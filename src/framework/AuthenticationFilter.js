@@ -25,13 +25,13 @@ AuthenticatonFilter.prototype = {
         var user = ctx.session && ctx.session[this.userKey];
         console.error('&&&&&&&&&&&******filter');
         console.error(user);
-        var token = ctx.cookies[this.tokenKey];
+        var token = ctx.cookies.get(this.tokenKey);
         console.error(token);
         console.error(user && !token);
         if(user && !token){
             ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366});
         }
-        var ok = user && user.stt == 'a';
+        var ok = (user && user.stt == 'a' || user && user.stt == 'r');
         /**
          * If property stt is "r" which means formally registered user, and
          * session variable authenticated is true, treat the user as authenticated
