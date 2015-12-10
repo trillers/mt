@@ -109,19 +109,19 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
                 throw new Error('Illegal scope return: ' + JSON.stringify(oauth));
             }
         })
-        .then(function*(result){
+        .then(function(result){
             console.error(result);
             errorUtil.throwResultError(result, 'getUser');
             if(ctx.oauth != result){
                 _extend(ctx.oauth, result);
             }
-            yield next;
             return ctx.oauth;
         })
         .catch(Error, function*(err){
             logger.error('Fail to signup or signin with wechat oauth: ' + err);
            yield ctx.render('error', {error: err});
         });
+    yield next;
 };
 
 WeixinOAuthClient.prototype.logout = function* () {};
