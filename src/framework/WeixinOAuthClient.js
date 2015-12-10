@@ -84,8 +84,6 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
     try {
         var state = ctx.query.state;
         var code = ctx.query.code;
-        console.error('%%%%%' + code);
-        console.error('&&&&&' + state);
         var client = this.wo;
         if (this.state != state) {
             yield ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});

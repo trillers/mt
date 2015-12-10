@@ -23,10 +23,7 @@ var AuthenticatonFilter = function(options){
 AuthenticatonFilter.prototype = {
     authenticated: function(ctx, scope){
         var user = ctx.session && ctx.session[this.userKey];
-        console.error('&&&&&&&&&&&******filter');
-        console.error(user);
         var token = ctx.cookies.get(this.tokenKey);
-        console.error(token);
         console.error(user && !token);
         if(user && !token){
             ctx.cookies.set(this.tokenKey, user.token, {expires: 3600000*24*366});
@@ -37,7 +34,6 @@ AuthenticatonFilter.prototype = {
          * session variable authenticated is true, treat the user as authenticated
          * and let the user go in.
          */
-        console.error(scope);
         if(scope === scopes.userinfo){
             ok = user && user.stt == 'r' && ctx.session.authenticated;
         }
@@ -49,7 +45,6 @@ AuthenticatonFilter.prototype = {
          */
         var mobile = ctx.browser && ctx.browser.Mobile;
         ok = ok || !mobile || settings.env.name=='dev';
-        console.error(ok);
         return ok;
     },
 

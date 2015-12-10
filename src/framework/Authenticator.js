@@ -37,7 +37,6 @@ Authenticator.prototype = {
     },
 
     setAuthentication: function (ctx, userJson) {
-        console.error('set auth info');
         ctx.cookies.set(this.tokenKey, userJson.token, {expires: 3600000 * 24 * 366}); //TODO
         ctx.session.authenticated = true;
         ctx.session[this.userKey] = userJson;
@@ -45,9 +44,7 @@ Authenticator.prototype = {
     },
 
     redirectReturnUrl: function (ctx) {
-        console.error('auth return');
         var returnUrl = ctx.session[this.returnUrlKey];
-        console.error(returnUrl);
         if (returnUrl) {
             ctx.session[this.returnUrlKey] = null;
         }
@@ -73,8 +70,6 @@ Authenticator.prototype = {
 
     oauthCallback: function*(ctx, next) {
         console.error(this.oauthClient.scope);
-        console.error('callback')
-        console.error('exchange');
         yield this.oauthClient.exchangeAccessToken(ctx, next);
     },
 
@@ -84,8 +79,6 @@ Authenticator.prototype = {
 
     signUpOrIn: function*(ctx, next) {
         try {
-            console.error('$$$$$');
-            console.error(ctx.oauth);
             var oauth = ctx.oauth;
             var authenticator = this;
             if (!oauth) {
@@ -96,7 +89,6 @@ Authenticator.prototype = {
 
             var user = yield WechatUserService.createOrUpdateFromWechatOAuth(oauth);
             authenticator.setAuthentication(ctx, user);
-            console.error('redirect start');
             authenticator.afterLogin(user, function () {
                 authenticator.redirectReturnUrl(ctx);
             });
