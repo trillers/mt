@@ -73,9 +73,11 @@ Authenticator.prototype = {
         console.error(this.oauthClient.scope);
         console.error('callback')
         if(this.oauthClient.scope === scopes.userinfo){
-            this.oauthClient.exchangeAccessToken(ctx, next);
+            console.error('exchange');
+            yield this.oauthClient.exchangeAccessToken(ctx, next);
+        }else{
+            yield next;
         }
-        yield next;
     },
 
     afterLogin: function(userJson, next){
