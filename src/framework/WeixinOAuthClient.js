@@ -93,6 +93,7 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
 
     yield client.getAccessTokenAsync(code)
         .then(function(result){
+            console.error(result);
             errorUtil.throwResultError(result, 'getAccessToken');
             ctx.oauth = result.data;
             return ctx.oauth;
@@ -109,6 +110,7 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
             }
         })
         .then(function*(result){
+            console.error(result);
             errorUtil.throwResultError(result, 'getUser');
             if(ctx.oauth != result){
                 _extend(ctx.oauth, result);
