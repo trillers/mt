@@ -83,6 +83,8 @@ WeixinOAuthClient.prototype.getAuthorizationCode = function (ctx) {
 WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
     var state = ctx.query.state;
     var code = ctx.query.code;
+    console.error('%%%%%' + code);
+    console.error('&&&&&' + state);
     var client = this.wo;
     if(this.state!=state){
         yield ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
@@ -106,12 +108,12 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
                 throw new Error('Illegal scope return: ' + JSON.stringify(oauth));
             }
         })
-        .then(function(result){
+        .then(function*(result){
             errorUtil.throwResultError(result, 'getUser');
             if(ctx.oauth != result){
                 _extend(ctx.oauth, result);
             }
-            next();
+            yield next;
             return ctx.oauth;
         })
         .catch(Error, function*(err){

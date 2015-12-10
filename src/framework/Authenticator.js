@@ -70,6 +70,8 @@ Authenticator.prototype = {
     },
 
     oauthCallback: function*(ctx, next){
+        console.error(this.oauthClient.scope);
+        console.error('callback')
         if(this.oauthClient.scope === scopes.userinfo){
             this.oauthClient.exchangeAccessToken(ctx, next);
         }
@@ -81,6 +83,8 @@ Authenticator.prototype = {
     },
 
     signUpOrIn: function*(ctx, next){
+        console.error('$$$$$');
+        console.error(ctx.oauth);
         var oauth = ctx.oauth;
         var authenticator = this;
         if(!oauth){
