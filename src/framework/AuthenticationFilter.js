@@ -24,9 +24,6 @@ AuthenticatonFilter.prototype = {
     authenticated: function(ctx, scope){
         var user = ctx.session && ctx.session[this.userKey];
         var token = ctx.cookies.get(this.tokenKey);
-        console.error(user);
-        console.error(token);
-        console.error(user && !token);
         if(user && !token){
             ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366});
         }

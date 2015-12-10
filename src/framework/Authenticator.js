@@ -69,7 +69,6 @@ Authenticator.prototype = {
     },
 
     oauthCallback: function*(ctx, next) {
-        console.error(this.oauthClient.scope);
         yield this.oauthClient.exchangeAccessToken(ctx, next);
     },
 
