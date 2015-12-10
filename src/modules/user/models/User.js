@@ -1,8 +1,6 @@
 var mongoose = require('../../../app/mongoose');
 var DomainBuilder = require('../../../framework/model/DomainBuilder');
 var UserState = require('../../../framework/model/enums').UserState;
-var UserRole = require('../../common/models/TypeRegistry').item('UserRole');
-var UserSourceType = require('../../common/models/TypeRegistry').item('UserSourceType');
 
 var _ = require('underscore');
 
@@ -14,10 +12,6 @@ var schema = DomainBuilder
     .withProperties({
         token: {type: String}
         , stt: {type: String, enum: UserState.values(), required: true}
-        , role: {type: String, enum: UserRole.valueList(), default: UserRole.Customer.value()}
-        , setRoleTime: {type: Date} //设置用户角色时间
-        , sourceType: {type: String, enum: UserSourceType.valueList(), default: UserSourceType.WechatSite.value()}
-        , siteUser: {type: String, ref: 'User'}
 
         , nickname:       {type: String}
         , headimgurl:        {type: String}
@@ -26,10 +20,6 @@ var schema = DomainBuilder
         , wx_at: String //weixin access_token
         , wx_rt: String //weixin refresh_token
         , wx_scope: String //weixin oauth scope
-
-        , wx_subscribe: {type: Number, default: 0}
-        , wx_subscribe_time: {type: Date}
-        , subscribeCount: {type: Number, default: 0} // how many times does the user subscribe on seedtrip wechat
 
         , wx_nickname: String
         , wx_sex: {type: Number, default: 0}
@@ -41,14 +31,6 @@ var schema = DomainBuilder
         , wx_province: {type: String}
         , wx_city: {type: String}
         , wx_privilege: {type: String}
-
-        //bot user properties
-        , bot_id: {type: String} //bot id is made like wechat site id + ':' + wechat site openid
-        , bot_uid: {type: String} //bid is make like 'bot' + randomid(idGen.next('WechatBotContact))
-        , bot_nickname: {type: String}
-        , bot_headimgid: {type: String} //bot user headImg id of athena file system
-        , bot_place: {type: String}
-        , bot_sex: {type: Number, default: 0}
 
     })
     .build();

@@ -9,8 +9,6 @@ var wechat = require('../../wechat/common/api');
 var Service = {};
 var Promise = require('bluebird');
 var cbUtil = require('../../../framework/callback');
-var userBizService = require('./UserBizService');
-var csKvs = require('../../cs/kvs/CustomerService');
 var generateUserToken = function(uid){
     var key = settings.secretKey;
     return require('crypto').createHash('sha1').update(String(uid)).update(key).digest('hex');
@@ -409,5 +407,4 @@ Service.find = function (params, callback) {
     });
 };
 
-Service = Promise.promisifyAll(Service);
 module.exports = Service;

@@ -3,9 +3,9 @@ var Promise = require('bluebird');
 var util = require('util');
 var logger = require('../app/logging').logger;
 var request = require('request');
-var scopes = require('../modules/wechat').oauth.scopes;
-var languages = require('../modules/wechat').oauth.languages;
-var errorUtil = require('../modules/wechat').error;
+var scopes = require('../modules/wechat/common/oauth').scopes;
+var languages = require('../modules/wechat/common/oauth').languages;
+var errorUtil = require('../modules/wechat/common/error');
 
 var defaultConfig = {
     appKey: '', //the client id in oauth2, which needs to be applied from service provider
@@ -76,25 +76,24 @@ WeixinOAuthClient.prototype.getAuthorizeUrl = function () {
     return this.authorizeUrl;
 };
 
-WeixinOAuthClient.prototype.getAuthorizationCode = function (req, res, next) {
-    res.writeHead(303, {Location: this.getAuthorizeUrl()});
-    res.end();
+WeixinOAuthClient.prototype.getAuthorizationCode = function (ctx) {
+    ctx.redirect(this.getAuthorizeUrl());
 };
 
-WeixinOAuthClient.prototype.exchangeAccessToken = function (req, res, next) {
-    var state = req.query.state;
-    var code = req.query.code;
+WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
+    var state = ctx.query.state;
+    var code = ctx.query.code;
     var client = this.wo;
     if(this.state!=state){
-        res.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
+        ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
         return;
     }
 
     client.getAccessTokenAsync(code)
         .then(function(result){
             errorUtil.throwResultError(result, 'getAccessToken');
-            req.oauth = result.data;
-            return req.oauth;
+            ctx.oauth = result.data;
+            return ctx.oauth;
         })
         .then(function(oauth){
             if(scopes.base==oauth.scope){
@@ -109,11 +108,11 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function (req, res, next) {
         })
         .then(function(result){
             errorUtil.throwResultError(result, 'getUser');
-            if(req.oauth != result){
-                _extend(req.oauth, result);
+            if(ctx.oauth != result){
+                _extend(ctx.oauth, result);
             }
             next();
-            return req.oauth;
+            return ctx.oauth;
         })
         .catch(Error, function(err){
             logger.error('Fail to signup or signin with wechat oauth: ' + err);
@@ -121,6 +120,6 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function (req, res, next) {
         });
 };
 
-WeixinOAuthClient.prototype.logout = function (res) {};
+WeixinOAuthClient.prototype.logout = function* () {};
 
 module.exports = WeixinOAuthClient;

@@ -22,6 +22,7 @@
     "co-views": "0.1.0",
     "co-wechat": "0.0.4",
     "wechat-api": "1.20.0",
+    "wechat-oauth": "1.0.1",
     "bluebird": "2.9.34",
     "co": "4.6.0",
     "request": "2.61.0",
