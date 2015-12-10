@@ -95,7 +95,7 @@ Authenticator.prototype = {
             return;
         }
 
-        return WechatUserService.createOrUpdateFromWechatOAuth(oauth)
+        yield WechatUserService.createOrUpdateFromWechatOAuth(oauth)
             .then(function(userJson){
                 var userInfo = authenticator.setAuthentication(ctx, userJson);
                 authenticator.afterLogin(userInfo, function(){
