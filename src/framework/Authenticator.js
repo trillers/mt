@@ -45,7 +45,9 @@ Authenticator.prototype = {
     },
 
     redirectReturnUrl: function(ctx){
+        console.error('auth return');
         var returnUrl = ctx.session[this.returnUrlKey];
+        console.error(returnUrl);
         if(returnUrl){
             ctx.session[this.returnUrlKey] = null;
         }
@@ -98,6 +100,7 @@ Authenticator.prototype = {
         yield WechatUserService.createOrUpdateFromWechatOAuth(oauth)
             .then(function(userJson){
                 var userInfo = authenticator.setAuthentication(ctx, userJson);
+                console.error('redirect start');
                 authenticator.afterLogin(userInfo, function(){
                     authenticator.redirectReturnUrl(ctx);
                 });
