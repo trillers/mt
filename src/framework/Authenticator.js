@@ -74,17 +74,8 @@ Authenticator.prototype = {
     oauthCallback: function*(ctx, next) {
         console.error(this.oauthClient.scope);
         console.error('callback')
-        if (this.oauthClient.scope === scopes.userinfo) {
-            console.error('exchange');
-            yield this.oauthClient.exchangeAccessToken(ctx, next);
-        } else {
-            console.error('^^^^^^^^ base oauth');
-            console.error(ctx.query.code);
-            ctx.oauth = {
-                openid: ctx.query.code
-            }
-            yield next;
-        }
+        console.error('exchange');
+        yield this.oauthClient.exchangeAccessToken(ctx, next);
     },
 
     afterLogin: function (userJson, next) {
