@@ -94,9 +94,11 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
 
         var result = yield client.getAccessTokenAsync(code);
         ctx.oauth = result.data;
-        var user = yield client.requestUserAsync(ctx.oauth.openid);
-        if(ctx.oauth != user) {
-            _extend(ctx.oauth, user);
+        if(scopes.userinfo == ctx.oauth.scope) {
+            var user = yield client.requestUserAsync(ctx.oauth.openid);
+            if (ctx.oauth != user) {
+                _extend(ctx.oauth, user);
+            }
         }
         yield next;
     }catch(err){
