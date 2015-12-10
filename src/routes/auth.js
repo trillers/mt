@@ -34,8 +34,8 @@ module.exports = function(app){
     auth_router.get(auth.signoutUri, function*(){
         yield auth.signout.call(auth, this);
     });
-    auth_router.get(auth.callbackUri, function*(){
-        yield auth.oauthCallback.call(auth, this);
+    auth_router.get(auth.callbackUri, function*(next){
+        yield auth.oauthCallback.call(auth, this, next);
     }, function*(){
         yield auth.signUpOrIn.call(auth, this);
     });

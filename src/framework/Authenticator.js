@@ -80,12 +80,12 @@ Authenticator.prototype = {
         next();
     },
 
-    signUpOrIn: function(ctx, next){
+    signUpOrIn: function*(ctx, next){
         var oauth = ctx.oauth;
         var authenticator = this;
         if(!oauth){
             logger.error('Fail to pass oauth authorization flow');
-            ctx.render('error', {error: new Error('Fail to pass oauth authorization flow')});
+            yield ctx.render('error', {error: new Error('Fail to pass oauth authorization flow')});
             return;
         }
 
@@ -97,9 +97,9 @@ Authenticator.prototype = {
                 });
                 return userJson;
             })
-            .catch(Error, function(err){
+            .catch(Error, function*(err){
                 logger.error('Fail to signup or signin with wechat oauth: ' + err);
-                ctx.render('error', {error: err});
+                yield ctx.render('error', {error: err});
             });
     }
 };

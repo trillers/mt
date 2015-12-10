@@ -13,7 +13,7 @@ var defaultConfig = {
     getAT: null, //
     saveAT: null,//
     state: 'seed',
-    scope: scopes.userinfo,
+    scope: scopes.base,
     redirectUrl: ''//the client side url which is used to return after logout from service provider side
 };
 
@@ -70,9 +70,9 @@ var WeixinOAuthClient = function (options) {
 _extend(WeixinOAuthClient.prototype, defaultConfig);
 
 WeixinOAuthClient.prototype.getAuthorizeUrl = function () {
-    if(!this.authorizeUrl){
+    //if(!this.authorizeUrl){
         this.authorizeUrl = this.wo.getAuthorizeURL(this.redirectUrl, this.state, this.scope);
-    }
+    //}
     return this.authorizeUrl;
 };
 
@@ -85,7 +85,7 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
     var code = ctx.query.code;
     var client = this.wo;
     if(this.state!=state){
-        ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
+        yield ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
         return;
     }
 
@@ -114,9 +114,9 @@ WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
             next();
             return ctx.oauth;
         })
-        .catch(Error, function(err){
+        .catch(Error, function*(err){
             logger.error('Fail to signup or signin with wechat oauth: ' + err);
-            res.render('error', {error: err});
+           yield ctx.render('error', {error: err});
         });
 };
 
