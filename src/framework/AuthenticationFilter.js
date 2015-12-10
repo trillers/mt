@@ -26,7 +26,7 @@ AuthenticatonFilter.prototype = {
 
         var token = ctx.cookies[this.tokenKey];
         if(user && !token){
-            res.cookie(this.tokenKey, user.token, {maxAge: 3600000*24*366}); //TODO
+            ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366}); //TODO
         }
         var ok = user && user.stt == 'a';
         /**
