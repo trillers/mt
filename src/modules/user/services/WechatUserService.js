@@ -221,6 +221,7 @@ Service.createOrUpdateFromWechatOAuth = function(oauth, callback){
         })
         .then(function(userJson){
             if(callback) callback(null, userJson);
+            console.error('return userinfo');
             return userJson;
         })
         .catch(Error, function (err) {

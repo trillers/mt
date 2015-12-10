@@ -99,6 +99,7 @@ Authenticator.prototype = {
 
         yield WechatUserService.createOrUpdateFromWechatOAuth(oauth)
             .then(function(userJson){
+                console.error('*******************');
                 var userInfo = authenticator.setAuthentication(ctx, userJson);
                 console.error('redirect start');
                 authenticator.afterLogin(userInfo, function(){
