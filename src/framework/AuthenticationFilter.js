@@ -28,7 +28,7 @@ AuthenticatonFilter.prototype = {
         console.error(token);
         console.error(user && !token);
         if(user && !token){
-            ctx.cookies.set(this.tokenKey, user.token, {expires: 3600000*24*366});
+            ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366});
         }
         var ok = (user && user.stt == 'a' || user && user.stt == 'r');
         /**

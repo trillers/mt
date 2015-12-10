@@ -37,7 +37,7 @@ Authenticator.prototype = {
     },
 
     setAuthentication: function (ctx, userJson) {
-        ctx.cookies.set(this.tokenKey, userJson.token, {expires: 3600000 * 24 * 366}); //TODO
+        ctx.cookies.set(this.tokenKey, userJson.token, {maxAge: 3600000*24*366}); //TODO
         ctx.session.authenticated = true;
         ctx.session[this.userKey] = userJson;
         return userJson;
