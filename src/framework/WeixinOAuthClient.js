@@ -81,47 +81,28 @@ WeixinOAuthClient.prototype.getAuthorizationCode = function (ctx) {
 };
 
 WeixinOAuthClient.prototype.exchangeAccessToken = function*(ctx, next) {
-    var state = ctx.query.state;
-    var code = ctx.query.code;
-    console.error('%%%%%' + code);
-    console.error('&&&&&' + state);
-    var client = this.wo;
-    if(this.state!=state){
-        yield ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
-        return;
+    try {
+        var state = ctx.query.state;
+        var code = ctx.query.code;
+        console.error('%%%%%' + code);
+        console.error('&&&&&' + state);
+        var client = this.wo;
+        if (this.state != state) {
+            yield ctx.render('error', {error: new Error('Wechat oauth exchange access token: echo state is different')});
+            return;
+        }
+
+        var result = yield client.getAccessTokenAsync(code);
+        ctx.oauth = result.data;
+        var user = yield client.requestUserAsync(ctx.oauth.openid);
+        if(ctx.oauth != user) {
+            _extend(ctx.oauth, user);
+        }
+        yield next;
+    }catch(err){
+        logger.error('Fail to signup or signin with wechat oauth: ' + err);
+        yield ctx.render('error', {error: err});
     }
-
-    yield client.getAccessTokenAsync(code)
-        .then(function(result){
-            console.error(result);
-            errorUtil.throwResultError(result, 'getAccessToken');
-            ctx.oauth = result.data;
-            return ctx.oauth;
-        })
-        .then(function(oauth){
-            if(scopes.base==oauth.scope){
-
-            }
-            else if(scopes.userinfo==oauth.scope){
-                return client.requestUserAsync(oauth.openid);
-            }
-            else{
-                throw new Error('Illegal scope return: ' + JSON.stringify(oauth));
-            }
-        })
-        .then(function(result){
-            console.error(result);
-            errorUtil.throwResultError(result, 'getUser');
-            if(ctx.oauth != result){
-                _extend(ctx.oauth, result);
-            }
-            return ctx.oauth;
-        })
-        .catch(Error, function*(err){
-            logger.error('Fail to signup or signin with wechat oauth: ' + err);
-           yield ctx.render('error', {error: err});
-        });
-    yield next;
 };
 
 WeixinOAuthClient.prototype.logout = function* () {};

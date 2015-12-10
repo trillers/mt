@@ -26,7 +26,7 @@ AuthenticatonFilter.prototype = {
 
         var token = ctx.cookies[this.tokenKey];
         if(user && !token){
-            ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366}); //TODO
+            ctx.cookies.set(this.tokenKey, user.token, {maxAge: 3600000*24*366});
         }
         var ok = user && user.stt == 'a';
         /**
@@ -45,7 +45,7 @@ AuthenticatonFilter.prototype = {
          * This workaround is mainly to support web crawling and developer testing.
          */
         var mobile = ctx.browser && ctx.browser.Mobile;
-        //ok = ok || !mobile || settings.env.name=='dev';
+        ok = ok || !mobile || settings.env.name=='dev';
 
         return ok;
     },

@@ -1,6 +1,9 @@
 var settings = require('mt-settings').redis;
 var logger = require('./logging').logger;
 var redis = require('redis');
+var Promise = require('bluebird');
+Promise.promisifyAll(redis.RedisClient.prototype);
+Promise.promisifyAll(redis.Multi.prototype);
 var sentinel = require('redis-sentinel');
 var DEFAULT_NAME = 'default';
 var clients = {};

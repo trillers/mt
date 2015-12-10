@@ -1,13 +1,13 @@
 var User = require('../models/User').model;
 var UserHelper = require('../models/User').helper;
 var UserState = require('../../../framework/model/enums').UserState;
+var LifeFlag = require('../../../framework/model/enums').LifeFlag;
 var UserKv = require('../kvs/User');
 var settings = require('mt-settings');
 var logger = require('../../../app/logging').logger;
 var u = require('../../../app/util');
 var wechat = require('../../wechat/common/api');
 var Service = {};
-var Promise = require('bluebird');
 var cbUtil = require('../../../framework/callback');
 
 var generateUserToken = function(uid){
@@ -15,87 +15,46 @@ var generateUserToken = function(uid){
     return require('crypto').createHash('sha1').update(String(uid)).update(key).digest('hex');
 };
 
-Promise.promisifyAll(User);
-var createUser = function (userInfo, callback) {
+var createUser = function* (userInfo) {
     var user = new User(userInfo);
     var uid = user.autoId();
     user.token = generateUserToken(uid); //TODO: use token generator
-    user.save(function (err, result, affected) {
-        //TODO: logging
-        cbUtil.handleAffected(callback, err, result, affected);
-    });
-};
-var createUserAsync = Promise.promisify(createUser);
-var updateUser = function (id, update, callback) {
-    User.update({_id: id}, update, function (err, doc) {
-        if (err) {
-            logger.error('Fail to update user [id=' + id + ']: ' + err);
-            if (callback) callback(err);
-        }
-        else{
-            if (callback) callback(null, doc);
-        }
-    });
-};
-var updateUserAsync = Promise.promisify(updateUser);
+    return yield user.save();
+}
 
-var loadById = function(id, callback){
-    User.findById(id).exec(function(err, doc){
-        if (err) {
-            logger.error('Fail to load user [id=' + id + ']: ' + err);
-            if(callback) callback(err);
-        }
-        else{
-            logger.debug('Succeed to load user [id=' + id + ']');
-            if(callback) callback(null, doc);
-        }
-    });
+var updateUser = function*(id, update) {
+    return yield User.update({_id: id}, update).exec();
 };
-var loadByIdAsync = Promise.promisify(loadById);
+
+var loadById = function*(id){
+    return yield User.findById(id).exec();
+};
+
+var deleteById = function*(id){
+    return yield yield User.update({_id: id}, {lFlg: LifeFlag.Deleted}).exec();
+};
 
 /**
- *  Create a registered user from wechat, not an anonymous user
+ *  Create a user from wechat
  * @param user user json object
  * @param callback
  */
-Service.createFromWechat = function (userInfo, callback) {
+Service.createFromWechat = function*(userInfo) {
     if(userInfo.wx_nickname){
         userInfo.stt = UserState.Registered;
     }
     else{
-        userInfo.stt = UserState.Registered; //UserState.Registered;
+        userInfo.stt = UserState.Anonymous;
     }
-    return createUserAsync(userInfo)
-        .then(function (user) {
-            return UserHelper.getUserJsonFromModel(user);
-        })
-        .then(function (userJson) {
-            return UserKv.saveByIdAsync(userJson);
-        })
-        .then(function (userJson) {
-            return UserKv.linkTokenAsync(userJson.token, userJson.id)
-                .then(function () {
-                    return userJson;
-                });
-        })
-        .then(function (userJson) {
-            return UserKv.linkOpenidAsync(userJson.wx_openid, userJson.id)
-                .then(function () {
-                    return userJson;
-                });
-        })
-        .then(function (userJson) {
-            if(callback) callback(null, userJson);
-            return userJson;
-        })
-        .catch(Error, function (err) {
-            logger.error('Fail to create user from wechat: ' + err);
-            if(callback) callback(err);
-        });
+    var user = yield createUser(userInfo);
+    user = UserHelper.getUserJsonFromModel(user);
+    yield UserKv.saveById(user);
+    yield UserKv.linkOpenid(user.wx_openid, user.id);
+    yield UserKv.linkToken(user.token, user.id);
+    return user;
 };
 
-Service.updateFromWechat = function(id, update, callback){
-    var newUserJson = null;
+Service.updateFromWechat = function*(id, update){
     var toUpdate = {};
 
     /*
@@ -105,7 +64,7 @@ Service.updateFromWechat = function(id, update, callback){
         toUpdate.stt = UserState.Registered;
     }
     else{
-        toUpdate.stt = UserState.Registered; //UserState.Anonymous;
+        toUpdate.stt = UserState.Anonymous;
     }
 
     /*
@@ -116,118 +75,44 @@ Service.updateFromWechat = function(id, update, callback){
             toUpdate[prop] = update[prop];
         }
     }
-
-    return updateUserAsync(id, toUpdate)
-        .then(function(){
-            return loadByIdAsync(id);
-        })
-        .then(function(user){
-            return newUserJson = UserHelper.getUserJsonFromModel(user);
-        })
-        .then(function(userJson){
-            return UserKv.saveByIdAsync(userJson);
-        })
-        .then(function(){
-            return UserKv.linkTokenAsync(newUserJson.token, newUserJson.id);
-        })
-        .then(function () {
-            if(callback) callback(null, newUserJson);
-            return newUserJson;
-        })
-        .catch(Error, function(err){
-            logger.error('Fail to update user from wechat: ' + err);
-            if(callback) callback(err);
-        });
+    yield updateUser(id, toUpdate);
+    var user = yield loadById(id);
+    user = UserHelper.getUserJsonFromModel(user);
+    yield UserKv.saveById(user);
+    return user;
 };
 
-var getUserFromWechat = function(openid, callback){
-    wechat.api.getUser(openid, function(err, userInfo){
-        if(err){
-            if(callback) callback(err);
+Service.deleteByOpenid = function*(openid){
+    var id = yield UserKv.loadIdByOpenid(openid);
+    var user = null;
+    if(id){
+        user = yield UserKv.loadById(id);
+        yield UserKv.deleteById(id);
+        if(user && user.wx_openid){
+            yield UserKv.unlinkOpenid(user.wx_openid);
         }
-        else{
-            if(callback) callback(null, userInfo);
+        if(user && user.token){
+            yield UserKv.unlinkToken(user.token);
         }
-    });
-};
-Service.getUserFromWechat = getUserFromWechat;
-
-var getUserFromWechatAsync = Promise.promisify(getUserFromWechat);
-Service.getUserFromWechatAsync = getUserFromWechatAsync;
-
-Service.loadOrCreateFromWechat = function(openid, callback){
-    return UserKv.loadIdByOpenidAsync(openid)
-        .then(function(id){
-            return id && UserKv.loadByIdAsync(id);
-        })
-        .then(function(user){
-            if (user) return user;
-            return getUserFromWechatAsync(openid)
-                .then(function (userInfo) {
-                    return UserHelper.getUserJsonFromWechatApi(userInfo)
-                })
-                .then(Service.createFromWechat);
-        })
-        .then(function(user){
-            if(callback) callback(null, user);
-            return user;
-        })
-        .catch(Error, function (err) {
-            logger.error('Fail to load or create user by openid: ' + err);
-            if(callback) callback(err);
-        });
+        yield deleteById(id);
+    }
+    return user;
 };
 
-Service.deleteByOpenid = function(openid, callback){
-    return UserKv.loadIdByOpenidAsync(openid)
-        .then(function(id){
-            return id && UserKv.loadByIdAsync(id);
-        })
-        .then(function(user){
-            if (user) return user;
-            return getUserFromWechatAsync(openid)
-                .then(function (userInfo) {
-                    return UserHelper.getUserJsonFromWechatApi(userInfo);
-                })
-                .then(Service.createFromWechat);
-        })
-        .then(function(user){
-            if(callback) callback(null, user);
-            return user;
-        })
-        .catch(Error, function (err) {
-            logger.error('Fail to delete user by openid: ' + err);
-            if(callback) callback(err);
-        });
-};
-
-Service.createOrUpdateFromWechatOAuth = function(oauth, callback){
+Service.createOrUpdateFromWechatOAuth = function*(oauth){
     var newUserJson = null;
     var openid = oauth.openid;
-    return getUserFromWechatAsync(openid)
-        .then(function (userJson) {
-            return newUserJson = UserHelper.mergeUserInfo(oauth, userJson);
-        })
-        .then(function(userJson){
-            return UserKv.loadIdByOpenidAsync(openid);
-        })
-        .then(function(id){
-            if(id){
-                return Service.updateFromWechat(id, newUserJson);
-            }
-            else{
-                return Service.createFromWechat(newUserJson);
-            }
-        })
-        .then(function(userJson){
-            if(callback) callback(null, userJson);
-            console.error('return userinfo');
-            return userJson;
-        })
-        .catch(Error, function (err) {
-            logger.error('Fail to create or update user by openid: ' + err);
-            if(callback) callback(err);
-        });
+    var id = yield UserKv.loadIdByOpenid(openid);
+    var user = null;
+    if(id){
+        user = yield UserKv.loadById(id);
+        newUserJson = UserHelper.mergeUserInfo(oauth, user);
+        user = yield Service.updateFromWechat(id, newUserJson);
+    }else{
+        newUserJson = UserHelper.mergeUserInfo(oauth, {});
+        user = yield Service.createFromWechat(newUserJson);
+    }
+    return user;
 };
 
 module.exports = Service;

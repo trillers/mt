@@ -149,14 +149,6 @@ helper.mergeUserInfo = function(snsUserInfo, globalUserInfo){
         userInfo.wx_privilege = '';
     }
 
-    //convert "subscribe time" from timestamp to date object
-    var subscribe_time = null;
-    if(userInfo.subscribe_time){
-        subscribe_time = new Date();
-        subscribe_time.setTime(userInfo.wx_subscribe_time*1000);
-    }
-    userInfo.wx_subscribe_time = subscribe_time;
-
     console.log('============= merged userinfo =================');
     console.log(userInfo);
     return userInfo;
