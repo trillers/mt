@@ -5,9 +5,10 @@ var userinfoAuthFilter = require('../../middlewares/userinfo-auth-filter');
 module.exports = function(router){
     require('../../app/routes-spa')(router);
     router.get('/clear', function *(){
-        this.cookies.set(this.tokenKey, null, {expires: 1});
+        console.log('clear.......');
+        this.cookies.set('token', null, {expires: 1});
         this.session.authenticated = false;
-        this.session[this.userKey] = null;
+        this.session['user'] = null;
         this.body = 'clear successful!!';
     });
 
