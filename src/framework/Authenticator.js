@@ -1,4 +1,3 @@
-var UserService = require('../modules/user/services/UserService');
 var WechatUserService = require('../modules/user/services/WechatUserService');
 var scopes = require('../modules/wechat/common/oauth').scopes;
 var logger = require('../app/logging').logger;
