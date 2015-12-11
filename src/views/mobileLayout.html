@@ -27,6 +27,7 @@
         console.log('ready');
     })
     wx.error(function(res){
+        alert(res);
         console.error(res);
     });
     wx.checkJsApi({
