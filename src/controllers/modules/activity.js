@@ -1,6 +1,8 @@
 var util = require('../../app/util');
 var baseAuthFilter = require('../../middlewares/base-auth-filter');
 var userinfoAuthFilter = require('../../middlewares/userinfo-auth-filter');
+var participantService = require('../../modules/activity/services/ParticipantService');
+var activityService = require('../../modules/activity/services/ActivityService');
 
 module.exports = function(router){
     require('../../app/routes-spa')(router);
@@ -12,10 +14,22 @@ module.exports = function(router){
     });
 
     router.get('/activity', baseAuthFilter, function *(){
-        yield this.render('activity');
+        var id = this.query.id;
+        //var activity = yield activityService.loadById(id);
+        //if(activity){
+            yield this.render('activity');
+        //}else{
+        //    yield this.render('error');
+        //}
     });
 
-    router.get('/participate', userinfoAuthFilter, function *(){
-        yield this.render('participate');
+    router.get('/participant', userinfoAuthFilter, function *(){
+        var id = this.query.id;
+        var participant = yield participantService.loadById(id);
+        if(participant){
+            yield this.render('participant');
+        }else{
+            yield this.render('error');
+        }
     });
 };

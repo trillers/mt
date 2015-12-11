@@ -1,11 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-    <span>activity</span>
-    <a href="/participate">参加</a>
-</body>
-</html>
+{% extends 'mobileLayout.html' %}
+
+{% block content %}
+    <div>
+        <input id="chooseImg" type="button" value="选择图片"/>
+    </div>
+    <script>
+        $(function(){
+            $('#chooseImg').click(function(){
+                wx.chooseImage({
+                    count: 1,
+                    sizeType: ['original', 'compressed'],
+                    sourceType: ['album', 'camera'],
+                    success: function (res) {
+                        var localIds = res.localIds;
+                    }
+                });
+            })
+        })
+    </script>
+{% endblock %}

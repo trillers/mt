@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}跟谁学{% endblock %}</title>
+
+    {% block head %}
+    <script src="../../components/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        window.__app = {{ JSON.stringify(__app) }};
+        window.__page = {{ JSON.stringify(__page) }};
+        window.prdOrNot =( __app.settings.env.NODE_ENV === "production" );
+    </script>
+    {% endblock %}
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+<script src="../../js/jssdk.js"></script>
+
+<script>
+    console.log(window.__page.jc);
+    wx.ready(function(){
+        console.log('ready');
+    })
+    wx.config(window.__page.jc);
+
+    wx.error(function(res){
+        console.error(res);
+    });
+</script>
+</html>

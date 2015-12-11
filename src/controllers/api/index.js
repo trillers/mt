@@ -7,4 +7,15 @@ module.exports = function(app){
     require('./user')(user_router);
     app.use(user_router.routes());
 
+    //activity module
+    var activity_router = new router();
+    activity_router.prefix('/api/activity');
+    require('./activity')(activity_router);
+    app.use(activity_router.routes());
+
+    //participant module
+    var participant_router = new router();
+    participant_router.prefix('/api/participant');
+    require('./participant')(participant_router);
+    app.use(participant_router.routes());
 }

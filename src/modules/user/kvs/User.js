@@ -18,8 +18,6 @@ var openidToIdKey = function(openid){
 var processUserToSave = function(sourceObject){
     var targetObject = _.clone(sourceObject);
     targetObject.crtOn && (delete targetObject.crtOn);
-    targetObject.wx_subscribe_time && (delete targetObject.wx_subscribe_time);
-
     return targetObject;
 };
 

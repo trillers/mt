@@ -35,7 +35,10 @@ util.result = function(object, property) {
     var value = object[property];
     return typeof value === 'function' ? value.call(object) : value;
 };
-
+util.random = function(min, max){
+    var no = max - min + 1;
+    return Math.floor(Math.random()*no + min);
+}
 
 util.appendLine = function(target, str, parseFlag){
     str = str.replace(/%%.*%%/, parseFlag);
@@ -79,5 +82,6 @@ module.exports = {
     result: util.result,
     appendLine: util.appendLine,
     genOneToOneId: util.genOneToOneId,
-    generateToken: util.generateToken
+    generateToken: util.generateToken,
+    random: util.random
 };

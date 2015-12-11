@@ -1,6 +1,6 @@
 var mongoose = require('../../../app/mongoose');
 var DomainBuilder = require('../../../framework/model/DomainBuilder');
-var ActivityType = require('../../../common/models/TypeRegistry').item('ActivityType');
+var ActivityType = require('../../../modules/common/models/TypeRegistry').item('ActivityType');
 
 var schema = DomainBuilder
     .i('Activity')
