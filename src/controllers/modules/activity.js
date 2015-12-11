@@ -13,6 +13,10 @@ module.exports = function(router){
         this.body = 'clear successful!!';
     });
 
+    router.get('/jssdk', function *(){
+        yield this.render('jssdk');
+    });
+
     router.get('/activity', baseAuthFilter, function *(){
         var id = this.query.id;
         //var activity = yield activityService.loadById(id);
