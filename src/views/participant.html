@@ -1,10 +1,562 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-    <span>参加</span>
-</body>
-</html>
+{% extends 'mobileLayout.html' %}
+
+{% block title %}微助力，助你成功{% endblock %}
+
+{% block head %}
+{% parent %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/swiper.min.css">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/swiper.jquery.min.js"></script>
+<script>
+    var timer = 0;
+    $(function () {
+        var docHeight = $(document).height();
+        $(".fullBg").height(docHeight);
+        $(".fullBg2").height(docHeight);
+        tab(".tabBox .hd ul li", ".tabBox .bd .row", "on");
+        centerTop(".w0");
+        centerWindow(".w1");
+        $(".fullBg").click(function () {
+            $(".window").removeClass("animate").hide();
+            $(this).hide();
+            clearTimeout(timer);
+        });
+        timeShow();//倒计时
+    });
+
+    var daoshi = 60;
+    function showWindow() {
+        $(".fullBg").show();
+        $(".w0").addClass("animate").show();
+        $('.getCode').click(function () {
+            var tel = $('input[name=tel]').val();
+            var tel_length = tel.length;
+            var thisget = $(this).text();
+            if (tel == '') {
+                alert('请填写您的手机号');
+            } else if (tel_length != 11) {
+                alert('请填写正确的手机号');
+            } else {
+                if (thisget == '获取验证码' || thisget == '重新获取') {
+                    $('.getCode').text('正在发送');
+                    $.ajax({
+                        type: "POST",
+                        url: "/index.php?g=Wap&m=Helping&a=sms&token=ufxonh1449237298&id=6",
+                        dataType: "json",
+                        data: {
+                            tel: tel,
+                            token: 'ufxonh1449237298',
+                            id: 6,
+                            wecha_id: 'oBnKHwIGnNcFZGu9bc9mQllW5amY'
+                        },
+                        success: function (data) {
+                            if (data.error == 0) {
+                                smsdaoshi()
+                            } else if (data.error == 'tel') {
+                                alert('该手机号码已被注册');
+                                $('.getCode').text('获取验证码');
+                            } else if (data.error == 4085 || data.error == 4084) {
+                                alert('该手机号码发送验证码超过每日限制');
+                                $('.getCode').text('获取验证码');
+                            } else if (data.error == null) {
+                                alert('发送失败：该商家未购买短信');
+                                $('.getCode').text('获取验证码');
+                            } else {
+                                alert('发送失败：请稍后再试<br/>失败原因：' + data.error);
+                                $('.getCode').text('获取验证码');
+                            }
+                        }
+                    });
+
+                }
+            }
+
+        });
+        $('#telyzbut').click(function () {
+            var tel = $('input[name=tel]').val();
+            var code = $('input[name=code]').val();
+            var tel_length = tel.length;
+            if (tel == '') {
+                alert('请填写您的手机号');
+            } else if (tel_length != 11) {
+                alert('请填写正确的手机号');
+            } else if (code == '') {
+                alert('请填写您收到的验证码');
+            } else {
+                $('#telyzbut').text('手机号码验证中');
+                $.ajax({
+                    type: "POST",
+                    url: "/index.php?g=Wap&m=Helping&a=smsyz&token=ufxonh1449237298&id=6",
+                    dataType: "json",
+                    data: {
+                        tel: tel,
+                        code: code,
+                        token: 'ufxonh1449237298',
+                        id: 6,
+                        wecha_id: 'oBnKHwIGnNcFZGu9bc9mQllW5amY'
+                    },
+                    success: function (data) {
+                        if (data.error == 0) {
+                            $('#telyzbut').text('验证成功');
+                            window.location.href = '/index.php?g=Wap&m=Helping&a=index&token=ufxonh1449237298&id=6&is_join2=1&tel=' + tel;
+                        } else if (data.error == 1) {
+                            alert('验证码不正确');
+                        } else if (data.error == 2) {
+                            alert('验证码和手机不匹配');
+                        } else if (data.error == 3) {
+                            alert('验证码超时');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function smsdaoshi() {
+        if (daoshi < 1) {
+            daoshi = 60;
+            $('.getCode').text('重新获取');
+            $('.getCode').addClass('butCode');
+        } else {
+            if (daoshi == 60) {
+                $('.getCode').text('发送成功');
+            } else {
+                $('.getCode').text(daoshi + 's');
+            }
+            daoshi--;
+            setTimeout("smsdaoshi()", 1000);
+        }
+    }
+    function closedWindow() {
+        timer = setTimeout(function () {
+            $(".fullBg").hide();
+            $(".w1").removeClass("animate").hide();
+            ;
+        }, 5000);
+    }
+
+    function tab(a, b, c) {
+        var len = $(a);
+        len.bind("click", function () {
+            var index = 0;
+            $(this).addClass(c).siblings().removeClass(c);
+            index = len.index(this);
+            $(b).eq(index).show().siblings().hide();
+            return false;
+        }).eq(0).trigger("click");
+    }
+    //2.将盒子方法放入这个方，方便法统一调用
+    function centerWindow(a) {
+        center(a);
+        //自适应窗口
+        $(window).bind('scroll resize',
+                function () {
+                    center(a);
+                });
+    }
+    function centerTop(a) {
+        var wWidth = $(window).width();
+        var boxWidth = $(a).width();
+        var scrollLeft = $(window).scrollLeft();
+        var left = scrollLeft + (wWidth - boxWidth) / 2;
+        $(a).css({
+            "left": left
+        });
+    }
+    //1.居中方法，传入需要剧中的标签
+    function center(a) {
+        var wWidth = $(window).width();
+        var wHeight = $(window).height();
+        var boxWidth = $(a).width();
+        var boxHeight = $(a).height();
+        var scrollTop = $(window).scrollTop();
+        var scrollLeft = $(window).scrollLeft();
+        var top = scrollTop + (wHeight - boxHeight) / 2;
+        var left = scrollLeft + (wWidth - boxWidth) / 2;
+        $(a).css({
+            "top": top,
+            "left": left
+        });
+    }
+
+
+    function timeShow() {
+        var show_time = $(".timeShow");
+        endtime = new Date({{JSON.stringify(activity.endTime)}});//结束时间
+    today = new Date();//当前时间
+    delta_T = endtime.getTime() - today.getTime();//时间间隔
+    window.setTimeout(timeShow, 1000);
+    total_days = delta_T / (24 * 60 * 60 * 1000);//总天数
+    total_show = Math.floor(total_days);//实际显示的天数
+    total_hours = (total_days - total_show) * 24;//剩余小时
+    hours_show = Math.floor(total_hours);//实际显示的小时数
+    total_minutes = (total_hours - hours_show) * 60;//剩余的分钟数
+    minutes_show = Math.floor(total_minutes);//实际显示的分钟数
+    total_seconds = (total_minutes - minutes_show) * 60;//剩余的分钟数
+    seconds_show = Math.floor(total_seconds);//实际显示的秒数
+    if (total_days < 10) {
+        total_days = "0" + total_days;
+    }
+    if (hours_show < 10) {
+        hours_show = "0" + hours_show;
+    }
+    if (minutes_show < 10) {
+        minutes_show = "0" + minutes_show;
+    }
+    if (seconds_show < 10) {
+        seconds_show = "0" + seconds_show;
+    }
+    show_time.find("li").eq(0).text(total_show);//显示在页面上
+    show_time.find("li").eq(2).text(hours_show);
+    show_time.find("li").eq(4).text(minutes_show);
+    show_time.find("li").eq(6).text(seconds_show);
+    }
+
+    function share() {
+        $('.share_bg').show();
+        $('.share_bg').click(function () {
+            if ($(this).css('display') == 'block') {
+                $(this).css('display', 'none');
+            }
+        });
+    }
+    $(function () {
+        countTop();
+        $(window).bind('scroll resize',
+                function () {
+                    countTop();
+                });
+        function countTop() {
+            var ftH = $("footer").height();
+            var wHeight = $(window).height();
+            var top = wHeight - ftH;
+            $("footer").css({"top": top});
+
+        }
+    });
+</script>
+<style>
+    .share_bg {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 99;
+    }
+
+    .tabBox .bd .prize .prizeImg h4 {
+        background-color: #aaa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="../../css/fans.css">
+<script src="../../js/jquery.leanModal.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/leanModal.css">
+<div id="lean_overlay" style="display: none; opacity: 0.45;"></div>
+<script type="text/javascript">
+    $(function () {
+        $('#modaltrigger_notice').leanModal({
+            top: 110,
+            overlay: 0.45,
+            closeButton: ".hidemodal"
+        });
+    });
+</script>
+<header class="scroll">
+    <!-- Swiper -->
+    <div class="swiper-container swiper-container-horizontal">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2552px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-duplicate" data-swiper-slide-index="0" style="width: 1276px;">
+                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+            </div>
+            <div class="swiper-slide swiper-slide-prev" data-swiper-slide-index="0" style="width: 1276px;">
+                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+            </div>
+            <div class="swiper-slide swiper-slide-duplicate swiper-slide-active" data-swiper-slide-index="0"
+                 style="width: 1276px;">
+                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+            </div>
+        </div>
+    </div>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: 5000//可选选项，自动滑动
+        });
+    </script>
+</header>
+<section class="topUser">
+    <div class="userBox">
+        <div class="fl userAvatar">
+            <img style="border-radius: 100%;" src="{{participant.user.headimgurl}}">
+        </div>
+        <div class="userDesc">
+            <h2>{{participant.user.nickname}}</h2>
+
+            <p>排名：{{participant.user.rank}}</p>
+        </div>
+        <div class="tipBox">
+            <div class="tip tip1">
+                <h3>红包</h3>
+
+                <p id="luckyMoney">￥{{participant.total_money}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="oTime">
+    <div class="timeBox">
+        <h2>
+            时间还剩 </h2>
+        <ul class="timeShow">
+            <li class="bg">755</li>
+            <li class="oText">天</li>
+            <li class="bg">05</li>
+            <li class="oText">时</li>
+            <li class="bg">39</li>
+            <li class="oText">分</li>
+            <li class="bg">17</li>
+            <li class="oText">秒</li>
+        </ul>
+    </div>
+</section>
+<section class="checkBtn animate clearfix">
+</section>
+<section class="oTab">
+    <div class="tabBox">
+        <div class="hd clearfix">
+            <ul>
+                <li class="li0" style="margin:0 2px"><i></i>活动规则</li>
+                <li class="li1 on" style="margin:0 2px"><i></i>活动介绍</li>
+                <li class="li2" style="margin:0 2px"><i></i>排行top10</li>
+            </ul>
+        </div>
+        <div class="bdRound">
+            <div class="bd" style="padding-top: 15px;">
+                <div class="row rule" style="line-height: 20px; display: none;">
+                    {{activity.rule}}
+                </div>
+                <div class="row prize" style="display: block;">
+                    <ul class="clearfix">
+                        <li>
+                            <div class="addBg">
+                                <div class="prizeDesc"  style="height: auto">
+                                    <p>{{activity.desc}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row list" style="display: none;">
+                    <ul>
+                        {% for item in participants %}
+                        <li>
+                            <div class="userBox">
+                                <div class="fl userAvatar">
+                                    <img src="{{item.user.headimgurl}}">
+                                </div>
+                                <div class="userDesc">
+                                    <h2>{{item.user.nickname}}</h2>
+                                </div>
+                                <div class="tipBox">
+                                    <div class="tip tip1">
+                                        <h3>红包</h3>
+                                        <br>
+                                        <p>￥{{item.total_money}}</p>
+                                    </div>
+                                </div>
+                                <div class="num">
+                                    <span>
+                                        <i>{{loop.index}}</i>
+                                    </span>
+                                    <s></s>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer style="top: 505px;">
+    <div class="oBtn">
+        <a href="{{activity.participateLink}}" style="display: {{ participant.join }}"
+           id="modaltrigger_notice">我要参加</a>
+        <a style="display: {{ participant.help }}"
+           id="helpTa">我要助力</a>
+        <a style="-webkit-animation: inherit; background-color: gray; display: {{ participant.helped }}">已助力</a>
+        <a style="-webkit-animation: inherit; background-color: gray; display: {{participant.joined}}">已参加</a>
+        <a href="javascript:;" onclick="share()" style="background: #aa2343;color: #fff; display: {{participant.inviteFriend}}">找朋友助力</a>
+    </div>
+</footer>
+<input type="hidden" id="participantId" value="{{participant._id}}"/>
+<script>
+    $(function(){
+        $('#helpTa').click(function(){
+            $.post('/api/participant/help', {id: $('#participantId').val()}, function(data){
+                if(data){
+                    if(data.helped){
+                        alert('已助力');
+                    }else if(!data.active){
+                        alert('活动已过期');
+                    }else if(data.limited){
+                        alert('该用户助力已达上限');
+                    }else if(data.error){
+                        alert('助力失败');
+                    }else {
+                        $('#luckyMoney').text('￥' + data.total_money);
+                        alert('助力成功');
+                    }
+                }else{
+                    alert('助力失败');
+                }
+            })
+        })
+    })
+</script>
+<div class="fullBg" style="height: 1794px;"></div>
+<div class="fullBg2" style="height: 1794px;"></div>
+<div class="share_bg">
+    <img src="../../images/share-guide.png">
+</div>
+<style>
+    .fullBg2 {
+        background-color: #000;
+        left: 0;
+        opacity: 0.8;
+        position: fixed;
+        top: 0;
+        z-index: 3;
+        filter: alpha(opacity=80);
+        -moz-opacity: 0.8;
+        -khtml-opacity: 0.8;
+        display: none;
+        z-index: 888;
+        width: 100%;
+    }
+
+    .w0 .windowThis .bd .row button {
+        width: 100%;
+        height: 30px;
+        background: #f6514b;
+        text-align: center;
+        line-height: 30px;
+        font-size: 1.4rem;
+        color: #fff;
+        border-radius: 5px
+    }
+
+    .tips {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 9999
+    }
+
+    .tips h3 {
+        width: 70%;
+        padding: 10px 0;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 1);
+        text-align: center;
+        font-size: 1.2rem;
+        color: red;
+    }
+</style>
+<div class="tips" style="display: none;"><h3></h3></div>
+
+<script type="text/javascript">
+    function alert(text) {
+        var t = null;
+        clearTimeout(t);
+        var tip = $(".tips");
+        tip.find('h3').html(text);
+        tip.slideDown();
+        t = setTimeout(function () {
+            tip.slideUp()
+        }, 3000);
+    }
+    window.shareData = {
+        "moduleName": "Helping",
+        "moduleID": "0",
+        "imgUrl": "http://s.404.cn/tpl/static/helping/images/default.jpg",
+        "timeLineLink": window.__app.settings.app.url + '/activity',
+        "sendFriendLink": window.__app.settings.app.url + '/activity',
+        "weiboLink": window.__app.settings.app.url + '/activity',
+        "tContent": "我正在参加红包助力活动，小伙伴们快来帮忙呀！",
+        "tTitle": "红包助力，祝我成功！",
+        "fTitle": "我正在参加红包助力活动，小伙伴们快来帮忙呀！"
+    };
+</script>
+<script type="text/javascript">
+    wx.ready(function () {
+        // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+        /*document.querySelector('#checkJsApi').onclick = function () {
+         wx.checkJsApi({
+         jsApiList: [
+         'getNetworkType',
+         'previewImage'
+         ],
+         success: function (res) {
+         //alert(JSON.stringify(res));
+         }
+         });
+         };*/
+        // 2. 分享接口
+        // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareAppMessage({
+            title: window.shareData.tTitle,
+            desc: window.shareData.tContent,
+            link: window.shareData.sendFriendLink,
+            imgUrl: window.shareData.imgUrl,
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+            },
+            cancel: function () {
+                //alert('分享朋友失败');
+            }
+        });
+
+
+        // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareTimeline({
+            title: window.shareData.fTitle ? window.shareData.fTitle : window.shareData.tTitle,
+            link: window.shareData.sendFriendLink,
+            imgUrl: window.shareData.imgUrl,
+            success: function () {
+                //alert('分享朋友圈成功');
+            },
+            cancel: function () {
+                //alert('分享朋友圈失败');
+            }
+        });
+        wx.error(function (res) {
+            /*if(res.errMsg == 'config:invalid signature'){
+             wx.hideOptionMenu();
+             }else if(res.errMsg == 'config:invalid url domain'){
+             wx.hideOptionMenu();
+             }else{
+             wx.hideOptionMenu();
+             //alert(res.errMsg);
+             }*/
+            if (res.errMsg) {
+                wx.hideOptionMenu();
+            }
+        });
+    });
+
+</script>
+{% endblock %}

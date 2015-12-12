@@ -4,6 +4,7 @@ var baseAuthFilter = require('../../middlewares/base-auth-filter');
 var userinfoAuthFilter = require('../../middlewares/userinfo-auth-filter');
 var participantService = require('../../modules/activity/services/ParticipantService');
 var activityService = require('../../modules/activity/services/ActivityService');
+var _ = require('underscore');
 
 module.exports = function(router){
     require('../../app/routes-spa')(router);
@@ -58,9 +59,53 @@ module.exports = function(router){
 
     router.get('/participant', baseAuthFilter, function *(){
         var id = this.query.id;
+        var user = this.session.user || {};
         var participant = yield participantService.loadById(id);
         if(participant){
-            yield this.render('participant');
+            participant.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + participant.activity._id;
+            participant.join = '';
+            participant.joined = 'none';
+            participant.help = '';
+            participant.helped = 'none';
+            var docs = yield participantService.filter({conditions: {user: user.id}});
+            if(docs.length > 0){
+                participant.join = 'none';
+                participant.joined = '';
+            }
+            var helpArr = participant.help_friends;
+            if (_.indexOf(helpArr, user.wx_openid) !== -1) {
+                participant.help = 'none';
+                participant.helped = '';
+            }
+            if(user.wx_openid === participant.user.wx_openid){
+                participant.join = 'none';
+                participant.joined = 'none';
+                participant.help = 'none';
+                participant.helped = 'none';
+                participant.inviteFriend = '';
+            }else{
+                participant.inviteFriend = 'none';
+            }
+            var params = {
+                conditions: {
+                    activity: participant.activity._id,
+                    lFlg: 'a'
+                },
+                sort: {
+                    total_money: -1
+                },
+                page: {
+                    no: 1,
+                    size: 10
+                },
+                populate: [
+                    {
+                        path: 'user'
+                    }
+                ]
+            }
+            var participants = yield participantService.filter(params);
+            yield this.render('activity', {participant: participant, participants: participants});
         }else{
             yield this.render('error');
         }
