@@ -23,7 +23,7 @@ module.exports = function(router){
         var user = this.session.user || {};
         var activity = yield activityService.loadById(id);
         if(activity){
-            activity.participateLink = settings.app.domain + '/participant?id=' + activity._id;
+            activity.participateLink = this.protocol + '://' + settings.app.domain + '/participant?id=' + activity._id;
             activity.join = '';
             activity.joined = 'none';
             var participant = yield participantService.filter({conditions: {user: user.id}});

@@ -10,7 +10,7 @@
         $(function(){
             $.get('/api/activity/load?type=flmh', function(data){
                 data.forEach(function(item){
-                    $('#list').append($('<li> <strong class="col-md-2">' + item.name +'</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.domain + '/activity?id=' + item._id + '</strong> </li>'));
+                    $('#list').append($('<li> <strong class="col-md-2">' + item.name +'</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
                 });
             });
 
@@ -35,7 +35,7 @@
 
                 $.post('/api/activity/add', json, function(data){
                     if(data){
-                        $('#list').append($('<li> <strong class="col-md-2">' + data.name +'</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.domain + '/activity?id=' + data._id + '</strong> </li>'));
+                        $('#list').append($('<li> <strong class="col-md-2">' + data.name +'</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
                         $('#addForm').hide();
                         $('#luckyMoneyHelpList').show();
                     }
