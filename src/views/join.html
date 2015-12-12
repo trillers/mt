@@ -2,9 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>参加</title>
+    <script src="../../components/jquery/jquery.min.js"></script>
+    <style>
+        .userAvatar{-webkit-animation: 0.5s linear 0s normal none rotate;
+            margin: 0.4rem;
+            border-radius: 100%;
+            background: #eee;
+            height: 100px;
+            width: 100px;
+            overflow: hidden;
+            float: left}
+        .userDesc h2{
+            color: #e7352d;
+            font-size: 70px;
+            font-weight: normal;
+            margin-top: 1.7rem;
+        }
+        .subBtn{
+            border-radius: 10px;
+            height: 55px;
+            font-size: 40px;
+            width: 150px;
+            border: solid 1px gray;
+            color: #fff;
+            background-color: #5cb85c;
+        }
+    </style>
+    <script>
+        window.__app = {{ JSON.stringify(__app) }};
+        window.__page = {{ JSON.stringify(__page) }};
+        $(function(){
+            $('.subBtn').click(function(){
+                var data = {
+                    id: $('#activityId').val()
+                }
+                $.post('/api/participant/add', data, function(data){
+                    if(!data.error){
+                        window.location.href = window.__page.app.domain + '/participant?id=' + data._id;
+                    }
+                })
+            })
+        })
+    </script>
 </head>
-<body>
-
+<body style="min-width: 320px; background-color: #f6514b;">
+    <div id="join" style="padding-top: 100px">
+        <div id="form"  style="margin: 0 auto; padding: 100px; width: 450px; height: 500px; background: #feffb9;border-radius: 50px;">
+            <ul style="list-style-type: none">
+                <li>
+                    <div class="fl userAvatar">
+                        <img style="border-radius: 100%; height: 100px; width: 100px" src="{{headimgurl}}">
+                    </div>
+                    <div class="userDesc" style="overflow: hidden">
+                        <h2>{{nickname}}</h2>
+                    </div>
+                </li>
+                <li style="margin-top: 2em">
+                    <div>
+                        <span style="font-size: 50px; float:left">手机: </span>
+                        <input type="text" id="phone" style="display: block; height: 50px;border: solid 1px gray;border-radius: 10px;font-size: 23px;" placeholder="请输入手机号"/>
+                    </div>
+                </li>
+                <li style="margin-top: 5em">
+                    <div style="text-align: center">
+                        <button class="subBtn">提交</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <input type="hidden" id="activityId" value="{{activityId}}"/>
+    </div>
 </body>
 </html>

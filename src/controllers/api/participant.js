@@ -28,7 +28,7 @@ module.exports = function (router) {
         var today = new Date();
         var participant = yield participantService.loadById(id);
         if (participant) {
-            var active = date >= new Date(participant.activity.startTime) && date <= new Date(participant.activity.endTime);
+            var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
             if(active) {
                 var helpArr = participant.help_friends;
                 if (_.indexOf(helpArr, user.wx_openid) === -1) {

@@ -25,22 +25,7 @@
             clearTimeout(timer);
         });
         timeShow();//倒计时
-        btnClick();
     });
-    function btnClick() {
-        $.getJSON("/index.php?g=Wap&m=Helping&a=add_share&token=ufxonh1449237298&id=6", {
-            share_key: '',
-            wecha_id: 'oBnKHwIGnNcFZGu9bc9mQllW5amY'
-        }, function (res) {
-            if (res.err == 0) {
-                $(".fullBg").show();
-                $(".w1").addClass("animate").show();
-                closedWindow();
-            } else {
-                alert(res.info)
-            }
-        });
-    }
 
     var daoshi = 60;
     function showWindow() {
@@ -199,7 +184,7 @@
 
     function timeShow() {
         var show_time = $(".timeShow");
-        endtime = new Date("01/05/2018 00:00:00");//结束时间
+        endtime = new Date({{JSON.stringify(activity.endTime)}});//结束时间
         today = new Date();//当前时间
         delta_T = endtime.getTime() - today.getTime();//时间间隔
         window.setTimeout(timeShow, 1000);
@@ -273,26 +258,8 @@
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../../css/fans.css">
-<div class="_fly" id="fly_page">
-    <p>您好，您还没有权限参加活动。 &nbsp; ( 公众号：谷来信息科技 )</p>
-
-    <div class="wxname"><a
-            href="http://mp.weixin.qq.com/s?__biz=MzIzMDEwMjAyMg==&mid=400538913&idx=1&sn=69a56711411997c952a3f77e192753ce#rd"
-            style="display:block">立即获得权限</a></div>
-    <div class="wxname close"><a href="javascript:pageClose();" style="display:block">关闭</a></div>
-</div>
-<script type="text/javascript" src="../../js/topNotice.js"></script>
 <script src="../../js/jquery.leanModal.min.js"></script>
 <link rel="stylesheet" type="text/css" href="../../css/leanModal.css">
-<div id="memberNoticeBox"
-     style="display: none; position: fixed; opacity: 1; z-index: 11000; left: 50%; margin-left: -170px; top: 110px;">
-    <h1>提醒</h1>
-
-    <div class="txtfield">您好，您还没有权限参加活动。 &nbsp; ( 公众号：谷来信息科技 )</div>
-    <a href="http://mp.weixin.qq.com/s?__biz=MzIzMDEwMjAyMg==&mid=400538913&idx=1&sn=69a56711411997c952a3f77e192753ce#rd"
-       class="flatbtn" style="display:block">立即获得权限</a>
-    <a class="flatbtn btnC hidemodal">关闭</a>
-</div>
 <div id="lean_overlay" style="display: none; opacity: 0.45;"></div>
 <script type="text/javascript">
     $(function () {
@@ -315,7 +282,7 @@
             </div>
             <div class="swiper-slide swiper-slide-duplicate swiper-slide-active" data-swiper-slide-index="0"
                  style="width: 1276px;">
-                <a href="javascript:void(0)"><img src="../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
             </div>
         </div>
     </div>
@@ -342,30 +309,6 @@
         </ul>
     </div>
 </section>
-<section class="topUser">
-    <div class="userBox">
-        <div class="fl userAvatar">
-            <img style="border-radius: 100%;" src="./微助力，助你成功_files/0">
-        </div>
-        <div class="userDesc">
-            <h2>独自等待</h2>
-
-            <p>排名：未参与</p>
-        </div>
-        <div class="tipBox">
-            <div class="tip tip0">
-                <h3>转发数</h3>
-
-                <p>0</p>
-            </div>
-            <div class="tip tip1">
-                <h3>助力值</h3>
-
-                <p>0</p>
-            </div>
-        </div>
-    </div>
-</section>
 <section class="checkBtn animate clearfix">
 </section>
 <section class="oTab">
@@ -373,32 +316,21 @@
         <div class="hd clearfix">
             <ul>
                 <li class="li0" style="margin:0 2px"><i></i>活动规则</li>
-                <li class="li1 on" style="margin:0 2px"><i></i>活动奖品</li>
+                <li class="li1 on" style="margin:0 2px"><i></i>活动介绍</li>
                 <li class="li2" style="margin:0 2px"><i></i>排行top10</li>
             </ul>
         </div>
         <div class="bdRound">
             <div class="bd" style="padding-top: 15px;">
                 <div class="row rule" style="line-height: 20px; display: none;">
-                    此活动为客户测试使用，请亲们尽情玩耍！
+                    {{activity.rule}}
                 </div>
                 <div class="row prize" style="display: block;">
                     <ul class="clearfix">
                         <li>
-                            <div class="rightBar fr">
-
-                            </div>
                             <div class="addBg">
-                                <div class="prizeImg fl">
-                                    <img src="../../images/thumb_5662add6db3a5.jpg">
-                                    <h4>1等奖</h4>
-                                </div>
-                                <div class="prizeDesc">
-                                    <h3>iPhone6s plus</h3>
-                                    <!-- 13个字 -->
-                                    <p>兑换时间：</p>
-
-                                    <p>2015-12-05至2017-12-05</p>
+                                <div class="prizeDesc"  style="height: auto">
+                                    <p>{{activity.desc}}</p>
                                 </div>
                             </div>
                         </li>
@@ -406,156 +338,31 @@
                 </div>
                 <div class="row list" style="display: none;">
                     <ul>
+                        {% for item in participants %}
                         <li>
                             <div class="userBox">
                                 <div class="fl userAvatar">
-                                    <img src="./微助力，助你成功_files/0(1)">
+                                    <img src="{{item.user.headimgurl}}">
                                 </div>
                                 <div class="userDesc">
-                                    <h2>钳</h2>
-                                    <!-- 6个字 -->
-                                    <p>135****5555</p>
+                                    <h2>{{item.user.nickname}}</h2>
                                 </div>
                                 <div class="tipBox">
-                                    <div class="tip tip2">
-                                        <h3>转发数</h3>
-
-                                        <p>2</p>
-                                    </div>
                                     <div class="tip tip1">
-                                        <h3>助力值</h3>
-
-                                        <p>3</p>
+                                        <h3>红包</h3>
+                                        <br>
+                                        <p>￥{{item.total_money}}</p>
                                     </div>
                                 </div>
                                 <div class="num">
                                     <span>
-                                        <i>1</i>
+                                        <i>{{loop.index}}</i>
                                     </span>
                                     <s></s>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="userBox">
-                                <div class="fl userAvatar">
-                                    <img src="./微助力，助你成功_files/0(2)">
-                                </div>
-                                <div class="userDesc">
-                                    <h2>小高</h2>
-                                    <!-- 6个字 -->
-                                    <p>123****8910</p>
-                                </div>
-                                <div class="tipBox">
-                                    <div class="tip tip2">
-                                        <h3>转发数</h3>
-
-                                        <p>1</p>
-                                    </div>
-                                    <div class="tip tip1">
-                                        <h3>助力值</h3>
-
-                                        <p>2</p>
-                                    </div>
-                                </div>
-                                <div class="num">
-                                    <span>
-                                        <i>2</i>
-                                    </span>
-                                    <s></s>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="userBox">
-                                <div class="fl userAvatar">
-                                    <img src="./微助力，助你成功_files/0(3)">
-                                </div>
-                                <div class="userDesc">
-                                    <h2>张洪强</h2>
-                                    <!-- 6个字 -->
-                                    <p>无</p>
-                                </div>
-                                <div class="tipBox">
-                                    <div class="tip tip2">
-                                        <h3>转发数</h3>
-
-                                        <p>0</p>
-                                    </div>
-                                    <div class="tip tip1">
-                                        <h3>助力值</h3>
-
-                                        <p>1</p>
-                                    </div>
-                                </div>
-                                <div class="num">
-                                    <span>
-                                        <i>3</i>
-                                    </span>
-                                    <s></s>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="userBox">
-                                <div class="fl userAvatar">
-                                    <img src="./微助力，助你成功_files/0(4)">
-                                </div>
-                                <div class="userDesc">
-                                    <h2>Rupert</h2>
-                                    <!-- 6个字 -->
-                                    <p>无</p>
-                                </div>
-                                <div class="tipBox">
-                                    <div class="tip tip2">
-                                        <h3>转发数</h3>
-
-                                        <p>0</p>
-                                    </div>
-                                    <div class="tip tip1">
-                                        <h3>助力值</h3>
-
-                                        <p>1</p>
-                                    </div>
-                                </div>
-                                <div class="num">
-                                    <span>
-                                        <i>4</i>
-                                    </span>
-                                    <s></s>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="userBox">
-                                <div class="fl userAvatar">
-                                    <img src="./微助力，助你成功_files/0(5)">
-                                </div>
-                                <div class="userDesc">
-                                    <h2>果果18989433698</h2>
-                                    <!-- 6个字 -->
-                                    <p>无</p>
-                                </div>
-                                <div class="tipBox">
-                                    <div class="tip tip2">
-                                        <h3>转发数</h3>
-
-                                        <p>0</p>
-                                    </div>
-                                    <div class="tip tip1">
-                                        <h3>助力值</h3>
-
-                                        <p>1</p>
-                                    </div>
-                                </div>
-                                <div class="num">
-                                    <span>
-                                        <i>5</i>
-                                    </span>
-                                    <s></s>
-                                </div>
-                            </div>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -564,64 +371,14 @@
 </section>
 <footer style="top: 505px;">
     <div class="oBtn">
-        <a href="http://wx.wechatsale.com/index.php?token=ufxonh1449237298&id=6&g=Wap&m=Helping&a=index&code=041127ec73cbec078c4ca7341bfed06c&state=#memberNoticeBox"
-           id="modaltrigger_notice">我也参与</a></div>
+        <a href="{{activity.participateLink}}" style="display: {{ activity.join }}"
+           id="modaltrigger_notice">我要参加</a>
+        <a style="-webkit-animation: inherit;
+    background-color: gray; display: {{activity.joined}}">已参加</a>
+    </div>
 </footer>
 <div class="fullBg" style="height: 1794px;"></div>
 <div class="fullBg2" style="height: 1794px;"></div>
-<div class="window w1" style="z-index: 1000; top: 456.5px; left: 489.5px;">
-    <div class="windowThis">
-
-        <div class="succeed">
-            <div class="userAvatar">
-                <div class="imgBox">
-                    <img src="./微助力，助你成功_files/0">
-                </div>
-            </div>
-            <div class="title">
-                <h3>给 独自等待</h3>
-
-                <div class="tipWord">
-
-                </div>
-            </div>
-            <div class="roundLight rotate360">
-                <img class="" src="../../images/roundLight.png">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="window w0" style="position: fixed; top: 20px; margin-top: 0px; left: 489.5px;">
-    <div class="windowThis">
-        <div class="hd"></div>
-        <div class="bd">
-            <div class="adMargin">
-                <div class="row">
-                    <div class="putBorder">
-                        <i></i><input type="tel" placeholder="手机号" name="tel">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="putBorder">
-                        <a href="javascript:;" class="getCode">获取验证码</a> <i></i><input type="tel" placeholder="验证码"
-                                                                                       name="code">
-                    </div>
-                </div>
-                <div class="row">
-                    <button id="telyzbut">确定</button>
-                </div>
-                <div class="row">
-                    <p>活动时间：2015-12-05至2018-01-05</p>
-                </div>
-            </div>
-        </div>
-        <div class="ft"></div>
-    </div>
-</div>
-<div class="share_bg">
-    <img src="../../images/share-guide.png">
-</div>
 <style>
     .fullBg2 {
         background-color: #000;
@@ -685,9 +442,9 @@
         "moduleName": "Helping",
         "moduleID": "0",
         "imgUrl": "http://s.404.cn/tpl/static/helping/images/default.jpg",
-        "timeLineLink": window.__page.app.domain + '/activity',
-        "sendFriendLink": window.__page.app.domain + '/activity',
-        "weiboLink": window.__page.app.domain + '/activity',
+        "timeLineLink": window.__app.settings.app.domain + '/activity',
+        "sendFriendLink": window.__app.settings.app.domain + '/activity',
+        "weiboLink": window.__app.settings.app.domain + '/activity',
         "tContent": "此为独自等待测试，可以随意玩弄，哈哈哈！"
     };
 </script>
