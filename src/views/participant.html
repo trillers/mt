@@ -288,11 +288,10 @@
 </section>
 <footer style="top: 505px;">
     <div class="oBtn">
-        <a href="{{activity.participateLink}}" style="display: {{ participant.join }}"
+        <a href="{{participant.activity.participateLink}}" style="display: {{ participant.join }}"
            id="modaltrigger_notice">我要参加</a>
-        <a style="display: {{ participant.help }}"
-           id="helpTa">我要助力</a>
-        <a style="-webkit-animation: inherit; background-color: gray; display: {{ participant.helped }}">已助力</a>
+        <a style="display: {{ participant.help }}" id="helpTa">我要助力</a>
+        <a style="-webkit-animation: inherit; background-color: gray; display: {{ participant.helped }}" id="helped">已助力</a>
         <a style="-webkit-animation: inherit; background-color: gray; display: {{participant.joined}}">已参加</a>
         <a href="javascript:;" onclick="share()" style="background: #aa2343;color: #fff; display: {{participant.inviteFriend}}">找朋友助力</a>
     </div>
@@ -305,7 +304,7 @@
                 if(data){
                     if(data.helped){
                         alert('已助力');
-                    }else if(!data.active){
+                    }else if(data.invalid){
                         alert('活动已过期');
                     }else if(data.limited){
                         alert('该用户助力已达上限');
@@ -313,6 +312,8 @@
                         alert('助力失败');
                     }else {
                         $('#luckyMoney').text('￥' + data.total_money);
+                        $('#helpTa').hide();
+                        $('#helped').show();
                         alert('助力成功');
                     }
                 }else{

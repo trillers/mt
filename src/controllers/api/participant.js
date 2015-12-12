@@ -51,7 +51,7 @@ module.exports = function (router) {
                     this.body = {helped: true};
                 }
             }else{
-                this.body = {active: false};
+                this.body = {invalid: true};
             }
         } else {
             this.body = {error: 'no such participant'};
