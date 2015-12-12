@@ -27,108 +27,6 @@
         timeShow();//倒计时
     });
 
-    var daoshi = 60;
-    function showWindow() {
-        $(".fullBg").show();
-        $(".w0").addClass("animate").show();
-        $('.getCode').click(function () {
-            var tel = $('input[name=tel]').val();
-            var tel_length = tel.length;
-            var thisget = $(this).text();
-            if (tel == '') {
-                alert('请填写您的手机号');
-            } else if (tel_length != 11) {
-                alert('请填写正确的手机号');
-            } else {
-                if (thisget == '获取验证码' || thisget == '重新获取') {
-                    $('.getCode').text('正在发送');
-                    $.ajax({
-                        type: "POST",
-                        url: "/index.php?g=Wap&m=Helping&a=sms&token=ufxonh1449237298&id=6",
-                        dataType: "json",
-                        data: {
-                            tel: tel,
-                            token: 'ufxonh1449237298',
-                            id: 6,
-                            wecha_id: 'oBnKHwIGnNcFZGu9bc9mQllW5amY'
-                        },
-                        success: function (data) {
-                            if (data.error == 0) {
-                                smsdaoshi()
-                            } else if (data.error == 'tel') {
-                                alert('该手机号码已被注册');
-                                $('.getCode').text('获取验证码');
-                            } else if (data.error == 4085 || data.error == 4084) {
-                                alert('该手机号码发送验证码超过每日限制');
-                                $('.getCode').text('获取验证码');
-                            } else if (data.error == null) {
-                                alert('发送失败：该商家未购买短信');
-                                $('.getCode').text('获取验证码');
-                            } else {
-                                alert('发送失败：请稍后再试<br/>失败原因：' + data.error);
-                                $('.getCode').text('获取验证码');
-                            }
-                        }
-                    });
-
-                }
-            }
-
-        });
-        $('#telyzbut').click(function () {
-            var tel = $('input[name=tel]').val();
-            var code = $('input[name=code]').val();
-            var tel_length = tel.length;
-            if (tel == '') {
-                alert('请填写您的手机号');
-            } else if (tel_length != 11) {
-                alert('请填写正确的手机号');
-            } else if (code == '') {
-                alert('请填写您收到的验证码');
-            } else {
-                $('#telyzbut').text('手机号码验证中');
-                $.ajax({
-                    type: "POST",
-                    url: "/index.php?g=Wap&m=Helping&a=smsyz&token=ufxonh1449237298&id=6",
-                    dataType: "json",
-                    data: {
-                        tel: tel,
-                        code: code,
-                        token: 'ufxonh1449237298',
-                        id: 6,
-                        wecha_id: 'oBnKHwIGnNcFZGu9bc9mQllW5amY'
-                    },
-                    success: function (data) {
-                        if (data.error == 0) {
-                            $('#telyzbut').text('验证成功');
-                            window.location.href = '/index.php?g=Wap&m=Helping&a=index&token=ufxonh1449237298&id=6&is_join2=1&tel=' + tel;
-                        } else if (data.error == 1) {
-                            alert('验证码不正确');
-                        } else if (data.error == 2) {
-                            alert('验证码和手机不匹配');
-                        } else if (data.error == 3) {
-                            alert('验证码超时');
-                        }
-                    }
-                });
-            }
-        });
-    }
-    function smsdaoshi() {
-        if (daoshi < 1) {
-            daoshi = 60;
-            $('.getCode').text('重新获取');
-            $('.getCode').addClass('butCode');
-        } else {
-            if (daoshi == 60) {
-                $('.getCode').text('发送成功');
-            } else {
-                $('.getCode').text(daoshi + 's');
-            }
-            daoshi--;
-            setTimeout("smsdaoshi()", 1000);
-        }
-    }
     function closedWindow() {
         timer = setTimeout(function () {
             $(".fullBg").hide();
@@ -184,7 +82,7 @@
 
     function timeShow() {
         var show_time = $(".timeShow");
-        endtime = new Date({{JSON.stringify(activity.endTime)}});//结束时间
+        endtime = new Date({{JSON.stringify(participant.activity.endTime)}});//结束时间
     today = new Date();//当前时间
     delta_T = endtime.getTime() - today.getTime();//时间间隔
     window.setTimeout(timeShow, 1000);
