@@ -12,31 +12,22 @@
         window.__page = {{ JSON.stringify(__page) }};
         window.prdOrNot =( __app.settings.env.NODE_ENV === "production" );
     </script>
+    <script src="../../js/jssdk.js"></script>
+
+    <script>
+        console.log(window.__page.jc);
+
+        wx.config(window.__page.jc);
+        wx.ready(function(){
+            console.log('ready');
+        })
+        wx.error(function(res){
+            console.error(res);
+        });
+    </script>
     {% endblock %}
 </head>
 <body>
 {% block content %}{% endblock %}
 </body>
-<script src="../../js/jssdk.js"></script>
-
-<script>
-    console.log(window.__page.jc);
-
-    wx.config(window.__page.jc);
-    wx.ready(function(){
-        console.log('ready');
-    })
-    wx.error(function(res){
-        alert(res);
-        console.error(res);
-    });
-    wx.checkJsApi({
-        jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-        success: function(res) {
-            console.error(res);
-            // 以键值对的形式返回，可用的api值true，不可用为false
-            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-        }
-    });
-</script>
 </html>

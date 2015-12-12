@@ -1,0 +1,281 @@
+.fullBg{background-color: #000;left: 0;opacity: 0.8;position: fixed;top: 0;z-index: 3;filter: alpha(opacity=80);-moz-opacity: 0.8;-khtml-opacity: 0.8;display: none;z-index: 888;width: 100%;}
+.scroll .swiper-container{}
+.scroll .swiper-wrapper{}
+.scroll .swiper-slide{position: relative;}
+.scroll .swiper-slide img{}
+.scroll .title{position: absolute;bottom: 0;left: 0;text-align: center;font-size: 1.4rem;color:#fff;background: rgba(0,0,0,.5);height:32px;width: 100%;line-height: 3.2rem}
+.oTime .timeBox{border-radius: 10px;background: rgba(0,0,0,.5);height: 90px;margin: 3% 5%}
+.oTime .timeBox h2{color: #fff;text-align: center;font-size: 1.6rem;font-weight: normal;line-height: 3rem;}
+.oTime .timeBox ul{display: block;overflow: hidden;text-align:center}
+.oTime .timeBox ul li{display: inline-block;}
+.oTime .timeBox ul li.bg{width: 36px;height: 35px;line-height: 35px;background: url("../images/timeBg@2x.png") no-repeat;background-size:36px 35px;font-size: 2.1rem;color: #000}
+.oTime .timeBox ul li.oText{color: #fff;font-size: 1.5rem;vertical-align: bottom;margin: 0 1%;}
+.topUser .userBox{height: 63px;background: #feffb9;margin:3% 5%;border-radius:50px;position: relative}
+.topUser .userBox .userAvatar{margin: 0.4rem;border-radius: 100%;;background: #eee;height: 54px;width: 54px;overflow:hidden;}
+.topUser .userBox .userAvatar img{height: 54px;width: 54px}
+.topUser .userBox .userDesc{overflow: hidden;}
+.topUser .userBox .userDesc h2{color: #e7352d;font-size: 14px;font-weight: normal;margin-top: 1.2rem;}
+.topUser .userBox .tipBox{position: absolute;left: 59%;top: -3px;}
+.topUser .userBox .tip{font-size:.8rem;height:50px;font-weight:normal;width: 45px;text-align: center;text-indent: -2px;color: #fff;float: left;margin-right: 4px}
+.topUser .userBox .tip h3{font-size: .8rem;font-weight: normal;line-height: 2rem;}
+.topUser .userBox .tip0{background: url("../images/tip0@2x.png") no-repeat; background-size: 45px 50px}
+.topUser .userBox .tip1{background: url("../images/tip1@2x.png") no-repeat; background-size: 45px 50px}
+.checkBtn{text-align: center;margin: 20px 0}
+.checkBtn a{background: url("../images/icons.png") no-repeat 0 -360px;width: 155px;height: 41px;line-height: 40px;display: inline-block;font-size: 1.8rem;color: #633a0e}
+.oTab{position: relative;margin-bottom:50px}
+.tabBox{width: 100%}
+.tabBox .hd{text-align: center}
+.tabBox .hd ul li{display: inline-block;vertical-align: text-bottom;padding: 10px 5px;background: #9a9a9a;font-size: 1.4rem;color:#fff}
+.tabBox .hd ul li i{height: 19px;background: url("../images/icons.png") no-repeat 0 -59px;display: inline-block;vertical-align: middle;margin-right: 5px;}
+.tabBox .hd ul li.li0 i{width: 21px;background:url("../images/w0@2x.png") no-repeat;background-size: 21px 19px}
+.tabBox .hd ul li.li1 i{width: 19px;background:url("../images/w1@2x.png") no-repeat;background-size: 19px 19px}
+.tabBox .hd ul li.on{font-size: 1.6rem;background:#db3537 url("../images/bdround.png") repeat;color: #fff}
+.tabBox .hd ul li.li0.on i{width:26px;height: 24px;background:url("../images/w0@2x.png") no-repeat;background-size: 26px 24px}
+.tabBox .hd ul li.li1.on i{width:25px;height: 24px;background:url("../images/w1@2x.png") no-repeat;background-size: 25px 24px}
+.tabBox .hd ul li.li2.on i{height: 24px}
+.tabBox .bd{margin: 0 3%;padding: 5px 0;color:#fff}
+.tabBox .bd .rule p{padding: 6px 0;color: #fff;font-size: 1.4rem;}
+.tabBox .bd .rule p i{display: inline-block;width: 17px;height: 17px;background: #fff;border-radius: 100%;text-align: center;vertical-align: text-top;color: #db3537;margin-right: 5px}
+.tabBox .bdRound{background:#db3537 url("../images/bdround.png") repeat;min-height: 240px;padding-bottom: 60px;}
+.tabBox .bd .prize li{margin: 2% 0}
+.tabBox .bd .prize .rightBar{width: 6px;height: 95px;background: url("../images/rightBar.png") no-repeat}
+.tabBox .bd .prize .prizeImg{background: #fff;margin-right: 10px;width: 95px;height: 95px;position: relative;  overflow: hidden;}
+.tabBox .bd .prize .prizeImg img{width: 95px;height: 95px}
+.tabBox .bd .prize .prizeImg h4{font-size: 1.2rem;color: #fff;position: absolute;top: 0;left: 0;-webkit-transform: translate(-46px,-34px) rotate(-45deg);transform: translate(-46px,-34px) rotate(-45deg);padding-top: 50px;padding-bottom: 5px;width: 100%;text-align: center;font-weight: normal;}
+.tabBox .bd .prize li:nth-child(1) .prizeImg h4{background: #ff7709}
+.tabBox .bd .prize li:nth-child(2) .prizeImg h4{background: #21a166}
+.tabBox .bd .prize li:nth-child(3) .prizeImg h4{background: #3b7eed}
+.tabBox .bd .prize .prizeDesc{background: #fff;height: 95px;overflow: hidden}
+.tabBox .bd .prize .prizeDesc h3{font-size: 1.4rem;padding-top: 1.0rem;line-height: 2.4rem;color: #f6514b}
+.tabBox .bd .prize .prizeDesc p{font-size: 1.1rem;line-height: 2.2rem;color: #8c8c8c}
+.tabBox .bd .prize .addBg{background-color: #fff;overflow: hidden;}
+.list li{margin: 2% 0}
+.list .userBox{height: 63px;background: #f6514b;border-radius:50px;position: relative}
+.list .userBox .userAvatar{margin: 0.4rem;border-radius: 100%;;background: #eee;height: 54px;width: 54px;overflow: hidden;}
+.list .userBox .userAvatar img{height: 54px;width: 54px}
+.list .userBox .userDesc{overflow: hidden;}
+.list .userBox .userDesc h2{color: #fff;font-size: 14px;font-weight: normal;margin-top: 1.2rem;}
+.list .userBox .userDesc p{color: #dbd833}
+.list .tipBox{position: absolute;left: 58%;top:-2px}
+.list .userBox .tip{font-size:.8rem;height:41px;font-weight:normal;width:35px;background: url("../images/icons.png") no-repeat -158px 0;text-align: center;text-indent: -2px;color: #fff;float: left;margin-right: 4px}
+.list .userBox .tip h3{font-size: .8rem;font-weight: normal;line-height: 2rem;margin-right: 10px;margin-right: 2px}
+.list .userBox .tip1{background: url("../images/tip1@2x.png") no-repeat; background-size: 35px 41px}
+.list  .userBox .tip2{background: url("../images/tip2@2x.png") no-repeat; background-size: 35px 41px}
+
+.list .userBox .num{position: absolute;right: 3%;top: 27%}
+.list .userBox .num span{width: 30px;height: 30px;line-height: 30px;display: inline-block;background: #db3537;color: #fff;border-radius: 100%;text-align: center;position: relative;z-index: 20;}
+.list .userBox .num span i{position: absolute;background: rgba(255, 255, 255, 0.4);border-radius: 100%;width: 22px;height: 22px;line-height: 22px;top: 4px;left: 4px;}
+.list .userBox .num s{position: absolute;display: inline-block;width: 17px;height: 17px;background: url("../images/taile@2x.png") no-repeat;top: 26px;left: 7px;z-index: 9;background-size: 17px 17px}
+.list li:nth-child(1) .userBox .num{top: 16%}
+.list li:nth-child(2) .userBox .num{top: 16%}
+.list li:nth-child(3) .userBox .num{top: 16%}
+.list li:nth-child(1) .userBox .num span{background: #facc59}
+.list li:nth-child(2) .userBox .num span{background: #cbcbcc}
+.list li:nth-child(3) .userBox .num span{background: #fe9325}
+footer{position: fixed;top: 9999px;width: 100%;z-index: 90}
+footer .oBtn{text-align: center;background: #2d2d49;width: 100%;padding: 15px 0;}
+footer .oBtn a{display: inline-block;padding: 5px 10px;border-radius: 5px;border: 2px solid #1e1e42;font-size: 1.4rem;margin: 0 5px;}
+footer .oBtn a:nth-child(1){background:#fbe601;color: #464215}
+footer .oBtn a:nth-child(2){background: #aa2343;color: #fff}
+.topInfo{padding-top: 155px;position: relative}
+.topInfo .singleInfo{width: 90%;margin: 0 auto;border: 5px solid #db3537;border-radius: 10px;background: #feffb9;position: relative}
+.topInfo .singleInfo h2{text-align: center;font-size: 1.4rem;color: #91604f;width: 70%;margin: 0 auto;border-bottom: 1px dotted #e9e0a5;padding-bottom: 10px;margin-top: 25px;}
+.topInfo .singleInfo .ulBox{text-align: center;padding: 0% 0 5% 0;}
+.topInfo .singleInfo .ulBox ul{display: inline-block;width: 94px;font-size: 1.2rem;color: #91604f;text-align: left}
+.topInfo .singleInfo .ulBox ul li{margin: 10% 0}
+.topInfo .singleInfo .ulBox ul li i{color: #f6514b}
+.topInfo .singleInfo .topAvatar{position: absolute;width: 100%;top: -28px}
+.topInfo .singleInfo .topAvatar .imgT0{width: 275px;margin: 0 auto;height: 56px;background: url("../images/imgt0@2x.png") no-repeat top center;background-size:275px 56px;position: relative;}
+.topInfo .singleInfo .topAvatar .imgT0 i{display: inline-block;background: url("../images/icons.png") no-repeat 0 -163px;position: absolute}
+.topInfo .singleInfo .topAvatar .imgT0 i.starl0{width: 17px;height: 17px;background: url("../images/sl0@2x.png") no-repeat;left: 48px;top: 16px;background-size: 17px 17px}
+.topInfo .singleInfo .topAvatar .imgT0 i.starr0{width: 17px;height: 17px;background: url("../images/sr0@2x.png") no-repeat;right: 43px;top: 16px;background-size: 17px 17px}
+.topInfo .singleInfo .topAvatar .imgT0 i.starl1{width: 24px;height: 24px;background:url("../images/sl1@2x.png") no-repeat;left: 70px;top: 6px; background-size: 24px 24px}
+.topInfo .singleInfo .topAvatar .imgT0 i.starr1{width: 24px;height: 24px;background:url("../images/sr1@2x.png") no-repeat;right: 70px;top: 6px;background-size: 24px 24px}
+.topInfo .singleInfo .avatarThis{position: absolute;width: 100%;top: -120px;left: 0;}
+.topInfo .singleInfo .avatarImg{width: 108px;height: 108px;margin: 0 auto;border: 4px solid #fff;border-radius: 100%;overflow:hidden;}
+.topInfo .light0{position: absolute;width: 100%;top: -67px;left: 0;text-align: center;}
+.topInfo .light0 img{width: 356px;height: 356px}
+.otherUser{width: 95%;margin: 0 auto;margin-bottom:50px}
+.otherUser .hd{position: relative;height: 22px;}
+.otherUser .hd .line{margin-top: 25px;text-align: center;}
+.otherUser .hd .line i{width: 6px;height: 6px;background:#2d2d49;border-radius: 100%;margin-top: -2px;}
+.otherUser .hd .line .lineThis{background: #2d2d49;height: 2px;width: 100%;-webkit-animation: line-fadeIn 4s;position: absolute;display: inline-block;left: 0;-webkit-animation: line-fadeIn 4s;}
+.otherUser .hd .tit{position:absolute;width: 100%;top: 10px;left: 0;z-index: 5;text-align: center;top: -13px;}
+.otherUser .hd .tit h2{display: inline-block;font-size: 1.87rem;color: #2d2d49;font-weight: normal;background: #f6514b;padding: 0 10px;}
+.otherUser .bd{padding-bottom: 62px}
+.otherUser .bd ul li{border-bottom: 1px solid #E33D3D;overflow: hidden;padding: 12px 0;}
+.otherUser .bd ul li .userAvatar{width: 54px;height: 54px;margin-right: 2%}
+.otherUser .bd ul li .userAvatar img{width: 54px;height: 54px;  border-radius: 100%;}
+.otherUser .bd ul li .desc{font-size: 1.4rem;color: #fff;overflow: hidden}
+.otherUser .bd ul li .desc h3{font-weight: normal;margin-top: 8px;line-height: 24px;}
+.otherUser .bd ul li .desc p{font-size: 1.2rem;color: #feffb9}
+.window{width: 297px;position: absolute;z-index: 999;display: none; margin-top: -70px;}
+.w0 .windowThis .hd{height: 32px;background: url("../images/whd.png") no-repeat}
+.w0 .windowThis .bd{background: url("../images/wbg.png") repeat}
+.w0 .windowThis .bd .adMargin{margin: 0 10%}
+.w0 .windowThis .bd .row{padding: 5px 0 20px 0}
+.w0 .windowThis .bd .row:nth-child(3){padding-bottom: 10px}
+.w0 .windowThis .bd .row p{font-size: 1.2rem;color: #fff;text-align: center}
+.w0 .windowThis .bd .row .putBorder{border: 1px solid #aca9aa;border-radius: 5px;}
+.w0 .windowThis .bd .row .putBorder i{display: inline-block;width: 25px;height: 18px;vertical-align: middle;  margin: 0 5px 0 10px}
+.w0 .windowThis .bd .row:nth-child(1) .putBorder i{height: 22px;background:url("../images/phone@2x.png") no-repeat;background-size: 16px 22px}
+.w0 .windowThis .bd .row:nth-child(2) .putBorder i{height: 18px;background:url("../images/code@2x.png") no-repeat;background-size: 25px 18px}
+.w0 .windowThis .bd .row:nth-child(2) .putBorder input{width: 90px}
+.w0 .windowThis .bd .row .putBorder input{border: 0;background: none;padding: 10px 5px;color: #bbb;font-size: 1.2rem}
+.w0 .windowThis .bd .row .putBorder .getCode{float: right;background: #8d7e7e;border-radius: 5px;padding: 5px;margin: 3px;color: #fff;}
+.w0 .windowThis .ft{background: url("../images/wft.png") no-repeat;height: 7px}
+.w1{margin-top: -70px;}
+.w1 .succeed{position: relative}
+.w1 .succeed .userAvatar .imgBox{width: 111px;height: 111px;margin: 0 auto;background: url("../images/icons.png") 0 -191px no-repeat}
+/*.w1 .succeed .userAvatar .imgBox img{border-radius: 100%;margin: 9px 0 0 11px;}*/
+.w1 .succeed .title{background: url("../images/imgt1@2x.png") top center no-repeat;background-size:287px 122px;height: 122px;width: 287px;margin: 0 auto;position: absolute;bottom: -100px;}
+.w1 .succeed .title h3{font-size: 1.4rem;color: #fff;text-align: center;padding: 6px 0;}
+.w1 .succeed .title .tipWord{width: 105px;height: 25px;margin: 0 auto;background: url("../images/zuli.png") no-repeat;background-size: 105px 25px}
+.w1 .succeed .roundLight{position: absolute;width: 356px;height: 356px;top: -90px;z-index: -10;left: -30px;}
+/*.shareLine{width: 98px; height: 106px;background: url("../images/line@2x.png") no-repeat; background-size: 98px 106px;  position: absolute;
+    top: -100px;
+    right: 0;}*/
+/*动画*/
+.swiper-slide-active .title{-webkit-animation: bounceInRight 2s ease .2s both;-moz-animation: bounceInRight 2s ease .2s both;}
+.swiper-slide-active img{-webkit-animation: pulse 3s ease .1s both;-moz-animation: pulse 3s ease .1s both;}
+.oTime .timeBox{-webkit-animation: fadeIn 2s ease 0s both;-moz-animation: fadeIn 2s ease 0s both;}
+.oTime .timeBox h2{-webkit-animation: bounceInDown 1.2s ease 0.2s both;-moz-animation: bounceInDown 1.2s ease 0.2s both;}
+.oTime .timeBox ul li:nth-child(1){-webkit-animation: bounceInDown 1.2s ease 0.4s both;-moz-animation: bounceInDown 1.2s ease 0.4s both;}
+.oTime .timeBox ul li:nth-child(2){-webkit-animation: bounceInDown 1.2s ease 0.6s both;-moz-animation: bounceInDown 1.2s ease 0.6s both;}
+.oTime .timeBox ul li:nth-child(3){-webkit-animation: bounceInDown 1.2s ease 0.8s both;-moz-animation: bounceInDown 1.2s ease 0.8s both;}
+.oTime .timeBox ul li:nth-child(4){-webkit-animation: bounceInDown 1.2s ease 1.0s both;-moz-animation: bounceInDown 1.2s ease 1.0s both;}
+.oTime .timeBox ul li:nth-child(5){-webkit-animation: bounceInDown 1.2s ease 1.2s both;-moz-animation: bounceInDown 1.2s ease 1.2s both;}
+.oTime .timeBox ul li:nth-child(6){-webkit-animation: bounceInDown 1.2s ease 1.4s both;-moz-animation: bounceInDown 1.2s ease 1.4s both;}
+.oTime .timeBox ul li:nth-child(7){-webkit-animation: bounceInDown 1.2s ease 1.6s both;-moz-animation: bounceInDown 1.2s ease 1.6s both;}
+.oTime .timeBox ul li:nth-child(8){-webkit-animation: bounceInDown 1.2s ease 1.8s both;-moz-animation: bounceInDown 1.2s ease 1.8s both;}
+.topUser .userBox .userAvatar img{animation: .5s linear 0s normal none rotate;-webkit-animation:0.5s linear 0s normal none rotate;}
+footer .oBtn a:nth-child(1){-webkit-animation: pulse 3s ease 0s both infinite;-moz-animation: pulse 3s ease 0s both infinite;}
+footer .oBtn a:nth-child(2){-webkit-animation: pulse 3s ease 2s both infinite;-moz-animation: pulse 3s ease 2s both infinite;}
+.topInfo .singleInfo .topAvatar .imgT0 i.starl0{-webkit-animation: flicker 3s ease 2s both infinite;-moz-animation: flicker 3s ease 2s both infinite;}
+.topInfo .singleInfo .topAvatar .imgT0 i.starr0{-webkit-animation: flicker 3s ease 2s both infinite;-moz-animation: flicker 3s ease 2s both infinite;}
+.topInfo .singleInfo .topAvatar .imgT0 i.starl1{-webkit-animation: flicker 5s ease 0s both infinite;-moz-animation: flicker 5s ease 0s both infinite;}
+.topInfo .singleInfo .topAvatar .imgT0 i.starr1{-webkit-animation: flicker 5s ease 0s both infinite;-moz-animation: flicker 5s ease 0s both infinite;}
+.topInfo .singleInfo{-webkit-animation: slideInDown 1.2s ease 0.1s both;-moz-animation: slideInDown 1.2s ease 0.1s both;}
+.topInfo .singleInfo .topAvatar{-webkit-animation: bounceInDown 1.2s ease 0.5s both;-moz-animation: bounceInDown 1.2s ease 0.5s both;}
+.topInfo .singleInfo .avatarImg{-webkit-animation: zoomInDown 1.2s ease 1s both;-moz-animation: zoomInDown 1.2s ease 1s both;}
+.animate .windowThis{-webkit-animation: bounceInUp 1.2s ease 0s both;-moz-animation: bounceInUp 1.2s ease 0s both;}
+/***** 动画样式 *****/
+/* 向上滑动*/
+@-webkit-keyframes up35{0%{opacity:0;-webkit-transform:translateY(35px);}
+                               100%{opacity:1;-webkit-transform:translateY(0);}}
+@-moz-keyframes up35{0%{opacity:0;-moz-transform:translateY(35px);}
+    100%{opacity:1;-moz-transform:translateY(0);}}
+@keyframes up35{0%{opacity:0;transform:translateY(35px);}
+    100%{opacity:1;transform:translateY(0);}}
+.animate .up35{-webkit-animation:up35 1s .5s ease both;-moz-animation:up35 1s .5s ease both;animation:up35 1s .5s ease both;}
+@-webkit-keyframes rotate{from{-webkit-transform:rotate(0deg)}
+    to{-webkit-transform:rotate(360deg)}}
+@-moz-keyframes rotate{from{-moz-transform:rotate(0deg)}
+    to{-moz-transform:rotate(360deg)}}
+@-ms-keyframes rotate{from{-ms-transform:rotate(0deg)}
+    to{-ms-transform:rotate(360deg)}}
+@-o-keyframes rotate{from{-o-transform:rotate(0deg)}
+    to{-o-transform:rotate(360deg)}}
+.animate .rotate360{animation: 9.5s linear 0s normal none infinite rotate;-webkit-animation:9.5s linear 0s normal none infinite rotate;}
+@-webkit-keyframes line-fadeIn{from{width: 0;}
+    to{width: 100%;}}
+@-webkit-keyframes twinkling{0%{opacity:0;}
+    100%{opacity:1;}}
+@-webkit-keyframes flicker{0%{-webkit-transform: rotate(0deg) scale(1);opacity: 1;}
+    50%{-webkit-transform: rotate(180deg) scale(0.7);opacity: .3;-webkit-transform-origin:center;}
+    100%{-webkit-transform: rotate(360deg) scale(1);opacity: 1;-webkit-transform-origin:center;}}
+@-moz-keyframes flicker{0%{-moz-transform: rotate(0deg) scale(1);opacity: 1;}
+    50%{-moz-transform: rotate(180deg) scale(0.7);opacity: .3;-moz-transform-origin:center;}
+    100%{-moz-transform: rotate(360deg) scale(1);opacity: 1;-moz-transform-origin:center;}}
+@-o-keyframes flicker{0%{-o-transform: rotate(0deg) scale(1);opacity: 1;}
+    50%{-o-transform: rotate(180deg) scale(0.7);opacity: .3;-o-transform-origin:center;}
+    100%{-o-transform: rotate(360deg) scale(1);opacity: 1;-o-transform-origin:center;}}
+@keyframes flicker{0%{transform: rotate(0deg) scale(1);opacity: 1;}
+    50%{transform: rotate(180deg) scale(0.7);opacity: .3;transform-origin:center;}
+    100%{transform: rotate(360deg) scale(1);opacity: 1;transform-origin:center;}}
+.flicker{-webkit-animation-name: flicker;-moz-animation-name: flicker;-o-animation-name: flicker;animation-name: flicker;}
+@-webkit-keyframes bounceInRight{0%{opacity: 0;-webkit-transform: translateX(2000px);}
+    60%{opacity: 1;-webkit-transform: translateX(-30px);}
+    80%{-webkit-transform: translateX(10px);}
+    100%{-webkit-transform: translateX(0);}}
+@-moz-keyframes bounceInRight{0%{opacity: 0;-moz-transform: translateX(2000px);}
+    60%{opacity: 1;-moz-transform: translateX(-30px);}
+    80%{-moz-transform: translateX(10px);}
+    100%{-moz-transform: translateX(0);}}
+@-o-keyframes bounceInRight{0%{opacity: 0;-o-transform: translateX(2000px);}
+    60%{opacity: 1;-o-transform: translateX(-30px);}
+    80%{-o-transform: translateX(10px);}
+    100%{-o-transform: translateX(0);}}
+@keyframes bounceInRight{0%{opacity: 0;transform: translateX(2000px);}
+    60%{opacity: 1;transform: translateX(-30px);}
+    80%{transform: translateX(10px);}
+    100%{transform: translateX(0);}}
+.bounceInRight{-webkit-animation-name: bounceInRight;-moz-animation-name: bounceInRight;-o-animation-name: bounceInRight;animation-name: bounceInRight;}
+@-webkit-keyframes pulse{0%{-webkit-transform: scale(1);}
+    50%{-webkit-transform: scale(1.1);}
+    100%{-webkit-transform: scale(1);}}
+@-moz-keyframes pulse{0%{-moz-transform: scale(1);}
+    50%{-moz-transform: scale(1.1);}
+    100%{-moz-transform: scale(1);}}
+@-o-keyframes pulse{0%{-o-transform: scale(1);}
+    50%{-o-transform: scale(1.1);}
+    100%{-o-transform: scale(1);}}
+@keyframes pulse{0%{transform: scale(1);}
+    50%{transform: scale(1.1);}
+    100%{transform: scale(1);}}
+.pulse{-webkit-animation-name: pulse;-moz-animation-name: pulse;-o-animation-name: pulse;animation-name: pulse;}
+@-webkit-keyframes fadeIn{0%{opacity: 0;}
+    100%{opacity: 1;}}
+@-moz-keyframes fadeIn{0%{opacity: 0;}
+    100%{opacity: 1;}}
+@-o-keyframes fadeIn{0%{opacity: 0;}
+    100%{opacity: 1;}}
+@keyframes fadeIn{0%{opacity: 0;}
+    100%{opacity: 1;}}
+.fadeIn{-webkit-animation-name: fadeIn;-moz-animation-name: fadeIn;-o-animation-name: fadeIn;animation-name: fadeIn;}
+@-webkit-keyframes bounceInDown{0%{opacity: 0;-webkit-transform: translateY(-2000px);}
+    60%{opacity: 1;-webkit-transform: translateY(30px);}
+    80%{-webkit-transform: translateY(-10px);}
+    100%{-webkit-transform: translateY(0);}}
+@-moz-keyframes bounceInDown{0%{opacity: 0;-moz-transform: translateY(-2000px);}
+    60%{opacity: 1;-moz-transform: translateY(30px);}
+    80%{-moz-transform: translateY(-10px);}
+    100%{-moz-transform: translateY(0);}}
+@-o-keyframes bounceInDown{0%{opacity: 0;-o-transform: translateY(-2000px);}
+    60%{opacity: 1;-o-transform: translateY(30px);}
+    80%{-o-transform: translateY(-10px);}
+    100%{-o-transform: translateY(0);}}
+@keyframes bounceInDown{0%{opacity: 0;transform: translateY(-2000px);}
+    60%{opacity: 1;transform: translateY(30px);}
+    80%{transform: translateY(-10px);}
+    100%{transform: translateY(0);}}
+.bounceInDown{-webkit-animation-name: bounceInDown;-moz-animation-name: bounceInDown;-o-animation-name: bounceInDown;animation-name: bounceInDown;}
+@-webkit-keyframes slideInDown{0%{-webkit-transform: translate3d(0, -100%, 0);transform: translate3d(0, -100%, 0);visibility: visible;}
+    100%{-webkit-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0);}}
+@keyframes slideInDown{0%{-webkit-transform: translate3d(0, -100%, 0);transform: translate3d(0, -100%, 0);visibility: visible;}
+    100%{-webkit-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0);}}
+.slideInDown{-webkit-animation-name: slideInDown;animation-name: slideInDown;}
+@-webkit-keyframes zoomInDown{0%{opacity: 0;-webkit-transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);-webkit-animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);}
+    60%{opacity: 1;-webkit-transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);-webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);}}
+@keyframes zoomInDown{0%{opacity: 0;-webkit-transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);-webkit-animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);}
+    60%{opacity: 1;-webkit-transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);-webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);}}
+.zoomInDown{-webkit-animation-name: zoomInDown;animation-name: zoomInDown;}
+@-webkit-keyframes bounceInUp{0%{opacity: 0;-webkit-transform: translateY(2000px);}
+    60%{opacity: 1;-webkit-transform: translateY(-30px);}
+    80%{-webkit-transform: translateY(10px);}
+    100%{-webkit-transform: translateY(0);}}
+@-moz-keyframes bounceInUp{0%{opacity: 0;-moz-transform: translateY(2000px);}
+    60%{opacity: 1;-moz-transform: translateY(-30px);}
+    80%{-moz-transform: translateY(10px);}
+    100%{-moz-transform: translateY(0);}}
+@-o-keyframes bounceInUp{0%{opacity: 0;-o-transform: translateY(2000px);}
+    60%{opacity: 1;-o-transform: translateY(-30px);}
+    80%{-o-transform: translateY(10px);}
+    100%{-o-transform: translateY(0);}}
+@keyframes bounceInUp{0%{opacity: 0;transform: translateY(2000px);}
+    60%{opacity: 1;transform: translateY(-30px);}
+    80%{transform: translateY(10px);}
+    100%{transform: translateY(0);}}
+.bounceInUp{-webkit-animation-name: bounceInUp;-moz-animation-name: bounceInUp;-o-animation-name: bounceInUp;animation-name: bounceInUp;}
+
+/***** 动画样式 结束 *****/
