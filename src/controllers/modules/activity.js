@@ -105,7 +105,7 @@ module.exports = function(router){
                 ]
             }
             var participants = yield participantService.filter(params);
-            yield this.render('activity', {participant: participant, participants: participants});
+            yield this.render('participant', {participant: participant, participants: participants});
         }else{
             yield this.render('error');
         }

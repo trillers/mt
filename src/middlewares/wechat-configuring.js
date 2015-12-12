@@ -18,7 +18,6 @@ var wechatConfiguring = function*(next) {
         yield next;
     }catch (err){
         logger.error('Fail to get jc: ' + err);
-        yield next;
     }
 };
 
