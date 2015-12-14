@@ -24,37 +24,41 @@ module.exports = function (router) {
 
     router.post('/help', function *() {
         var id = this.request.body.id;
-        var user = this.session.user;
-        var today = new Date();
-        var participant = yield participantService.loadById(id);
-        if (participant) {
-            var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
-            if(active) {
-                var helpArr = participant.help_friends;
-                if (_.indexOf(helpArr, user.wx_openid) === -1) {
-                    if (helpArr.length < participant.activity.friend_help_count_limit) {
-                        helpArr.push(user.wx_openid);
-                        var min = participant.activity.friend_help_min_money || 0;
-                        var max = participant.activity.friend_help_max_money || 0;
-                        var helpMoney = util.random(min, max);
-                        var total_money = participant.total_money + helpMoney;
-                        var update = {
-                            total_money: total_money,
-                            help_friends: helpArr
+        var user = this.session.user || {};
+        if(!user.wx_openid){
+            var today = new Date();
+            var participant = yield participantService.loadById(id);
+            if (participant) {
+                var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
+                if(active) {
+                    var helpArr = participant.help_friends;
+                    if (_.indexOf(helpArr, user.wx_openid) === -1) {
+                        if (helpArr.length < participant.activity.friend_help_count_limit) {
+                            helpArr.push(user.wx_openid);
+                            var min = participant.activity.friend_help_min_money || 0;
+                            var max = participant.activity.friend_help_max_money || 0;
+                            var helpMoney = util.random(min, max);
+                            var total_money = participant.total_money + helpMoney;
+                            var update = {
+                                total_money: total_money,
+                                help_friends: helpArr
+                            }
+                            var data = yield participantService.updateById(participant._id, update);
+                            this.body = data;
+                        } else {
+                            this.body = {limited: true};
                         }
-                        var data = yield participantService.updateById(participant._id, update);
-                        this.body = data;
                     } else {
-                        this.body = {limited: true};
+                        this.body = {helped: true};
                     }
-                } else {
-                    this.body = {helped: true};
+                }else{
+                    this.body = {invalid: true};
                 }
-            }else{
-                this.body = {invalid: true};
+            } else {
+                this.body = {error: 'no such participant'};
             }
-        } else {
-            this.body = {error: 'no such participant'};
+        }else {
+            this.body = {error: 'please open in wechat browser'};
         }
     });
 }

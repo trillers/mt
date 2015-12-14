@@ -114,9 +114,13 @@ module.exports = function(router){
     router.get('/join', userinfoAuthFilter, function *(){
         var id = this.query.id;
         var user = this.session.user || {};
-        var activity = yield activityService.loadById(id);
-        if(activity){
-            yield this.render('join', {headimgurl: user.headimgurl, nickname: user.nickname, activityId: activity._id});
+        if(!user.wx_openid){
+            var activity = yield activityService.loadById(id);
+            if(activity){
+                yield this.render('join', {headimgurl: user.headimgurl, nickname: user.nickname, activityId: activity._id});
+            }else{
+                yield this.render('error');
+            }
         }else{
             yield this.render('error');
         }
