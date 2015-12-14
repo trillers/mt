@@ -135,7 +135,7 @@ footer .oBtn a:nth-child(2){background: #aa2343;color: #fff}
 /*.shareLine{width: 98px; height: 106px;background: url("../images/line@2x.png") no-repeat; background-size: 98px 106px;  position: absolute;
     top: -100px;
     right: 0;}*/
-/*¶¯»­*/
+/*ï¿½ï¿½ï¿½ï¿½*/
 .swiper-slide-active .title{-webkit-animation: bounceInRight 2s ease .2s both;-moz-animation: bounceInRight 2s ease .2s both;}
 .swiper-slide-active img{-webkit-animation: pulse 3s ease .1s both;-moz-animation: pulse 3s ease .1s both;}
 .oTime .timeBox{-webkit-animation: fadeIn 2s ease 0s both;-moz-animation: fadeIn 2s ease 0s both;}
@@ -151,6 +151,7 @@ footer .oBtn a:nth-child(2){background: #aa2343;color: #fff}
 .topUser .userBox .userAvatar img{animation: .5s linear 0s normal none rotate;-webkit-animation:0.5s linear 0s normal none rotate;}
 footer .oBtn a:nth-child(1){-webkit-animation: pulse 3s ease 0s both infinite;-moz-animation: pulse 3s ease 0s both infinite;}
 footer .oBtn a:nth-child(2){-webkit-animation: pulse 3s ease 2s both infinite;-moz-animation: pulse 3s ease 2s both infinite;}
+footer .oBtn a:nth-child(5){-webkit-animation: pulse 3s ease 2s both infinite;-moz-animation: pulse 3s ease 2s both infinite;}
 .topInfo .singleInfo .topAvatar .imgT0 i.starl0{-webkit-animation: flicker 3s ease 2s both infinite;-moz-animation: flicker 3s ease 2s both infinite;}
 .topInfo .singleInfo .topAvatar .imgT0 i.starr0{-webkit-animation: flicker 3s ease 2s both infinite;-moz-animation: flicker 3s ease 2s both infinite;}
 .topInfo .singleInfo .topAvatar .imgT0 i.starl1{-webkit-animation: flicker 5s ease 0s both infinite;-moz-animation: flicker 5s ease 0s both infinite;}
@@ -159,8 +160,8 @@ footer .oBtn a:nth-child(2){-webkit-animation: pulse 3s ease 2s both infinite;-m
 .topInfo .singleInfo .topAvatar{-webkit-animation: bounceInDown 1.2s ease 0.5s both;-moz-animation: bounceInDown 1.2s ease 0.5s both;}
 .topInfo .singleInfo .avatarImg{-webkit-animation: zoomInDown 1.2s ease 1s both;-moz-animation: zoomInDown 1.2s ease 1s both;}
 .animate .windowThis{-webkit-animation: bounceInUp 1.2s ease 0s both;-moz-animation: bounceInUp 1.2s ease 0s both;}
-/***** ¶¯»­ÑùÊ½ *****/
-/* ÏòÉÏ»¬¶¯*/
+/***** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ *****/
+/* ï¿½ï¿½ï¿½Ï»ï¿½ï¿½ï¿½*/
 @-webkit-keyframes up35{0%{opacity:0;-webkit-transform:translateY(35px);}
                                100%{opacity:1;-webkit-transform:translateY(0);}}
 @-moz-keyframes up35{0%{opacity:0;-moz-transform:translateY(35px);}
@@ -278,4 +279,4 @@ footer .oBtn a:nth-child(2){-webkit-animation: pulse 3s ease 2s both infinite;-m
     100%{transform: translateY(0);}}
 .bounceInUp{-webkit-animation-name: bounceInUp;-moz-animation-name: bounceInUp;-o-animation-name: bounceInUp;animation-name: bounceInUp;}
 
-/***** ¶¯»­ÑùÊ½ ½áÊø *****/
+/***** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ ï¿½ï¿½ï¿½ï¿½ *****/
