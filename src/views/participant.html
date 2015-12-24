@@ -300,6 +300,7 @@
     $(function(){
         $('#helpTa').click(function(){
             $.post('/api/participant/help', {id: $('#participantId').val()}, function(data){
+                alert(JSON.stringify(data));
                 if(data){
                     if(data.helped){
                         alert('已助力');
