@@ -240,10 +240,10 @@
                         <li>
                             <div class="userBox">
                                 <div class="fl userAvatar">
-                                    <img src="{{ item.user ? item.user.headimgurl : ''}}">
+                                    <img src="{{ !item.user ? '' : item.user.headimgurl}}">
                                 </div>
                                 <div class="userDesc">
-                                    <h2>{{item.user ? item.user.nickname : ''}}</h2>
+                                    <h2>{{!item.user ?  '' : item.user.nickname}}</h2>
                                 </div>
                                 <div class="tipBox">
                                     <div class="tip tip1">
