@@ -74,7 +74,7 @@
 .list li:nth-child(3) .userBox .num span{background: #fe9325}
 footer{position: fixed;top: 9999px;width: 100%;z-index: 90}
 footer .oBtn{text-align: center;background: #2d2d49;width: 100%;padding: 15px 0;}
-footer .oBtn a{display: inline-block;padding: 5px 10px;border-radius: 5px;border: 2px solid #1e1e42;font-size: 1.4rem;margin: 0 5px;}
+footer .oBtn a{display: inline-block;padding: 5px 10px;border-radius: 5px;border: 2px solid #1e1e42;font-size: 3.4rem;margin: 0 5px;}
 footer .oBtn a:nth-child(1){background:#fbe601;color: #464215}
 footer .oBtn a:nth-child(2){background: #aa2343;color: #fff}
 .topInfo{padding-top: 155px;position: relative}
