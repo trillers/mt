@@ -10,6 +10,10 @@ var schema = DomainBuilder
     .withProperties({
         type: {type: String, enum: ActivityType.valueList(), require: true}
         ,name: {type: String, require: true}
+        ,bgImg: {type: String}
+        ,shareImg: {type: String}
+        ,shareTitle: {type: String}
+        ,shareDesc: {type: String}
         ,base_lucky_money: {type: Number}
         ,friend_help_count_limit: {type: Number}
         ,startTime: {type: Date}

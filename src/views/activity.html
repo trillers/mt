@@ -173,14 +173,14 @@
     <div class="swiper-container swiper-container-horizontal">
         <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2552px, 0px, 0px);">
             <div class="swiper-slide swiper-slide-duplicate" data-swiper-slide-index="0" style="width: 1276px;">
-                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+                <a href="javascript:void(0)"><img src="{{activity.bgImg || '../../images/thumb_5662adc4f38c1.jpg'}}" width="100%"></a>
             </div>
             <div class="swiper-slide swiper-slide-prev" data-swiper-slide-index="0" style="width: 1276px;">
-                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+                <a href="javascript:void(0)"><img src="{{activity.bgImg || '../../images/thumb_5662adc4f38c1.jpg'}}" width="100%"></a>
             </div>
             <div class="swiper-slide swiper-slide-duplicate swiper-slide-active" data-swiper-slide-index="0"
                  style="width: 1276px;">
-                <a href="javascript:void(0)"><img src="../../images/thumb_5662adc4f38c1.jpg" width="100%"></a>
+                <a href="javascript:void(0)"><img src="{{activity.bgImg || '../../images/thumb_5662adc4f38c1.jpg'}}" width="100%"></a>
             </div>
         </div>
     </div>
@@ -190,6 +190,12 @@
             autoplay: 5000//可选选项，自动滑动
         });
     </script>
+    <style>
+        .swiper-slide img{
+            width: 100%;
+            height: 500px;
+        }
+    </style>
 </header>
 <section class="oTime">
     <div class="timeBox">
@@ -340,13 +346,13 @@
     window.shareData = {
         "moduleName": "Helping",
         "moduleID": "0",
-        "imgUrl": "http://s.404.cn/tpl/static/helping/images/default.jpg",
+        "imgUrl": "{{ activity.shareImg || 'http://s.404.cn/tpl/static/helping/images/default.jpg'}}",
         "timeLineLink": window.__app.settings.app.url + '/activity?id=' + '{{activity._id}}',
         "sendFriendLink": window.__app.settings.app.url + '/activity?id=' + '{{activity._id}}',
         "weiboLink": window.__app.settings.app.url + '/activity?id=' + '{{activity._id}}',
-        "tContent": "我正在参加红包助力活动，小伙伴们快来参加呀！",
-        "tTitle": "红包助力，祝我成功！",
-        "fTitle": "我正在参加红包助力活动，小伙伴们快来参加呀！"
+        "tContent": "{{activity.shareDesc || '我正在参加红包助力活动，小伙伴们快来参加呀！'}}",
+        "tTitle": "{{activity.shareTitle || '红包助力，祝我成功！'}}",
+        "fTitle": "{{activity.shareTitle || '我正在参加红包助力活动，小伙伴们快来参加呀！'}}"
     };
 </script>
 <script type="text/javascript">

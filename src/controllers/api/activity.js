@@ -5,6 +5,10 @@ module.exports = function(router){
         var json = {
             type:  this.request.body.type
             ,name: this.request.body.name
+            ,shareTitle: this.request.body.shareTitle
+            ,shareDesc: this.request.body.shareDesc
+            ,shareImg: this.request.body.shareImg
+            ,bgImg: this.request.body.bgImg
             ,base_lucky_money: this.request.body.base_lucky_money
             ,friend_help_count_limit: this.request.body.friend_help_count_limit
             ,startTime: new Date(this.request.body.startTime)

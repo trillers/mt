@@ -5,6 +5,9 @@
     <style type="text/css">
         .leftlist{list-style-type: none;text-align: center;font-size: 1.3em}
         .ul{list-style-type: none ; text-align: center; padding: 0}
+        .ul li{
+            margin-bottom: 20px;
+        }
     </style>
     <script type="text/javascript">
         $(function(){
@@ -23,6 +26,8 @@
                 var json = {
                     type:  $('#activityType').val()
                     ,name: $('#activityName').val()
+                    ,shareTitle: $('#shareTitle').val()
+                    ,shareDesc: $('#shareDesc').val()
                     ,base_lucky_money: $('#base_lucky_money').val()
                     ,friend_help_count_limit: $('#friend_help_count_limit').val()
                     ,startTime: $('#startTime').val()
@@ -33,13 +38,48 @@
                     ,desc: $('#desc').val()
                 }
 
-                $.post('/api/activity/add', json, function(data){
-                    if(data){
-                        $('#list').append($('<li> <strong class="col-md-2">' + data.name +'</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
-                        $('#addForm').hide();
-                        $('#luckyMoneyHelpList').show();
+                var formData = new FormData();
+                var files = $('#bgImg')[0].files;
+                formData.append('file', files[0]);
+                $.ajax({
+                    url: __app.settings.api.url + '/file/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (responseStr) {
+                        json.bgImg = __app.settings.api.url + '/file?media_id=' + responseStr.media_id;
+                        var sFormData = new FormData();
+                        var sFiles = $('#shareImg')[0].files;
+                        sFormData.append('file', sFiles[0]);
+                        $.ajax({
+                            url: __app.settings.api.url + '/file/upload',
+                            type: 'POST',
+                            data: sFormData,
+                            processData: false,
+                            contentType: false,
+                            success: function (responseStr) {
+                                json.shareImg = __app.settings.api.url + '/file?media_id=' + responseStr.media_id;
+
+                                $.post('/api/activity/add', json, function(data){
+                                    if(data){
+                                        $('#list').append($('<li> <strong class="col-md-2">' + data.name +'</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
+                                        $('#addForm').hide();
+                                        $('#luckyMoneyHelpList').show();
+                                    }
+                                })
+                            },
+                            error: function (responseStr) {
+                                console.error(responseStr);
+                                //TODO
+                            }
+                        });
+                    },
+                    error: function (responseStr) {
+                        console.error(responseStr);
+                        //TODO
                     }
-                })
+                });
             })
         })
         function formatDate(date){
@@ -58,7 +98,7 @@
             <div class="col-md-3 col-xs-3 col-sm-3">
                 <div class="well sidebar-nav" style="height: 38em">
                     <ul class="nav nav-list" style="margin-top: 1em">
-                        <li class="leftlist" style="background: #e7e7e7"><a >红包助力</a></li>
+                        <li class="leftlist" style="background: #e7e7e7"><a href="/">红包助力</a></li>
                     </ul>
                 </div>
                 <!--/.well -->
@@ -66,8 +106,8 @@
             <!--/span-->
             <div class="col-md-9 col-xs-9 col-sm-9">
                 <div class="jumbotron" style="height: auto; padding: 25px;">
-                    <a id="add" style="font-size: 1.5em">新增</a>
                     <div id="luckyMoneyHelpList" class="panel" style="margin-top: 1em; padding: 0; min-height: 30em">
+                        <div style="padding-left: 20px; padding-bottom: 10px;"><a id="add" style="font-size: 1.5em; text-decoration: none; cursor: pointer">新增</a></div>
                         <ul class="ul" id="list">
                             <li>
                                 <strong class="col-md-2">活动名称</strong>
@@ -81,12 +121,17 @@
                         </ul>
                     </div>
                     <div id="addForm" class="panel" style="margin-top: 1em; display: none">
+                        <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return" style="font-size: 1.5em; text-decoration: none; cursor: pointer" href="/">返回</a></div>
                         <ul class="ul" style="text-align: left; padding-left: 2em">
                             <li><span>红包助力活动设置</span></li>
                             <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
+                            <li><span style="float: left">背景图片:  </span><input id="bgImg" type="file"/></li>
+                            <li><span style="float: left">分享卡片图片:  </span><input id="shareImg" type="file"/></li>
                             <li><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime" type="date"/></li>
                             <li><span>活动介绍:  </span><textarea id="desc" cols="60" rows="5"></textarea></li>
                             <li><span>活动规则:  </span><textarea id="rule" cols="60" rows="5"></textarea></li>
+                            <li><span>分享标题自定义:  </span><textarea id="shareTitle" cols="60" rows="1"></textarea></li>
+                            <li><span>分享描述自定义:  </span><textarea id="shareDesc" cols="60" rows="1"></textarea></li>
                             <li><span>基础红包金额:  </span><input id="base_lucky_money" type="text"/></li>
                             <li><span>好友助力单次奖励:  </span><input id="friend_help_min_money" type="text"/><span> 至 </span><input id="friend_help_max_money" type="text"/></li>
                             <li><span>好友助力上限人数:  </span><input id="friend_help_count_limit" type="text"/></li>

@@ -18,4 +18,10 @@ module.exports = function(app){
     participant_router.prefix('/api/participant');
     require('./participant')(participant_router);
     app.use(participant_router.routes());
+
+    //file
+    var file_router = new router();
+    file_router.prefix('/api/file');
+    require('./file')(file_router);
+    app.use(file_router.routes());
 }
