@@ -15,10 +15,10 @@ var wechatConfiguring = function*(next) {
         var jsConfig = yield token.getJc({url: url, jsApiList: jsApiList, debug: debug});
         this.app.jc = jsConfig;
         this.state.__page.jc = jsConfig;
-        yield next;
     }catch (err){
         logger.error('Fail to get jc: ' + err);
     }
+    yield next;
 };
 
 module.exports = wechatConfiguring;
