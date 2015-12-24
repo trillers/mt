@@ -28,7 +28,7 @@ module.exports = function (router) {
         console.log('!!!!!!!!!!!!!!!!!!!!');
         console.error(id);
         console.error(user);
-        if(!user.wx_openid){
+        if(user.wx_openid){
             var today = new Date();
             var participant = yield participantService.loadById(id);
             console.error(participant);
