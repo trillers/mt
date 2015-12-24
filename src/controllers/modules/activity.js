@@ -114,6 +114,7 @@ module.exports = function(router){
     router.get('/join', userinfoAuthFilter, function *(){
         var id = this.query.id;
         var user = this.session.user || {};
+        console.error(user);
         if(!user.wx_openid){
             var activity = yield activityService.loadById(id);
             if(activity){
