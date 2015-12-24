@@ -25,9 +25,6 @@ module.exports = function (router) {
     router.post('/help', function *() {
         var id = this.request.body.id;
         var user = this.session.user || {};
-        console.log('!!!!!!!!!!!!!!!!!!!!');
-        console.error(id);
-        console.error(user);
         if(user.wx_openid){
             var today = new Date();
             var participant = yield participantService.loadById(id);
