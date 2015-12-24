@@ -27,7 +27,7 @@ module.exports = function(router){
             activity.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + activity._id;
             activity.join = '';
             activity.joined = 'none';
-            var participant = yield participantService.filter({conditions: {user: user.id}});
+            var participant = yield participantService.filter({activity: activity._id, conditions: {user: user.id}});
             if(participant.length > 0){
                 activity.join = 'none';
                 activity.joined = '';
