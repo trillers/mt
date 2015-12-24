@@ -115,7 +115,7 @@ module.exports = function(router){
         var id = this.query.id;
         var user = this.session.user || {};
         console.error(user);
-        if(!user.wx_openid){
+        if(user.wx_openid){
             var activity = yield activityService.loadById(id);
             if(activity){
                 yield this.render('join', {headimgurl: user.headimgurl, nickname: user.nickname, activityId: activity._id});
