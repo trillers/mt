@@ -1,6 +1,6 @@
 var logger = require('../../../app/logging').logger;
 var u = require('../../../app/util');
-var File = require('../models/File').model;
+var File = require('../models/file').model;
 var Promise = require('bluebird');
 
 var Service = {};
