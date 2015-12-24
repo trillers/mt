@@ -28,10 +28,15 @@ module.exports = function (router) {
         if(user.wx_openid){
             var today = new Date();
             var participant = yield participantService.loadById(id);
-            console.error(participant);
             if (participant) {
+                var state = 'started';
                 var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
-                console.error(active);
+                if(today < new Date(participant.activity.startTime)){
+                    state = 'nonActivated';
+                }
+                if(today > new Date(participant.activity.endTime)){
+                    state = 'closed';
+                }
                 if(active) {
                     var helpArr = participant.help_friends;
                     if (_.indexOf(helpArr, user.wx_openid) === -1) {
@@ -54,7 +59,7 @@ module.exports = function (router) {
                         this.body = {helped: true};
                     }
                 }else{
-                    this.body = {invalid: true};
+                    this.body = {invalid: state};
                 }
             } else {
                 this.body = {error: 'no such participant'};

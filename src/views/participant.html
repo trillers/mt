@@ -304,8 +304,10 @@
                 if(data){
                     if(data.helped){
                         alert('已助力');
-                    }else if(data.invalid){
-                        alert('活动已过期');
+                    }else if(data.invalid == 'nonActivated'){
+                        alert('活动未开始');
+                    }else if(data.invalid == 'closed'){
+                        alert('活动已结束');
                     }else if(data.limited){
                         alert('该用户助力已达上限');
                     }else if(data.error){
