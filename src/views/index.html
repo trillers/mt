@@ -1,150 +1,217 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-    {% parent %}
-    <style type="text/css">
-        .leftlist{list-style-type: none;text-align: center;font-size: 1.3em}
-        .ul{list-style-type: none ; text-align: center; padding: 0}
-        .ul li{
-            margin-bottom: 20px;
-        }
-    </style>
-    <script type="text/javascript">
-        $(function(){
-            $.get('/api/activity/load?type=flmh', function(data){
-                data.forEach(function(item){
-                    $('#list').append($('<li> <strong class="col-md-2">' + item.name +'</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
-                });
+{% parent %}
+<style type="text/css">
+    .leftlist {list-style-type: none; text-align: center; font-size: 1.3em}
+    .ul {list-style-type: none; text-align: center; padding: 0}
+    .ul li {margin-bottom: 20px;}
+    .bgImg #bgImg {float: left; margin-left: 10px;}
+    .bgImg .bgImgCon {margin-left: 10px; display: -webkit-inline-box; position: relative; display: none; border: solid 1px #E8E7E7;}
+    .bgImgCon i{color: #EC3131; position: absolute; left: 58px; top: 2px; cursor: pointer;}
+    .bgImgCon div{margin-left: 20px; float: left;}
+    .bgImgCon img {width: 75px; height: 75px;}
+    .shareImgCon img {width: 75px; height: 75px;}
+    #shareImg{float: left; margin-left: 10px;}
+    .shareImgCon i{color: #EC3131;position: absolute;left: 58px;top: 2px;cursor: pointer;}
+    .shareImgCon{margin-left: 10px; display: -webkit-inline-box;position: relative; display: none; border: solid 1px #E8E7E7;}
+</style>
+<script type="text/javascript">
+    var bgImgCount = 0;
+    var bgImg = [];
+    var shareImg = '';
+    $(function () {
+        $.get('/api/activity/load?type=flmh', function (data) {
+            data.forEach(function (item) {
+                $('#list').append($('<li> <strong class="col-md-2">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
             });
+        });
 
-            $('#add').click(function(){
-                $('#luckyMoneyHelpList').hide();
-                $('#addForm').show();
-            });
+        $('#add').click(function () {
+            $('#luckyMoneyHelpList').hide();
+            $('#addForm').show();
+        });
 
-            $('#submit').click(function(){
-                var json = {
-                    type:  $('#activityType').val()
-                    ,name: $('#activityName').val()
-                    ,shareTitle: $('#shareTitle').val()
-                    ,shareDesc: $('#shareDesc').val()
-                    ,base_lucky_money: $('#base_lucky_money').val()
-                    ,friend_help_count_limit: $('#friend_help_count_limit').val()
-                    ,startTime: $('#startTime').val()
-                    ,endTime: $('#endTime').val()
-                    ,friend_help_min_money: $('#friend_help_min_money').val()
-                    ,friend_help_max_money: $('#friend_help_max_money').val()
-                    ,rule: $('#rule').val()
-                    ,desc: $('#desc').val()
+        $('.bgImgCon i').click(function(){
+            $(this).parent().hide();
+            $('#bgImg').show();
+            var index = bgImg.indexOf($(this).attr('media'));
+            bgImg.splice(index, 1);
+            --bgImgCount;
+        });
+
+        $('.shareImgCon i').click(function(){
+            $(this).parent().hide();
+            $('#shareImg').show();
+        });
+
+        $('#submit').click(function () {
+            var json = {
+                type: $('#activityType').val()
+                , name: $('#activityName').val()
+                , bgImg: bgImg
+                , shareImg: shareImg
+                , shareTitle: $('#shareTitle').val()
+                , shareDesc: $('#shareDesc').val()
+                , base_lucky_money: $('#base_lucky_money').val()
+                , friend_help_count_limit: $('#friend_help_count_limit').val()
+                , startTime: $('#startTime').val()
+                , endTime: $('#endTime').val()
+                , friend_help_min_money: $('#friend_help_min_money').val()
+                , friend_help_max_money: $('#friend_help_max_money').val()
+                , rule: $('#rule').val()
+                , desc: $('#desc').val()
+            }
+
+
+            $.post('/api/activity/add', json, function (data) {
+                if (data) {
+                    $('#list').append($('<li> <strong class="col-md-2">' + data.name + '</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
+                    $('#addForm').hide();
+                    $('#luckyMoneyHelpList').show();
                 }
-
-                var formData = new FormData();
-                var files = $('#bgImg')[0].files;
-                formData.append('file', files[0]);
-                $.ajax({
-                    url: __app.settings.api.url + '/file/upload',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (responseStr) {
-                        json.bgImg = __app.settings.api.url + '/file?media_id=' + responseStr.media_id;
-                        var sFormData = new FormData();
-                        var sFiles = $('#shareImg')[0].files;
-                        sFormData.append('file', sFiles[0]);
-                        $.ajax({
-                            url: __app.settings.api.url + '/file/upload',
-                            type: 'POST',
-                            data: sFormData,
-                            processData: false,
-                            contentType: false,
-                            success: function (responseStr) {
-                                json.shareImg = __app.settings.api.url + '/file?media_id=' + responseStr.media_id;
-
-                                $.post('/api/activity/add', json, function(data){
-                                    if(data){
-                                        $('#list').append($('<li> <strong class="col-md-2">' + data.name +'</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
-                                        $('#addForm').hide();
-                                        $('#luckyMoneyHelpList').show();
-                                    }
-                                })
-                            },
-                            error: function (responseStr) {
-                                console.error(responseStr);
-                                //TODO
-                            }
-                        });
-                    },
-                    error: function (responseStr) {
-                        console.error(responseStr);
-                        //TODO
-                    }
-                });
-            })
+            });
         })
-        function formatDate(date){
-            var dateTime = new Date(date);
-            var year = dateTime.getFullYear();
-            var month = dateTime.getMonth() + 1;
-            var day = dateTime.getDate();
-            return year + '-' + month + '-' + day;
+    })
+    function formatDate(date) {
+        var dateTime = new Date(date);
+        var year = dateTime.getFullYear();
+        var month = dateTime.getMonth() + 1;
+        var day = dateTime.getDate();
+        return year + '-' + month + '-' + day;
+    }
+
+    function uploadShareImg() {
+        var files = $('#shareImg')[0].files;
+        var formData = new FormData();
+        formData.append('file', files[0]);
+        $.ajax({
+            url: __app.settings.api.url + '/file/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (responseStr) {
+                if (responseStr.media_id) {
+                    $('#shareImg1 img').attr('src', __app.settings.api.url + '/file?media_id=' + responseStr.media_id).parent().css('display', '-webkit-inline-box');
+                    shareImg = window.__app.settings.api.url + '/file?media_id=' + responseStr.media_id;
+                    $('#shareImg').hide();
+                }
+            },
+            error: function (responseStr) {
+                console.error(responseStr);
+                //TODO
+            }
+        });
+        $('#shareImg').val();
+    }
+
+    function uploadBgImg(){
+        var files = $('#bgImg')[0].files;
+        if(files.length > (3 - bgImgCount)){
+            alert('最多上传三张背景图片');
+            return;
         }
-    </script>
+        for(var i=0; i<files.length; i++) {
+            var formData = new FormData();
+            formData.append('file', files[i]);
+            $.ajax({
+                url: __app.settings.api.url + '/file/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (responseStr) {
+                    if(responseStr.media_id) {
+                        ++bgImgCount;
+                        $('#bgImg' + bgImgCount + ' img').attr('src', __app.settings.api.url + '/file?media_id=' + responseStr.media_id).parent().css('display', '-webkit-inline-box');
+                        $('#bgImg' + bgImgCount + ' i').attr('media', window.__app.settings.api.url + '/file?media_id=' + responseStr.media_id);
+                        bgImg.push(window.__app.settings.api.url + '/file?media_id=' + responseStr.media_id);
+                        if (bgImgCount === 3) {
+                            $('#bgImg').hide();
+                        }
+                    }
+                },
+                error: function (responseStr) {
+                    console.error(responseStr);
+                    //TODO
+                }
+            });
+        }
+        $('#bgImg').val();
+    }
+</script>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row-fluid">
-            <div class="col-md-3 col-xs-3 col-sm-3">
-                <div class="well sidebar-nav" style="height: 38em">
-                    <ul class="nav nav-list" style="margin-top: 1em">
-                        <li class="leftlist" style="background: #e7e7e7"><a href="/">红包助力</a></li>
+<div class="container">
+    <div class="row-fluid">
+        <div class="col-md-3 col-xs-3 col-sm-3">
+            <div class="well sidebar-nav" style="height: 38em">
+                <ul class="nav nav-list" style="margin-top: 1em">
+                    <li class="leftlist" style="background: #e7e7e7"><a href="/">红包助力</a></li>
+                </ul>
+            </div>
+            <!--/.well -->
+        </div>
+        <!--/span-->
+        <div class="col-md-9 col-xs-9 col-sm-9">
+            <div class="jumbotron" style="height: auto; padding: 25px;">
+                <div id="luckyMoneyHelpList" class="panel" style="margin-top: 1em; padding: 0; min-height: 30em">
+                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="add"
+                                                                              style="font-size: 1.5em; text-decoration: none; cursor: pointer">新增</a>
+                    </div>
+                    <ul class="ul" id="list">
+                        <li>
+                            <strong class="col-md-2">活动名称</strong>
+                            <strong class="col-md-2">开始时间</strong>
+                            <strong class="col-md-2">结束时间</strong>
+                            <strong class="col-md-6">活动链接</strong>
+                        </li>
+
+                        <li>
+                            <hr width="100%">
+                        </li>
+
                     </ul>
                 </div>
-                <!--/.well -->
-            </div>
-            <!--/span-->
-            <div class="col-md-9 col-xs-9 col-sm-9">
-                <div class="jumbotron" style="height: auto; padding: 25px;">
-                    <div id="luckyMoneyHelpList" class="panel" style="margin-top: 1em; padding: 0; min-height: 30em">
-                        <div style="padding-left: 20px; padding-bottom: 10px;"><a id="add" style="font-size: 1.5em; text-decoration: none; cursor: pointer">新增</a></div>
-                        <ul class="ul" id="list">
-                            <li>
-                                <strong class="col-md-2">活动名称</strong>
-                                <strong class="col-md-2">开始时间</strong>
-                                <strong class="col-md-2">结束时间</strong>
-                                <strong class="col-md-6">活动链接</strong>
-                            </li>
+                <div id="addForm" class="panel" style="margin-top: 1em; display: none">
+                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return"
+                                                                              style="font-size: 1.5em; text-decoration: none; cursor: pointer"
+                                                                              href="/">返回</a></div>
+                    <ul class="ul" style="text-align: left; padding-left: 2em">
+                        <li><span>红包助力活动设置</span></li>
+                        <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
+                        <li class="bgImg" style="min-height: 26px"><span style="float: left">背景图片(3张):  </span><input id="bgImg" type="file" multiple="multiple" accept="image/bmp, image/jpg, image/jpeg, image/gif, image/png" onchange="uploadBgImg()" style="width: 60px;"/>
 
-                            <li>  <hr width="100%" >  </li>
-
-                        </ul>
-                    </div>
-                    <div id="addForm" class="panel" style="margin-top: 1em; display: none">
-                        <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return" style="font-size: 1.5em; text-decoration: none; cursor: pointer" href="/">返回</a></div>
-                        <ul class="ul" style="text-align: left; padding-left: 2em">
-                            <li><span>红包助力活动设置</span></li>
-                            <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
-                            <li><span style="float: left">背景图片:  </span><input id="bgImg" type="file"/></li>
-                            <li><span style="float: left">分享卡片图片:  </span><input id="shareImg" type="file"/></li>
-                            <li><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime" type="date"/></li>
-                            <li><span>活动介绍:  </span><textarea id="desc" cols="60" rows="5"></textarea></li>
-                            <li><span>活动规则:  </span><textarea id="rule" cols="60" rows="5"></textarea></li>
-                            <li><span>分享标题自定义:  </span><textarea id="shareTitle" cols="60" rows="1"></textarea></li>
-                            <li><span>分享描述自定义:  </span><textarea id="shareDesc" cols="60" rows="1"></textarea></li>
-                            <li><span>基础红包金额:  </span><input id="base_lucky_money" type="text"/></li>
-                            <li><span>好友助力单次奖励:  </span><input id="friend_help_min_money" type="text"/><span> 至 </span><input id="friend_help_max_money" type="text"/></li>
-                            <li><span>好友助力上限人数:  </span><input id="friend_help_count_limit" type="text"/></li>
-                            <li style="text-align: center; margin-top: 1em"><input class="btn btn-success" type="button" id="submit" value="提交"/></li>
-                            <input type="hidden" id="activityType" value="flmh"/>
-                        </ul>
-                    </div>
+                            <div id="bgImg1" class="bgImgCon"><i class="glyphicon glyphicon-remove"></i><img src="" alt=""/></div>
+                            <div id="bgImg2" class="bgImgCon"><i class="glyphicon glyphicon-remove"></i><img src="" alt=""/></div>
+                            <div id="bgImg3" class="bgImgCon"><i class="glyphicon glyphicon-remove"></i><img src="" alt=""/></div>
+                        </li>
+                        <li style="clear: both; min-height: 26px"><span style="float: left">分享卡片图片:  </span><input id="shareImg" type="file" accept="image/bmp, image/jpg, image/jpeg, image/gif, image/png" onchange="uploadShareImg()" style="width: 60px;"/>
+                            <div id="shareImg1" class="shareImgCon"><i class="glyphicon glyphicon-remove"></i><img src="/" alt=""/></div>
+                        </li>
+                        <li style="clear: both"><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime"
+                                                                                                          type="date"/>
+                        </li>
+                        <li><span>活动介绍:  </span><textarea id="desc" cols="60" rows="5"></textarea></li>
+                        <li><span>活动规则:  </span><textarea id="rule" cols="60" rows="5"></textarea></li>
+                        <li><span>分享标题自定义:  </span><textarea id="shareTitle" cols="60" rows="1"></textarea></li>
+                        <li><span>分享描述自定义:  </span><textarea id="shareDesc" cols="60" rows="1"></textarea></li>
+                        <li><span>基础红包金额:  </span><input id="base_lucky_money" type="text"/></li>
+                        <li><span>好友助力单次奖励:  </span><input id="friend_help_min_money" type="text"/><span> 至 </span><input id="friend_help_max_money" type="text"/></li>
+                        <li><span>好友助力上限人数:  </span><input id="friend_help_count_limit" type="text"/></li>
+                        <li style="text-align: center; margin-top: 1em"><input class="btn btn-success" type="button"
+                                                                               id="submit" value="提交"/></li>
+                        <input type="hidden" id="activityType" value="flmh"/>
+                    </ul>
                 </div>
             </div>
-            <!--/span-->
         </div>
-        <!--/row-->
-
-
+        <!--/span-->
     </div>
+    <!--/row-->
+
+
+</div>
 {% endblock %}

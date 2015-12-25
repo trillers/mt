@@ -58,16 +58,16 @@ module.exports = function(router){
                 console.log(fileJson);
                 try {
                     var wx_media_id = null;
-                    if (file.type && file.size > 0 && fileType === 'image') {
-                        console.log('upload image');
-                        var imageData = yield wechatApi.uploadMediaAsync(file.path, 'image');
-                        wx_media_id = imageData[0].media_id;
-                    } else if (file.type && file.size > 0 && fileType === 'audio' || ext === 'amr') {
-                        console.log('upload voice');
-                        var voiceData = yield wechatApi.uploadMediaAsync(file.path, 'voice');
-                        wx_media_id = voiceData[0].media_id;
-                    }
-                    fileJson.wx_media_id = wx_media_id;
+                    //if (file.type && file.size > 0 && fileType === 'image') {
+                    //    console.log('upload image');
+                    //    var imageData = yield wechatApi.uploadMediaAsync(file.path, 'image');
+                    //    wx_media_id = imageData[0].media_id;
+                    //} else if (file.type && file.size > 0 && fileType === 'audio' || ext === 'amr') {
+                    //    console.log('upload voice');
+                    //    var voiceData = yield wechatApi.uploadMediaAsync(file.path, 'voice');
+                    //    wx_media_id = voiceData[0].media_id;
+                    //}
+                    //fileJson.wx_media_id = wx_media_id;
                     var result = yield FileService.createAsync(fileJson);
                     console.log('++++++');
                     console.log(result);
