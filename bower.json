@@ -5,6 +5,7 @@
   "dependencies": {
     "underscore": "~1.8.2",
     "jquery": "~1.10.2",
-    "bootstrap": "3.3.5"
+    "bootstrap": "3.3.5",
+    "summernote": "~0.7.0"
   }
 }

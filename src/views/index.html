@@ -21,6 +21,19 @@
     var bgImg = [];
     var shareImg = '';
     $(function () {
+        $('#desc').summernote({
+            height: 200,
+            minHeight: null,
+            maxHeight: null,
+            focus: true
+        });
+        $('#rule').summernote({
+            height: 200,
+            minHeight: null,
+            maxHeight: null,
+            focus: true
+        });
+
         $.get('/api/activity/load?type=flmh', function (data) {
             data.forEach(function (item) {
                 $('#list').append($('<li> <strong class="col-md-2">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
@@ -59,8 +72,8 @@
                 , endTime: $('#endTime').val()
                 , friend_help_min_money: $('#friend_help_min_money').val()
                 , friend_help_max_money: $('#friend_help_max_money').val()
-                , rule: $('#rule').val()
-                , desc: $('#desc').val()
+                , rule: $('#rule').summernote('code')
+                , desc: $('#desc').summernote('code')
             }
 
 
@@ -176,9 +189,7 @@
                     </ul>
                 </div>
                 <div id="addForm" class="panel" style="margin-top: 1em; display: none">
-                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return"
-                                                                              style="font-size: 1.5em; text-decoration: none; cursor: pointer"
-                                                                              href="/">返回</a></div>
+                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return"style="font-size: 1.5em; text-decoration: none; cursor: pointer" href="/">返回</a></div>
                     <ul class="ul" style="text-align: left; padding-left: 2em">
                         <li><span>红包助力活动设置</span></li>
                         <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
@@ -194,8 +205,8 @@
                         <li style="clear: both"><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime"
                                                                                                           type="date"/>
                         </li>
-                        <li><span>活动介绍:  </span><textarea id="desc" cols="60" rows="5"></textarea></li>
-                        <li><span>活动规则:  </span><textarea id="rule" cols="60" rows="5"></textarea></li>
+                        <li><span>活动介绍:  </span><div id="desc"></div></li>
+                        <li><span>活动规则:  </span><div id="rule"></div></li>
                         <li><span>分享标题自定义:  </span><textarea id="shareTitle" cols="60" rows="1"></textarea></li>
                         <li><span>分享描述自定义:  </span><textarea id="shareDesc" cols="60" rows="1"></textarea></li>
                         <li><span>基础红包金额:  </span><input id="base_lucky_money" type="text"/></li>
