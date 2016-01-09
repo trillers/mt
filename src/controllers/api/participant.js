@@ -8,16 +8,21 @@ module.exports = function (router) {
         var id = this.request.body.id;
         var activity = yield activityService.loadById(id);
         if (activity) {
-            var json = {
-                activity: id
-                , user: this.session.user.id
-                , phone: this.request.body.phone
-                , total_money: activity.base_lucky_money
-                , help_friends: []
+            var participant = yield participantService.filter({conditions: {user: this.session.user.id, activity: id}});
+            if(participant){
+                yield this.render('error', {error: '已参加'});
+            }else {
+                var json = {
+                    activity: id
+                    , user: this.session.user.id
+                    , phone: this.request.body.phone
+                    , total_money: activity.base_lucky_money
+                    , help_friends: []
+                }
+                var data = yield participantService.create(json);
+                yield activityService.updateById(id, {$inc: {participants_count: 1}});
+                this.body = data;
             }
-            var data = yield participantService.create(json);
-            yield activityService.updateById(id, {$inc: {participants_count: 1}});
-            this.body = data;
         } else {
             this.body = {error: 'no such activity'};
         }
