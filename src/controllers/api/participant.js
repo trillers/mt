@@ -10,7 +10,7 @@ module.exports = function (router) {
         if (activity) {
             var participant = yield participantService.filter({conditions: {user: this.session.user.id, activity: id}});
             console.error(participant);
-            if(participant){
+            if(participant.length > 0){
                 this.body = {error: 'joined', msg: '已参加'};
             }else {
                 var json = {
