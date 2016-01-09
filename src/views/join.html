@@ -38,6 +38,8 @@
                 $.post('/api/participant/add', data, function (data) {
                     if (!data.error) {
                         window.location.href = window.__app.settings.app.url + '/participant?id=' + data._id;
+                    }else if(data.error === 'joined'){
+                        alert('已参加');
                     }
                 })
             })

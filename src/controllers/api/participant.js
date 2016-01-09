@@ -9,8 +9,9 @@ module.exports = function (router) {
         var activity = yield activityService.loadById(id);
         if (activity) {
             var participant = yield participantService.filter({conditions: {user: this.session.user.id, activity: id}});
+            console.error(participant);
             if(participant){
-                yield this.render('error', {error: '已参加'});
+                this.body = {error: 'joined', msg: '已参加'};
             }else {
                 var json = {
                     activity: id
