@@ -16,6 +16,7 @@ module.exports = function (router) {
                 , help_friends: []
             }
             var data = yield participantService.create(json);
+            yield activityService.updateById(id, {$inc: {participants_count: 1}});
             this.body = data;
         } else {
             this.body = {error: 'no such activity'};
