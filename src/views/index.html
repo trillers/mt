@@ -36,7 +36,7 @@
 
         $.get('/api/activity/load?type=flmh', function (data) {
             data.forEach(function (item) {
-                $('#list').append($('<li> <strong class="col-md-2">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
+                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
             });
         });
 
