@@ -45,6 +45,11 @@
             $('#addForm').show();
         });
 
+        $('#return').click(function () {
+            $('#luckyMoneyHelpList').show();
+            $('#addForm').hide();
+        });
+
         $('.bgImgCon i').click(function(){
             $(this).parent().hide();
             $('#bgImg').show();
@@ -189,7 +194,7 @@
                     </ul>
                 </div>
                 <div id="addForm" class="panel" style="margin-top: 1em; display: none">
-                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return"style="font-size: 1.5em; text-decoration: none; cursor: pointer" href="/">返回</a></div>
+                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return" style="font-size: 1.5em; text-decoration: none; cursor: pointer">返回</a></div>
                     <ul class="ul" style="text-align: left; padding-left: 2em">
                         <li><span>红包助力活动设置</span></li>
                         <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
