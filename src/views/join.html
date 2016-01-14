@@ -33,7 +33,8 @@
         $(function () {
             $('.subBtn').click(function () {
                 var data = {
-                    id: $('#activityId').val()
+                    id: $('#activityId').val(),
+                    phone: $('#phone').val()
                 }
                 $.post('/api/participant/add', data, function (data) {
                     if (!data.error) {
