@@ -31,31 +31,33 @@ module.exports = function(router){
             if(participant.length > 0){
                 activity.join = 'none';
                 activity.joined = '';
-            }
-            var params = {
-                conditions: {
-                    activity: activity._id,
-                    lFlg: 'a'
-                },
-                sort: {
-                    total_money: -1
-                },
-                page: {
-                    no: 1,
-                    size: 10
-                },
-                populate: [
-                    {
-                        path: 'user'
-                    }
-                ]
-            }
-            var participants = yield participantService.filter(params);
-            console.warn('**************************');
-            console.error(activity);
+                this.redirect('/participant?id=' + participant[0]._id);
+            }else {
+                var params = {
+                    conditions: {
+                        activity: activity._id,
+                        lFlg: 'a'
+                    },
+                    sort: {
+                        total_money: -1
+                    },
+                    page: {
+                        no: 1,
+                        size: 10
+                    },
+                    populate: [
+                        {
+                            path: 'user'
+                        }
+                    ]
+                }
+                var participants = yield participantService.filter(params);
+                console.warn('**************************');
+                console.error(activity);
 
-            console.error(participants);
-            yield this.render('activity', {activity: activity, participants: participants});
+                console.error(participants);
+                yield this.render('activity', {activity: activity, participants: participants});
+            }
         }else{
             yield this.render('error');
         }
