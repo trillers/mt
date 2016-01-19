@@ -1,7 +1,7 @@
 var settings = require('mt-settings');
 var logger = require('../app/logging').logger;
 var token = require('../modules/wechat/common/token');
-var jsApiList = ['checkJsApi','chooseImage','previewImage','uploadImage','downloadImage','onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','getNetworkType'];
+var jsApiList = ['checkJsApi','chooseImage','previewImage','uploadImage','downloadImage','onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','getNetworkType','startRecord','stopRecord','onVoiceRecordEnd','playVoice','pauseVoice','stopVoice','onVoicePlayEnd','uploadVoice','downloadVoice'];
 
 var env = settings.env.NODE_ENV;
 var debug = env != 'production';
