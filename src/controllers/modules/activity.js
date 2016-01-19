@@ -19,6 +19,10 @@ module.exports = function(router){
         yield this.render('jssdk');
     });
 
+    router.get('/voice', function *(){
+        yield this.render('voice');
+    });
+
     router.get('/activity', baseAuthFilter, function *(){
         var id = this.query.id;
         var user = this.session.user || {};

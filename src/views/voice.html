@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>voice</title>
+    <script src="../../components/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        window.__app = {{ JSON.stringify(__app) }};
+        window.__page = {{ JSON.stringify(__page) }};
+        window.prdOrNot =( __app.settings.env.NODE_ENV === "production" );
+    </script>
+    <script src="../../js/jssdk.js"></script>
+    <script>
+        wx.config(window.__page.jc);
+        wx.ready(function(){
+            console.log('ready');
+            wx.onVoiceRecordEnd({
+                // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+                complete: function (res) {
+                    console.error('end');
+                    var localId = res.localId;
+                }
+            });
+            wx.onVoicePlayEnd({
+                success: function (res) {
+                    var localId = res.localId; // 返回音频的本地ID
+                }
+            });
+        })
+        wx.error(function(res){
+            console.error(res);
+        });
+    </script>
+    <script>
+        $(function(){
+            var recordGap;
+           $('#record').on('touchstart', function(){
+               recordGap = setTimeout(function(){
+                   console.error('down');
+                   wx.startRecord();
+               }, 1000);
+           }).on('touchend', function(){
+               clearTimeout(recordGap);
+               console.error('up');
+               wx.stopRecord({
+                   success: function (res) {
+                       var localId = res.localId;
+                       console.error('localId:' + localId);
+                       $('#voiceList').append($('<button onclick="playVoice(' + localId + ')" localId="' + localId + '">音频</button>'))
+                   }
+               });
+           });
+        });
+        var playVoice = function(id){
+            wx.playVoice({
+                localId: id
+            })
+        }
+    </script>
+</head>
+<body>
+    <div id="voiceList">
+
+    </div>
+    <button id="record">录音</button>
+</body>
+</html>
