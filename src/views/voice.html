@@ -32,6 +32,10 @@
         });
     </script>
     <script>
+        var voice = {
+            localId: '',
+            serverId: ''
+        };
         $(function(){
             var recordGap;
            $('#record').on('touchstart', function(){
@@ -46,15 +50,15 @@
                    success: function (res) {
                        var localId = res.localId;
                        console.error('localId:' + localId);
-                       $('#voiceList').append($('<button class="btn" onclick="playVoice(' + localId + ')" localId="' + localId + '">音频</button>'))
+                       voice.localId = localId;
+                       $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
                    }
                });
            });
         });
-        var playVoice = function(id){
-            alert('ddddd');
+        var playVoice = function(){
             wx.playVoice({
-                localId: id
+                localId: voice.localId
             })
         }
     </script>
