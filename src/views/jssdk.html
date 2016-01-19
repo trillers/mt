@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -119,50 +118,55 @@
 </div>
 </body>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"> </script>
+<script type="text/javascript">
+    window.__app = {{ JSON.stringify(__app) }};
+    window.__page = {{ JSON.stringify(__page) }};
+</script>
 <script>
-    wx.config({
-        appId: "wx23f1709f7727051f",
-        debug: false,
-        nonceStr: "xhk1cd9iyewpcik",
-        signature: "d50c4db1de4e658b86834ac9e25caa9c90582d92",
-        timestamp: "1449837036",
-        jsApiList: [
-            'checkJsApi',
-            'onMenuShareTimeline',
-            'onMenuShareAppMessage',
-            'onMenuShareQQ',
-            'onMenuShareWeibo',
-            'hideMenuItems',
-            'showMenuItems',
-            'hideAllNonBaseMenuItem',
-            'showAllNonBaseMenuItem',
-            'translateVoice',
-            'startRecord',
-            'stopRecord',
-            'onRecordEnd',
-            'playVoice',
-            'pauseVoice',
-            'stopVoice',
-            'uploadVoice',
-            'downloadVoice',
-            'chooseImage',
-            'previewImage',
-            'uploadImage',
-            'downloadImage',
-            'getNetworkType',
-            'openLocation',
-            'getLocation',
-            'hideOptionMenu',
-            'showOptionMenu',
-            'closeWindow',
-            'scanQRCode',
-            'chooseWXPay',
-            'openProductSpecificView',
-            'addCard',
-            'chooseCard',
-            'openCard'
-        ]
-    });
+//    wx.config({
+//        appId: "wx23f1709f7727051f",
+//        debug: false,
+//        nonceStr: "xhk1cd9iyewpcik",
+//        signature: "d50c4db1de4e658b86834ac9e25caa9c90582d92",
+//        timestamp: "1449837036",
+//        jsApiList: [
+//            'checkJsApi',
+//            'onMenuShareTimeline',
+//            'onMenuShareAppMessage',
+//            'onMenuShareQQ',
+//            'onMenuShareWeibo',
+//            'hideMenuItems',
+//            'showMenuItems',
+//            'hideAllNonBaseMenuItem',
+//            'showAllNonBaseMenuItem',
+//            'translateVoice',
+//            'startRecord',
+//            'stopRecord',
+//            'onRecordEnd',
+//            'playVoice',
+//            'pauseVoice',
+//            'stopVoice',
+//            'uploadVoice',
+//            'downloadVoice',
+//            'chooseImage',
+//            'previewImage',
+//            'uploadImage',
+//            'downloadImage',
+//            'getNetworkType',
+//            'openLocation',
+//            'getLocation',
+//            'hideOptionMenu',
+//            'showOptionMenu',
+//            'closeWindow',
+//            'scanQRCode',
+//            'chooseWXPay',
+//            'openProductSpecificView',
+//            'addCard',
+//            'chooseCard',
+//            'openCard'
+//        ]
+//    });
+    wx.config(window.__page.jc);
     wx.ready(function () {
         // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
         document.querySelector('#checkJsApi').onclick = function () {
