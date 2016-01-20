@@ -45,25 +45,10 @@
             record.addEventListener('touchstart', function(e){
                 //$('#mask').show();
                 $('#dis').append($('<span>down</span>'));
-                e.preventDefault();
+                //e.preventDefault();
                 recordGap = setTimeout(function(){
-                    wx.startRecord();
+                    //wx.startRecord();
                     $('#dis').append($('<span>out</span>'));
-                    record.addEventListener('touchend', function(e){
-                        clearTimeout(recordGap);
-                        $('#dis').append($('<span>up</span>'));
-                        //$('#mask').hide();
-                        wx.stopRecord({
-                            success: function (res) {
-                                console.log(res);
-                                var localId = res.localId;
-                                console.error('localId:' + localId);
-                                voice.localId = localId;
-                                $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
-                            }
-                        });
-                    }, false);
-
                 }, 1000);
             }, false);
 
