@@ -57,7 +57,8 @@
                     $('#dis').append($('<span>out</span>'));
                 }, 300);
             });
-            $('#record').on('touchmove', function(){
+            $('#record').on('touchmove', function(e){
+                e.preventDefault();
                 $('#dis').append($('<span>move</span>'));
             });
             $('#record').on('touchend', function(event){
