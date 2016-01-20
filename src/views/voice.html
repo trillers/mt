@@ -38,25 +38,44 @@
         };
         $(function(){
             var recordGap;
-           $('#record').on('touchstart', function(e){
-               e.preventDefault();
-               recordGap = setTimeout(function(){
-                   console.error('down');
-                   wx.startRecord();
-               }, 1000);
-           }).on('touchend', function(e){
-               e.preventDefault();
-               clearTimeout(recordGap);
-               console.error('up');
-               wx.stopRecord({
-                   success: function (res) {
-                       var localId = res.localId;
-                       console.error('localId:' + localId);
-                       voice.localId = localId;
-                       $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
-                   }
-               });
-           });
+            var obj = document.getElementById('record');
+            obj.addEventListener('touchstart', function(e){
+                recordGap = setTimeout(function(){
+                    console.error('down');
+                    wx.startRecord();
+                }, 1000);
+            }, false);
+            obj.addEventListener('touchend', function(e){
+                clearTimeout(recordGap);
+                console.error('up');
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        console.error('localId:' + localId);
+                        voice.localId = localId;
+                        $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+                    }
+                });
+            }, false);
+//           $('#record').on('touchstart', function(e){
+//               e.preventDefault();
+//               recordGap = setTimeout(function(){
+//                   console.error('down');
+//                   wx.startRecord();
+//               }, 1000);
+//           }).on('touchend', function(e){
+//               e.preventDefault();
+//               clearTimeout(recordGap);
+//               console.error('up');
+//               wx.stopRecord({
+//                   success: function (res) {
+//                       var localId = res.localId;
+//                       console.error('localId:' + localId);
+//                       voice.localId = localId;
+//                       $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+//                   }
+//               });
+//           });
         });
         var playVoice = function(){
             wx.playVoice({
