@@ -1,76 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>touchend doesn't fire on mobile devices</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <style>
-        body {
-            background-color: #eee;
+    <meta charset="UTF-8">
+    <title>voice</title>
+    <script src="../../components/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        window.__app = {{ JSON.stringify(__app) }};
+        window.__page = {{ JSON.stringify(__page) }};
+        window.prdOrNot =( __app.settings.env.NODE_ENV === "production" );
+    </script>
+    <script src="../../js/jssdk.js"></script>
+    <script>
+        wx.config(window.__page.jc);
+        wx.ready(function(){
+            console.log('ready');
+            wx.onVoiceRecordEnd({
+                // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+                complete: function (res) {
+                    console.error('end');
+                    var localId = res.localId;
+                }
+            });
+            wx.onVoicePlayEnd({
+                success: function (res) {
+                    var localId = res.localId; // 返回音频的本地ID
+                }
+            });
+        })
+        wx.error(function(res){
+            console.error(res);
+        });
+    </script>
+    <script>
+        var voice = {
+            localId: '',
+            serverId: ''
+        };
+        $(function(){
+            var recordGap;
+            var obj = document.getElementById('record');
+            obj.addEventListener('touchstart', function(e){
+                $('#dis').append($('<span>down</span>'));
+                recordGap = setTimeout(function(){
+                    wx.startRecord();
+                }, 1000);
+            }, false);
+            obj.addEventListener('touchend', function(e){
+                clearTimeout(recordGap);
+                $('#dis').append($('<span>up</span>'));
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        console.error('localId:' + localId);
+                        voice.localId = localId;
+                        $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+                    }
+                });
+            }, false);
+//           $('#record').on('touchstart', function(e){
+//               e.preventDefault();
+//               recordGap = setTimeout(function(){
+//                   console.error('down');
+//                   wx.startRecord();
+//               }, 1000);
+//           }).on('touchend', function(e){
+//               e.preventDefault();
+//               clearTimeout(recordGap);
+//               console.error('up');
+//               wx.stopRecord({
+//                   success: function (res) {
+//                       var localId = res.localId;
+//                       console.error('localId:' + localId);
+//                       voice.localId = localId;
+//                       $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+//                   }
+//               });
+//           });
+        });
+        var playVoice = function(){
+            wx.playVoice({
+                localId: voice.localId
+            })
         }
-        .headline {
-            font-size: 1.5em;
-        }
-        .headline small {
-            display: block;
-        }
-        .touchme {
-            height: 180px;
-            line-height: 180px;
-            margin-bottom: 10px;
-            background-color: #4E9197;
-            text-align: center;
-            font-size: 3em;
-            -webkit-user-select: none;
-            box-shadow: 0 2px 5px #aaa;
-            border-radius: 5px;
-        }
-        .textarea-log {
+    </script>
+    <style type="text/css">
+        .btn {
             width: 100%;
+            margin-top: 5px;
+            height: 60px;
+            font-size: 40px;
         }
-        .author {
-            border-top: 1px dashed #aaa;
-            padding-top: 10px;
-            text-align: right;
-            color: #999;
-            font-size: small;
-        }
-        blockquote a {
-            display: block;
+        .recordBtn {
+            width: 100%;
+            height: 80px;
+            margin-top: 200px;
+            font-size: 60px;
+            -webkit-user-select: none;/*禁用手机浏览器的用户选择功能 */
+            -moz-user-select: none;
         }
     </style>
 </head>
 <body>
-<h1 class="headline">FIXBUG: touchend doesn't fire <small>on mobile devices</small></h1>
-<div class="touchme">touch me</div>
-<textarea class="textarea-log" cols="30" rows="10"></textarea>
-<input type="checkbox" id="js-fixtouch"><label for="js-fixtouch">fix touch event problem</label>
-<p class="author">2014-9-19 Sun</p>
-<ul>
-    <li><a href="http://code.google.com/p/android/issues/detail?id=19827">WebView touchevents are not fired propperly if e.preventDefault() is not used on touchstart and touchmove</a></li>
-    <li><a href="http://blog.mobiscroll.com/working-with-touch-events/">Working with touch events</a></li>
-</ul>
-<script>
-    var touchEl = document.querySelector('.touchme');
-    var logEl = document.querySelector('.textarea-log');
-    var fixtouchEl = document.querySelector('#js-fixtouch');
-    function logEvent(type) {
-        logEl.innerHTML = logEl.innerHTML + '\n' + new Date().toLocaleTimeString() + ' - ' + type;
-        logEl.scrollTop = logEl.scrollHeight;
-    }
-    touchEl.addEventListener('touchstart', function(event) {
-        logEvent('[touchstart]');
-        // 在touchstart中阻止事件的默认行为即可修复touchmove和touchend事件不触发的问题
-        if (fixtouchEl.checked) {
-            event.preventDefault();
-        }
-    }, false);
-    touchEl.addEventListener('touchmove', function(event) {
-        logEvent('touchmove');
-    }, false);
-    touchEl.addEventListener('touchend', function(event) {
-        logEvent('[touchend]');
-    }, false);
-</script>
+<div id="voiceList">
+
+</div>
+<button id="record" class="recordBtn">录音</button>
+<div id="dis"></div>
+
 </body>
 </html>
