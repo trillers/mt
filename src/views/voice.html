@@ -45,7 +45,14 @@
                 //$('#mask').show();
                 $('#dis').append($('<span>down</span>'));
                 recordGap = setTimeout(function(){
-                    wx.startRecord();
+                    wx.startRecord({
+                        success: function(){
+                            localStorage.rainAllowRecord = 'true';
+                        },
+                        cancel: function () {
+                            alert('用户拒绝授权录音');
+                        }
+                    });
                     $('#dis').append($('<span>out</span>'));
                 }, 800);
             });
