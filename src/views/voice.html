@@ -38,12 +38,14 @@
         };
         $(function(){
             var recordGap;
-           $('#record').on('touchstart', function(){
+           $('#record').on('touchstart', function(e){
+               e.preventDefault();
                recordGap = setTimeout(function(){
                    console.error('down');
                    wx.startRecord();
                }, 1000);
-           }).on('touchend', function(){
+           }).on('touchend', function(e){
+               e.preventDefault();
                clearTimeout(recordGap);
                console.error('up');
                wx.stopRecord({
