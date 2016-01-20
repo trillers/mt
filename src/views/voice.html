@@ -56,7 +56,9 @@
                     $('#dis').append($('<span>out</span>'));
                 }, 300);
             });
-
+            $('#record').on('touchmove', function(){
+                $('#dis').append($('<span>move</span>'));
+            });
             $('#record').on('touchend', function(event){
                 event.preventDefault();
                 END = new Date().getTime();
