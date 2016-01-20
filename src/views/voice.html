@@ -38,34 +38,41 @@
             serverId: ''
         };
         $(function(){
-            var recordGap;
-            var record = document.getElementById('record');
-            var mask = document.getElementById('mask');
-
-            record.addEventListener('touchstart', function(e){
+            var recordGap, START, END;
+            $('#record').on('touchstart', function(event){
+                event.preventDefault();
+                START = new Date().getTime();
                 //$('#mask').show();
                 $('#dis').append($('<span>down</span>'));
-                //e.preventDefault();
                 recordGap = setTimeout(function(){
                     wx.startRecord();
                     $('#dis').append($('<span>out</span>'));
-                }, 1000);
-            }, false);
+                }, 800);
+            });
 
-            record.addEventListener('touchend', function(e){
-                clearTimeout(recordGap);
-                $('#dis').append($('<span>up</span>'));
-                //$('#mask').hide();
-                wx.stopRecord({
-                    success: function (res) {
-                        console.log(res);
-                        var localId = res.localId;
-                        console.error('localId:' + localId);
-                        voice.localId = localId;
-                        $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
-                    }
-                });
-            }, false);
+            $('#record').on('touchend', function(event){
+                event.preventDefault();
+                END = new Date().getTime();
+
+                if((END - START) < 300){
+                    END = 0;
+                    START = 0;
+                    //小于300ms，不录音
+                    clearTimeout(recordGap);
+                }else {
+                    $('#dis').append($('<span>up</span>'));
+                    //$('#mask').hide();
+                    wx.stopRecord({
+                        success: function (res) {
+                            console.log(res);
+                            var localId = res.localId;
+                            console.error('localId:' + localId);
+                            voice.localId = localId;
+                            $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+                        }
+                    });
+                }
+            });
 //           $('#record').on('touchstart', function(e){
 //               e.preventDefault();
 //               recordGap = setTimeout(function(){
