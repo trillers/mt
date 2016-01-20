@@ -40,6 +40,7 @@
         $(function(){
             var recordGap, START, END;
             $('#record').on('touchstart', function(event){
+                //$('#mask').show();
                 event.preventDefault();
                 START = new Date().getTime();
                 //$('#mask').show();
@@ -60,6 +61,7 @@
                 $('#dis').append($('<span>move</span>'));
             });
             $('#record').on('touchend', function(event){
+                //$('#mask').hide();
                 event.preventDefault();
                 END = new Date().getTime();
 
