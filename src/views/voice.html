@@ -43,9 +43,9 @@
             obj.addEventListener('touchstart', function(e){
                 $('#dis').append($('<span>down</span>'));
                 recordGap = setTimeout(function(){
-                    //wx.startRecord();
+                    wx.startRecord();
                     $('#dis').append($('<span>out</span>'));
-
+                    e.preventDefault();
                 }, 1000);
             }, false);
             obj.addEventListener('touchend', function(e){
