@@ -42,21 +42,21 @@
             var obj = document.getElementById('record');
             obj.addEventListener('touchstart', function(e){
                 $('#dis').append($('<span>down</span>'));
-//                recordGap = setTimeout(function(){
-//                    wx.startRecord();
-//                }, 1000);
+                recordGap = setTimeout(function(){
+                    wx.startRecord();
+                }, 1000);
             }, false);
             obj.addEventListener('touchend', function(e){
                 clearTimeout(recordGap);
                 $('#dis').append($('<span>up</span>'));
-//                wx.stopRecord({
-//                    success: function (res) {
-//                        var localId = res.localId;
-//                        console.error('localId:' + localId);
-//                        voice.localId = localId;
-//                        $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
-//                    }
-//                });
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        console.error('localId:' + localId);
+                        voice.localId = localId;
+                        $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+                    }
+                });
             }, false);
 //           $('#record').on('touchstart', function(e){
 //               e.preventDefault();
