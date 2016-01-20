@@ -61,12 +61,12 @@
                 event.preventDefault();
                 END = new Date().getTime();
 
-                if((END - START) < 300){
-                    END = 0;
-                    START = 0;
-                    //小于300ms，不录音
+//                if((END - START) < 300){
+//                    END = 0;
+//                    START = 0;
+//                    //小于300ms，不录音
                     clearTimeout(recordGap);
-                }else {
+                //}else {
                     $('#dis').append($('<span>up</span>'));
                     //$('#mask').hide();
                     wx.stopRecord({
@@ -78,27 +78,8 @@
                             $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
                         }
                     });
-                }
+               // }
             });
-//           $('#record').on('touchstart', function(e){
-//               e.preventDefault();
-//               recordGap = setTimeout(function(){
-//                   console.error('down');
-//                   wx.startRecord();
-//               }, 1000);
-//           }).on('touchend', function(e){
-//               e.preventDefault();
-//               clearTimeout(recordGap);
-//               console.error('up');
-//               wx.stopRecord({
-//                   success: function (res) {
-//                       var localId = res.localId;
-//                       console.error('localId:' + localId);
-//                       voice.localId = localId;
-//                       $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
-//                   }
-//               });
-//           });
         });
         var playVoice = function(){
             wx.playVoice({
