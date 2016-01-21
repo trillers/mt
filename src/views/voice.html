@@ -44,18 +44,18 @@
                     isShowProgressTips: 0, // 默认为1，显示进度提示
                     success: function (res) {
                         //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
-//                        $.ajax({
-//                            url: '后端处理上传录音的接口',
-//                            type: 'post',
-//                            data: JSON.stringify(res),
-//                            dataType: "json",
-//                            success: function (data) {
-//                                alert('文件已经保存到七牛的服务器');//这回，我使用七牛存储
-//                            },
-//                            error: function (xhr, errorType, error) {
-//                                console.log(error);
-//                            }
-//                        });
+                        $.ajax({
+                            url: '/api/qn/voice',
+                            type: 'post',
+                            data: {media_id: res.serverId},
+                            dataType: "json",
+                            success: function (data) {
+                                $('#dis').append($('<span>' + data + '</span>'));
+                            },
+                            error: function (xhr, errorType, error) {
+                                console.log(error);
+                            }
+                        });
                         console.error(res);
                         $('#dis').append($('<span>upload</span>'));
                     }
