@@ -14,8 +14,8 @@ module.exports = function(router){
      * */
     router.post('/voice', function* (){
         var self = this;
-        console.log(self.body);
-        var media_id = self.body.media_id;
+        console.log(self.request.body);
+        var media_id = self.request.body.media_id;
         try {
             console.error(media_id);
             var voiceBuffer = yield wechatApi.getMediaAsync(media_id);
