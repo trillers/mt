@@ -21,7 +21,7 @@ module.exports = function(router){
             var voiceBuffer = yield wechatApi.getMediaAsync(media_id);
             console.log(voiceBuffer[0]);
             //var uploadAsync = thunkify(qnClient.upload);
-            qnClient.upload(voiceBuffer[0], {key: 'qn/test/voice/' + media_id + '.amr'}, function(err, res){
+            qnClient.upload(voiceBuffer[0], {key: 'qn/test/voice/' + media_id + '.mp3'}, function(err, res){
                 if(!err){
                     console.error(res);
                 }
