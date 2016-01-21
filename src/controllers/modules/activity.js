@@ -27,7 +27,7 @@ module.exports = function(router){
         var id = this.query.id;
         var user = this.session.user || {};
         var activity = yield activityService.loadById(id);
-        if(activity){
+        if(activity &&participant.lFlg === 'a'){
             activity.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + activity._id;
             activity.join = '';
             activity.joined = 'none';
@@ -63,7 +63,7 @@ module.exports = function(router){
                 yield this.render('activity', {activity: activity, participants: participants});
             }
         }else{
-            yield this.render('error');
+            yield this.render('error', {error: '活动暂未开放'});
         }
     });
 
@@ -71,7 +71,7 @@ module.exports = function(router){
         var id = this.query.id;
         var user = this.session.user || {};
         var participant = yield participantService.loadById(id);
-        if(participant){
+        if(participant && participant.lFlg === 'a'){
             participant.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + participant.activity._id;
             participant.join = '';
             participant.joined = 'none';
@@ -117,7 +117,7 @@ module.exports = function(router){
             var participants = yield participantService.filter(params);
             yield this.render('participant', {participant: participant, participants: participants});
         }else{
-            yield this.render('error');
+            yield this.render('error', {error: '活动暂未开放'});
         }
     });
 
