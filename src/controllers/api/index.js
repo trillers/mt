@@ -28,6 +28,6 @@ module.exports = function(app){
     //qn voice img api
     var qn_router = new router();
     qn_router.prefix('/api/qn');
-    require('./file')(qn_router);
+    require('./qn')(qn_router);
     app.use(qn_router.routes());
 }
