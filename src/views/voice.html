@@ -38,12 +38,34 @@
             serverId: ''
         };
         $(function(){
+            var uploadVoice = function(localId){
+                wx.uploadVoice({
+                    localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+//                        $.ajax({
+//                            url: '后端处理上传录音的接口',
+//                            type: 'post',
+//                            data: JSON.stringify(res),
+//                            dataType: "json",
+//                            success: function (data) {
+//                                alert('文件已经保存到七牛的服务器');//这回，我使用七牛存储
+//                            },
+//                            error: function (xhr, errorType, error) {
+//                                console.log(error);
+//                            }
+//                        });
+                        console.error(res);
+                        $('#dis').append($('<span>upload</span>'));
+                    }
+                });
+            }
             var recordGap, START, END;
             $('#record').on('touchstart', function(event){
                 //$('#mask').show();
-                event.preventDefault();
+                //event.preventDefault();
                 START = new Date().getTime();
-                //$('#mask').show();
                 $('#dis').append($('<span>down</span>'));
                 recordGap = setTimeout(function(){
                     wx.startRecord({
@@ -81,6 +103,7 @@
                             console.error('localId:' + localId);
                             voice.localId = localId;
                             $('#voiceList').append($('<button class="btn" onclick="playVoice()" localId="' + localId + '">音频</button>'))
+                            uploadVoice(localId);
                         }
                     });
                // }
