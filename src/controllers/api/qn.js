@@ -20,10 +20,13 @@ module.exports = function(router){
             console.error(media_id);
             var voiceBuffer = yield wechatApi.getMediaAsync(media_id);
             console.log(voiceBuffer[0]);
-            var uploadAsync = thunkify(qnClient.upload);
-            var result = yield uploadAsync(voiceBuffer[0], {key: 'qn/test/voice/' + media_id + '.amr'});
-            console.error(result);
-            self.body = result;
+            //var uploadAsync = thunkify(qnClient.upload);
+            qnClient.upload(voiceBuffer[0], {key: 'qn/test/voice/' + media_id + '.amr'}, function(err, res){
+                if(!err){
+                    console.error(res);
+                }
+            });
+            //self.body = result;
         }catch(err){
             console.log(err);
             self.body = '404';
