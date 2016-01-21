@@ -27,7 +27,7 @@ module.exports = function(router){
         var id = this.query.id;
         var user = this.session.user || {};
         var activity = yield activityService.loadById(id);
-        if(activity &&participant.lFlg === 'a'){
+        if(activity && activity.lFlg === 'a'){
             activity.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + activity._id;
             activity.join = '';
             activity.joined = 'none';
@@ -71,7 +71,7 @@ module.exports = function(router){
         var id = this.query.id;
         var user = this.session.user || {};
         var participant = yield participantService.loadById(id);
-        if(participant && participant.lFlg === 'a'){
+        if(participant && participant.activity.lFlg === 'a'){
             participant.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + participant.activity._id;
             participant.join = '';
             participant.joined = 'none';
