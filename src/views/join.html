@@ -32,7 +32,7 @@
         window.__page = {{JSON.stringify(__page)}};
         $(function () {
             $('.subBtn').click(function () {
-                if(!/^1\d{10}$/.test($('#phone').val())) {
+                if(/^1\d{10}$/.test($('#phone').val())) {
                     var data = {
                         id: $('#activityId').val(),
                         phone: $('#phone').val()
