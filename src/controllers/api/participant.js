@@ -6,26 +6,36 @@ var _ = require('underscore');
 module.exports = function (router) {
     router.post('/add', function *() {
         var id = this.request.body.id;
-        var activity = yield activityService.loadById(id);
-        if (activity) {
-            var participant = yield participantService.filter({conditions: {user: this.session.user.id, activity: id}});
-            console.error(participant);
-            if(participant.length > 0){
-                this.body = {error: 'joined', msg: '已参加'};
-            }else {
-                var json = {
-                    activity: id
-                    , user: this.session.user.id
-                    , phone: this.request.body.phone
-                    , total_money: activity.base_lucky_money
-                    , help_friends: []
+        var phone = this.request.body.phone;
+        if (phone) {
+            var activity = yield activityService.loadById(id);
+            if (activity) {
+                var participant = yield participantService.filter({
+                    conditions: {
+                        user: this.session.user.id,
+                        activity: id
+                    }
+                });
+                console.error(participant);
+                if (participant.length > 0) {
+                    this.body = {error: 'joined', msg: '已参加'};
+                } else {
+                    var json = {
+                        activity: id
+                        , user: this.session.user.id
+                        , phone: phone
+                        , total_money: activity.base_lucky_money
+                        , help_friends: []
+                    }
+                    var data = yield participantService.create(json);
+                    yield activityService.updateById(id, {$inc: {participants_count: 1}});
+                    this.body = data;
                 }
-                var data = yield participantService.create(json);
-                yield activityService.updateById(id, {$inc: {participants_count: 1}});
-                this.body = data;
+            } else {
+                this.body = {error: 'no such activity'};
             }
-        } else {
-            this.body = {error: 'no such activity'};
+        }else{
+            this.body = {error: 'phone no is must'};
         }
     });
 

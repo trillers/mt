@@ -32,17 +32,23 @@
         window.__page = {{JSON.stringify(__page)}};
         $(function () {
             $('.subBtn').click(function () {
-                var data = {
-                    id: $('#activityId').val(),
-                    phone: $('#phone').val()
-                }
-                $.post('/api/participant/add', data, function (data) {
-                    if (!data.error) {
-                        window.location.href = window.__app.settings.app.url + '/participant?id=' + data._id;
-                    }else if(data.error === 'joined'){
-                        alert('已参加');
+                if(!/^1\d{10}$/.test($('#phone').val())) {
+                    var data = {
+                        id: $('#activityId').val(),
+                        phone: $('#phone').val()
                     }
-                })
+                    $.post('/api/participant/add', data, function (data) {
+                        if (!data.error) {
+                            window.location.href = window.__app.settings.app.url + '/participant?id=' + data._id;
+                        } else if (data.error === 'joined') {
+                            alert('已参加');
+                        } else if (data.error === 'phone no is must') {
+                            alert('必须填写手机号才能参加活动哦!');
+                        }
+                    })
+                }else{
+                    alert('请输入正确的手机号');
+                }
             })
         })
     </script>
