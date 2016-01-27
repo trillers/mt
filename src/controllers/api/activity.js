@@ -27,5 +27,33 @@ module.exports = function(router){
         var data = yield activityService.loadAllByType(type);
         this.body = data;
     });
+
+    router.get('/loadById', function *(){
+        var id = this.query.id;
+        var data = yield activityService.loadById(id);
+        this.body = data;
+    });
+
+    router.post('/update', function *(){
+        var id = this.request.body.id;
+        var json = {
+            type:  this.request.body.type
+            ,name: this.request.body.name
+            ,shareTitle: this.request.body.shareTitle
+            ,shareDesc: this.request.body.shareDesc
+            ,shareImg: this.request.body.shareImg
+            ,bgImg: this.request.body.bgImg
+            ,base_lucky_money: this.request.body.base_lucky_money
+            ,friend_help_count_limit: this.request.body.friend_help_count_limit
+            ,startTime: new Date(this.request.body.startTime)
+            ,endTime: new Date(this.request.body.endTime)
+            ,friend_help_min_money: this.request.body.friend_help_min_money
+            ,friend_help_max_money: this.request.body.friend_help_max_money
+            ,rule: this.request.body.rule
+            ,desc: this.request.body.desc
+        }
+        var data = yield activityService.updateById(id, json);
+        this.body = data;
+    });
 }
 

@@ -15,6 +15,10 @@
     #shareImg{float: left; margin-left: 10px;}
     .shareImgCon i{color: #EC3131;position: absolute;left: 58px;top: 2px;cursor: pointer;}
     .shareImgCon{margin-left: 10px; display: -webkit-inline-box;position: relative; display: none; border: solid 1px #E8E7E7;}
+    .activity-name{
+        color: #23527c;
+        cursor: pointer;
+    }
 </style>
 <script type="text/javascript">
     var bgImgCount = 0;
@@ -36,8 +40,11 @@
 
         $.get('/api/activity/load?type=flmh', function (data) {
             data.forEach(function (item) {
-                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
+                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name" _id="'+ item._id +'">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
             });
+            $('.activity-name').off('click').click(function(){
+                edit($(this).attr('_id'));
+            })
         });
 
         $('#add').click(function () {
@@ -80,22 +87,76 @@
                 , rule: $('#rule').summernote('code')
                 , desc: $('#desc').summernote('code')
             }
-
-
+            if($('#add-or-update').val() === 'add'){
+                add(json);
+            }else{
+                json.id = $('#activity-id').val();
+                update(json);
+            }
+        })
+        function add(json){
             $.post('/api/activity/add', json, function (data) {
-                if (data) {
-                    $('#list').append($('<li> <strong class="col-md-2">' + data.name + '</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
-                    $('#addForm').hide();
-                    $('#luckyMoneyHelpList').show();
+//                if (data) {
+//                    $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name">' + data.name + '</strong> <strong class="col-md-2">' + formatDate(data.startTime) + '</strong> <strong class="col-md-2">' + formatDate(data.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + data._id + '</strong> </li>'));
+//                    $('#addForm').hide();
+//                    $('#luckyMoneyHelpList').show();
+//                }
+                if(data){
+                    window.location.href=window.location.href;
                 }
             });
-        })
+
+        }
+        function update(json){
+            $.post('/api/activity/update', json, function (data) {
+                if (data) {
+                    window.location.href = window.location.href;
+                }
+            });
+        }
     })
+    function edit(id){
+        $.get('/api/activity/loadById?id=' + id, function(data){
+           if(data){
+               $('#activityName').val(data.name);
+               $('#shareTitle').val(data.shareTitle);
+               if(data.bgImg && data.bgImg.length > 0){
+                   bgImgCount = data.bgImg.length;
+                   bgImg = data.bgImg;
+                   for(var i = 1; i <= bgImg.length; i++){
+                       $('#bgImg' + i + ' img').attr('src', bgImg[i-1]).parent().css('display', '-webkit-inline-box');
+                       $('#bgImg' + i + ' i').attr('media', bgImg[i-1]);
+                   }
+                   if (bgImgCount === 3) {
+                       $('#bgImg').hide();
+                   }
+               }
+               if(data.shareImg){
+                   $('#shareImg1 img').attr('src', data.shareImg).parent().css('display', '-webkit-inline-box');
+                   shareImg = data.shareImg;
+                   $('#shareImg').hide();
+               }
+               $('#shareDesc').val(data.shareDesc);
+               $('#base_lucky_money').val(data.base_lucky_money);
+               $('#friend_help_count_limit').val(data.friend_help_count_limit);
+               $('#startTime').attr('value', formatDate(data.startTime));
+               $('#endTime').attr('value', formatDate(data.endTime));
+               $('#friend_help_min_money').val(data.friend_help_min_money);
+               $('#friend_help_max_money').val(data.friend_help_max_money);
+               $('#rule').summernote('code', data.rule);
+               $('#desc').summernote('code', data.desc);
+               $('#luckyMoneyHelpList').hide();
+               $('#addForm').show();
+               $('#activity-id').val(data._id);
+               $('#add-or-update').val('update');
+           }
+        });
+    }
     function formatDate(date) {
         var dateTime = new Date(date);
         var year = dateTime.getFullYear();
-        var month = dateTime.getMonth() + 1;
-        var day = dateTime.getDate();
+        var month = (dateTime.getMonth() + 1)>9 ? (dateTime.getMonth() + 1) : '0' + (dateTime.getMonth() + 1);
+        var day = dateTime.getDate() > 9 ? dateTime.getDate() : '0' + dateTime.getDate();
         return year + '-' + month + '-' + day;
     }
 
@@ -194,6 +255,8 @@
                     </ul>
                 </div>
                 <div id="addForm" class="panel" style="margin-top: 1em; display: none">
+                    <input type="hidden" value="add" id="add-or-update">
+                    <input type="hidden" value="" id="activity-id">
                     <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return" style="font-size: 1.5em; text-decoration: none; cursor: pointer">返回</a></div>
                     <ul class="ul" style="text-align: left; padding-left: 2em">
                         <li><span>红包助力活动设置</span></li>
@@ -207,8 +270,7 @@
                         <li style="clear: both; min-height: 26px"><span style="float: left">分享卡片图片:  </span><input id="shareImg" type="file" accept="image/bmp, image/jpg, image/jpeg, image/gif, image/png" onchange="uploadShareImg()" style="width: 60px;"/>
                             <div id="shareImg1" class="shareImgCon"><i class="glyphicon glyphicon-remove"></i><img src="/" alt=""/></div>
                         </li>
-                        <li style="clear: both"><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime"
-                                                                                                          type="date"/>
+                        <li style="clear: both"><span>活动时间:  </span><input id="startTime" type="date"/><span> 至 </span><input id="endTime" type="date"/>
                         </li>
                         <li><span>活动介绍:  </span><div id="desc"></div></li>
                         <li><span>活动规则:  </span><div id="rule"></div></li>
