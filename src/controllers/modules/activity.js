@@ -77,7 +77,7 @@ module.exports = function(router){
             participant.joined = 'none';
             participant.help = '';
             participant.helped = 'none';
-            var docs = yield participantService.filter({conditions: {user: user.id}});
+            var docs = yield participantService.filter({conditions: {user: user.id, activity: participant.activity._id}});
             if(docs.length > 0){
                 participant.join = 'none';
                 participant.joined = '';
