@@ -137,4 +137,7 @@ module.exports = function(router){
         }
     });
 
+    //router.get('/join', function *(){
+    //    yield this.render('join');
+    //});
 };
