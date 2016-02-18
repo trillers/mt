@@ -279,15 +279,20 @@
         <a style="display: {{ participant.help }}" id="helpTa">我要助力</a>
         <a style="background-color: gray; display: {{ participant.helped }}" id="helped">已助力</a>
         <a style="background-color: gray; display: {{participant.joined}}">已参加</a>
+        <a style="background-color: gray; display: {{participant.noActivated}}">未开始</a>
+        <a style="background-color: gray; display: {{participant.closed}}">已结束</a>
+        <a style="background-color: gray; display: {{participant.helpLimited}}">助力已达上限</a>
         <a onclick="share()" style="background: #aa2343;color: #fff; display: {{participant.inviteFriend}}">找朋友助力</a>
     </div>
 </footer>
 <input type="hidden" id="participantId" value="{{participant._id}}"/>
 <script>
     $(function(){
+        var helping = false;
         $('#helpTa').click(function(){
+            if(helping) return;
+            helping = true;
             $.post('/api/participant/help', {id: $('#participantId').val()}, function(data){
-                alert(JSON.stringify(data));
                 if(data){
                     if(data.helped){
                         alert('已助力');
@@ -299,6 +304,7 @@
                         alert('该用户助力已达上限');
                     }else if(data.error){
                         alert('助力失败');
+                        helping = false;
                     }else {
                         $('#luckyMoney').text('￥' + data.total_money);
                         $('#helpTa').hide();
@@ -307,6 +313,7 @@
                     }
                 }else{
                     alert('助力失败');
+                    helping = false;
                 }
             })
         })

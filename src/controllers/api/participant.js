@@ -43,44 +43,72 @@ module.exports = function (router) {
         var id = this.request.body.id;
         var user = this.session.user || {};
         if(user.wx_openid){
-            var today = new Date();
+            //var today = new Date();
             var participant = yield participantService.loadById(id);
-            if (participant) {
-                var state = 'started';
-                var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
-                if(today < new Date(participant.activity.startTime)){
-                    state = 'nonActivated';
-                }
-                if(today > new Date(participant.activity.endTime)){
-                    state = 'closed';
-                }
-                if(active) {
+            //if (participant) {
+            //    var state = 'started';
+            //    var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
+            //    if(today < new Date(participant.activity.startTime)){
+            //        state = 'nonActivated';
+            //    }
+            //    if(today > new Date(participant.activity.endTime)){
+            //        state = 'closed';
+            //    }
+            //    if(active) {
                     var helpArr = participant.help_friends;
-                    if (_.indexOf(helpArr, user.wx_openid) === -1) {
-                        if (helpArr.length < participant.activity.friend_help_count_limit) {
-                            helpArr.push(user.wx_openid);
-                            var min = participant.activity.friend_help_min_money || 0;
-                            var max = participant.activity.friend_help_max_money || 0;
-                            var helpMoney = util.random(min, max);
-                            var total_money = participant.total_money + helpMoney;
-                            var update = {
-                                total_money: total_money,
-                                help_friends: helpArr
+                    if (helpArr.length < participant.activity.friend_help_count_limit) {
+                        var con = {
+                            _id: id,
+                            $where: 'this.help_friends.length < ' + participant.activity.friend_help_count_limit
+                        }
+                        var res = yield participantService.update(con, {$addToSet: {help_friends: user.wx_openid}});
+                        if(res.n === 1) {
+                            if (res.ok === 1 && res.nModified === 1) {
+                                var min = participant.activity.friend_help_min_money || 0;
+                                var max = participant.activity.friend_help_max_money || 0;
+                                var helpMoney = util.random(min, max);
+                                var total_money = participant.total_money + helpMoney;
+                                var update = {
+                                    total_money: total_money
+                                }
+                                var data = yield participantService.updateById(participant._id, update);
+                                this.body = data;
+                            } else {
+                                this.body = {helped: true};
                             }
-                            var data = yield participantService.updateById(participant._id, update);
-                            this.body = data;
-                        } else {
+                        } else if(res.n === 0) {
                             this.body = {limited: true};
+                        } else {
+                            this.body = {error: 'unknown error'};
                         }
                     } else {
-                        this.body = {helped: true};
+                        this.body = {limited: true};
                     }
-                }else{
-                    this.body = {invalid: state};
-                }
-            } else {
-                this.body = {error: 'no such participant'};
-            }
+                    //if (_.indexOf(helpArr, user.wx_openid) === -1) {
+                    //    if (helpArr.length < participant.activity.friend_help_count_limit) {
+                    //        helpArr.push(user.wx_openid);
+                    //        var min = participant.activity.friend_help_min_money || 0;
+                    //        var max = participant.activity.friend_help_max_money || 0;
+                    //        var helpMoney = util.random(min, max);
+                    //        var total_money = participant.total_money + helpMoney;
+                    //        var update = {
+                    //            total_money: total_money,
+                    //            help_friends: helpArr
+                    //        }
+                    //        var data = yield participantService.updateById(participant._id, update);
+                    //        this.body = data;
+                    //    } else {
+                    //        this.body = {limited: true};
+                    //    }
+                    //} else {
+                    //    this.body = {helped: true};
+                    //}
+                //}else{
+                //    this.body = {invalid: state};
+                //}
+            //} else {
+            //    this.body = {error: 'no such participant'};
+            //}
         }else {
             this.body = {error: 'please open in wechat browser'};
         }

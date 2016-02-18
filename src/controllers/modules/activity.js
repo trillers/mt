@@ -31,12 +31,26 @@ module.exports = function(router){
             activity.participateLink = this.protocol + '://' + settings.app.domain + '/join?id=' + activity._id;
             activity.join = '';
             activity.joined = 'none';
+            activity.closed = 'none';
+            activity.noActivated = 'none';
             var participant = yield participantService.filter({conditions: {user: user.id, activity: activity._id}});
             if(participant.length > 0){
                 activity.join = 'none';
                 activity.joined = '';
                 this.redirect('/participant?id=' + participant[0]._id);
             }else {
+                var today = new Date();
+                var active = today >= new Date(activity.startTime) && today <= new Date(activity.endTime);
+                if(!active){
+                    activity.join = 'none';
+                    activity.joined = 'none';
+                    if(today < new Date(activity.startTime)){
+                        activity.noActivated = '';
+                    }
+                    if(today > new Date(activity.endTime)){
+                        activity.closed = '';
+                    }
+                }
                 var params = {
                     conditions: {
                         activity: activity._id,
@@ -77,16 +91,10 @@ module.exports = function(router){
             participant.joined = 'none';
             participant.help = '';
             participant.helped = 'none';
-            var docs = yield participantService.filter({conditions: {user: user.id, activity: participant.activity._id}});
-            if(docs.length > 0){
-                participant.join = 'none';
-                participant.joined = '';
-            }
-            var helpArr = participant.help_friends;
-            if (_.indexOf(helpArr, user.wx_openid) !== -1) {
-                participant.help = 'none';
-                participant.helped = '';
-            }
+            participant.closed = 'none';
+            participant.noActivated = 'none';
+            participant.helpLimited = 'none';
+
             if(user.wx_openid === participant.user.wx_openid){
                 participant.join = 'none';
                 participant.joined = 'none';
@@ -95,6 +103,36 @@ module.exports = function(router){
                 participant.inviteFriend = '';
             }else{
                 participant.inviteFriend = 'none';
+                var docs = yield participantService.filter({conditions: {user: user.id, activity: participant.activity._id}});
+                if(docs.length > 0){
+                    participant.join = 'none';
+                    participant.joined = '';
+                }
+                var helpArr = participant.help_friends;
+                if (_.indexOf(helpArr, user.wx_openid) !== -1) {
+                    participant.help = 'none';
+                    participant.helped = '';
+                }
+                if(helpArr.length >= participant.activity.friend_help_count_limit){
+                    participant.help = 'none';
+                    participant.helped = 'none';
+                    participant.helpLimited = '';
+                }
+                var today = new Date();
+                var active = today >= new Date(participant.activity.startTime) && today <= new Date(participant.activity.endTime);
+                if(!active){
+                    participant.join = 'none';
+                    participant.joined = 'none';
+                    participant.help = 'none';
+                    participant.helped = 'none';
+                    participant.inviteFriend = 'none';
+                    if(today < new Date(participant.activity.startTime)){
+                        participant.noActivated = '';
+                    }
+                    if(today > new Date(participant.activity.endTime)){
+                        participant.closed = '';
+                    }
+                }
             }
             var params = {
                 conditions: {

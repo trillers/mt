@@ -18,6 +18,12 @@ Service.updateById = function*(id, update){
     return doc;
 }
 
+Service.update = function*(con, update){
+    var res = yield Participant.update(con, update).exec();
+    logger.info('success update participant by condition: ' + con);
+    return res;
+}
+
 Service.loadById = function*(id){
     var doc = yield Participant.findById(id, {}, {lean: true}).populate({path: 'activity'}).populate({path: 'user'}).exec();
     logger.info('success load participant by id: ' + id);
