@@ -75,7 +75,7 @@ module.exports = function(router){
             width:40
         },{
             caption:'红包金额',
-            type:'string',
+            type:'number',
             width:40
         }];
         conf.rows = [];
@@ -100,7 +100,7 @@ module.exports = function(router){
             activity_name = data.name
         }
         this.set('Content-Type', 'application/vnd.openxmlformats');
-        this.set("Content-Disposition", "attachment; filename=" + activity_name + ".xlsx");
+        this.set("Content-Disposition", "attachment; filename=" + encodeURIComponent(activity_name) + ".xlsx");
         this.body = new Buffer(result, 'binary');
     });
 
