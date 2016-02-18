@@ -19,6 +19,10 @@
         color: #23527c;
         cursor: pointer;
     }
+    li strong{
+        padding: 0 !important;
+        margin: 0 !important;
+    }
 </style>
 <script type="text/javascript">
     var bgImgCount = 0;
@@ -40,7 +44,7 @@
 
         $.get('/api/activity/load?type=flmh', function (data) {
             data.forEach(function (item) {
-                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name" _id="'+ item._id +'">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-6">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> </li>'));
+                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name" _id="'+ item._id +'">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-5">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> <strong class="col-md-1"><a href="{{api}}' + '/activity/exportParticipants?id=' + item._id + '" target="_blank" >导出</a></strong> </li>'));
             });
             $('.activity-name').off('click').click(function(){
                 edit($(this).attr('_id'));
@@ -237,15 +241,15 @@
         <div class="col-md-9 col-xs-9 col-sm-9">
             <div class="jumbotron" style="height: auto; padding: 25px;">
                 <div id="luckyMoneyHelpList" class="panel" style="margin-top: 1em; padding: 0; min-height: 30em">
-                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="add"
-                                                                              style="font-size: 1.5em; text-decoration: none; cursor: pointer">新增</a>
+                    <div style="padding-left: 20px; padding-bottom: 10px;"><a id="add" style="font-size: 1.5em; text-decoration: none; cursor: pointer">新增</a>
                     </div>
                     <ul class="ul" id="list">
                         <li>
                             <strong class="col-md-2">活动名称</strong>
                             <strong class="col-md-2">开始时间</strong>
                             <strong class="col-md-2">结束时间</strong>
-                            <strong class="col-md-6">活动链接</strong>
+                            <strong class="col-md-5">活动链接</strong>
+                            <strong class="col-md-1">操作</strong>
                         </li>
 
                         <li>

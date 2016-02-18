@@ -1,5 +1,6 @@
 var systemUserService = require('../../modules/system_user/services/SystemUserService');
 var util = require('../../app/util');
+var settings = require('mt-settings');
 
 module.exports = function(router){
     require('../../app/routes-spa')(router);
@@ -8,7 +9,7 @@ module.exports = function(router){
         if(!this.session.user){
             this.redirect('/login');
         }else{
-            yield this.render('index');
+            yield this.render('index', {api: settings.api.url});
         }
     });
     router.get('/login', function *(){
