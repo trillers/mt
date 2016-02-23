@@ -29,9 +29,9 @@ Service.deleteById = function*(id){
     return doc;
 }
 
-Service.loadAllByType = function*(type){
-    var docs = yield Activity.find({type: type, lFlg: 'a'}).lean().exec();
-    logger.info('success load all activity by type: ' + type);
+Service.loadAll = function*(type){
+    var docs = yield Activity.find({lFlg: 'a'}).lean().exec();
+    logger.info('success load all activity');
     return docs;
 }
 

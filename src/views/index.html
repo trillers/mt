@@ -23,6 +23,9 @@
         padding: 0 !important;
         margin: 0 !important;
     }
+    .actionCon a{
+        margin-left: 10px;
+    }
 </style>
 <script type="text/javascript">
     var bgImgCount = 0;
@@ -42,9 +45,9 @@
             focus: true
         });
 
-        $.get('/api/activity/load?type=flmh', function (data) {
+        $.get('/api/activity/load', function (data) {
             data.forEach(function (item) {
-                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name" _id="'+ item._id +'">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-5">' + window.__app.settings.app.url + '/activity?id=' + item._id + '</strong> <strong class="col-md-1"><a href="{{api}}' + '/activity/exportParticipants?id=' + item._id + '" target="_blank" >导出</a></strong> </li>'));
+                $('#list').append($('<li style="height: 17px; overflow: hidden; margin-top: 2px;"> <strong class="col-md-2 activity-name" _id="'+ item._id +'">' + item.name + '</strong> <strong class="col-md-2">' + formatDate(item.startTime) + '</strong> <strong class="col-md-2">' + formatDate(item.endTime) + '</strong> <strong class="col-md-2">' + (item.type === "flmh" ? "红包" : "积分") + '</strong><strong class="col-md-4 actionCon"><a href="'+ window.__app.settings.app.url + '/activity?id=' + item._id +'" target="_blank">查看</a><a href="{{api}}' + '/activity/exportParticipants?id=' + item._id + '" target="_blank" >导出</a></strong> </li>'));
             });
             $('.activity-name').off('click').click(function(){
                 edit($(this).attr('_id'));
@@ -57,8 +60,9 @@
         });
 
         $('#return').click(function () {
-            $('#luckyMoneyHelpList').show();
-            $('#addForm').hide();
+//            $('#luckyMoneyHelpList').show();
+//            $('#addForm').hide();
+            window.location.href = window.location.href;
         });
 
         $('.bgImgCon i').click(function(){
@@ -76,7 +80,7 @@
 
         $('#submit').click(function () {
             var json = {
-                type: $('#activityType').val()
+                type: $(':radio[name="activity_type"]:checked').val()
                 , name: $('#activityName').val()
                 , bgImg: bgImg
                 , shareImg: shareImg
@@ -150,6 +154,7 @@
                $('#rule').summernote('code', data.rule);
                $('#desc').summernote('code', data.desc);
                $('#luckyMoneyHelpList').hide();
+               $('#type_select').hide();
                $('#addForm').show();
                $('#activity-id').val(data._id);
                $('#add-or-update').val('update');
@@ -232,7 +237,7 @@
         <div class="col-md-3 col-xs-3 col-sm-3">
             <div class="well sidebar-nav" style="height: 38em">
                 <ul class="nav nav-list" style="margin-top: 1em">
-                    <li class="leftlist" style="background: #e7e7e7"><a href="/">红包助力</a></li>
+                    <li class="leftlist" style="background: #e7e7e7"><a href="/">助力</a></li>
                 </ul>
             </div>
             <!--/.well -->
@@ -248,8 +253,8 @@
                             <strong class="col-md-2">活动名称</strong>
                             <strong class="col-md-2">开始时间</strong>
                             <strong class="col-md-2">结束时间</strong>
-                            <strong class="col-md-5">活动链接</strong>
-                            <strong class="col-md-1">操作</strong>
+                            <strong class="col-md-2">类型</strong>
+                            <strong class="col-md-4">操作</strong>
                         </li>
 
                         <li>
@@ -263,7 +268,11 @@
                     <input type="hidden" value="" id="activity-id">
                     <div style="padding-left: 20px; padding-bottom: 10px;"><a id="return" style="font-size: 1.5em; text-decoration: none; cursor: pointer">返回</a></div>
                     <ul class="ul" style="text-align: left; padding-left: 2em">
-                        <li><span>红包助力活动设置</span></li>
+                        <li><span>助力活动设置</span></li>
+                        <li id="type_select"><span>类型: </span>
+                            <label><input name="activity_type" type="radio" value="flmh"  checked="checked"/>红包</label>
+                            <label><input name="activity_type" type="radio" value="fph" />积分</label>
+                        </li>
                         <li><span>活动名称:  </span><input id="activityName" type="text"/></li>
                         <li class="bgImg" style="min-height: 26px"><span style="float: left">背景图片(3张):  </span><input id="bgImg" type="file" multiple="multiple" accept="image/bmp, image/jpg, image/jpeg, image/gif, image/png" onchange="uploadBgImg()" style="width: 60px;"/>
 
@@ -285,7 +294,7 @@
                         <li><span>好友助力上限人数:  </span><input id="friend_help_count_limit" type="text"/></li>
                         <li style="text-align: center; margin-top: 1em"><input class="btn btn-success" type="button"
                                                                                id="submit" value="提交"/></li>
-                        <input type="hidden" id="activityType" value="flmh"/>
+                        <!--<input type="hidden" id="activityType" value="flmh"/>-->
                     </ul>
                 </div>
             </div>

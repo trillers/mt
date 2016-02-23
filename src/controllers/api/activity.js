@@ -25,8 +25,8 @@ module.exports = function(router){
     });
 
     router.get('/load', function *(){
-        var type = this.query.type;
-        var data = yield activityService.loadAllByType(type);
+        //var type = this.query.type;
+        var data = yield activityService.loadAll();
         this.body = data;
     });
 
@@ -61,23 +61,7 @@ module.exports = function(router){
     router.get('/exportParticipants', function*(){
         var activity_id = this.query.id;
         var conf ={};
-        conf.cols = [{
-            caption:'活动名称',
-            type:'string',
-            width:40
-        },{
-            caption:'报名昵称',
-            type:'string',
-            width:40
-        },{
-            caption:'报名电话',
-            type:'string',
-            width:40
-        },{
-            caption:'红包金额',
-            type:'number',
-            width:40
-        }];
+
         conf.rows = [];
         var params = {
             conditions: {
@@ -90,6 +74,43 @@ module.exports = function(router){
             }]
         }
         var participants = yield participantService.filter(params);
+        if(participants[0].activity.type === 'flmh'){
+            conf.cols = [{
+                caption:'活动名称',
+                type:'string',
+                width:40
+            },{
+                caption:'报名昵称',
+                type:'string',
+                width:40
+            },{
+                caption:'报名电话',
+                type:'string',
+                width:40
+            },{
+                caption:'红包金额',
+                type:'number',
+                width:40
+            }];
+        }else{
+            conf.cols = [{
+                caption:'活动名称',
+                type:'string',
+                width:40
+            },{
+                caption:'报名昵称',
+                type:'string',
+                width:40
+            },{
+                caption:'报名电话',
+                type:'string',
+                width:40
+            },{
+                caption:'总积分',
+                type:'number',
+                width:40
+            }];
+        }
         participants.forEach(function(item){
             conf.rows.push([item.activity.name, item.user.nickname, item.phone, item.total_money]);
         });

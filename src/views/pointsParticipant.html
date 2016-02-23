@@ -1,0 +1,457 @@
+{% extends 'mobileLayout.html' %}
+
+{% block title %}{{participant.activity.name || '积分助力，助你成功'}}{% endblock %}
+
+{% block head %}
+{% parent %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/swiper.min.css">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/swiper.jquery.min.js"></script>
+<script>
+    var timer = 0;
+    $(function () {
+        var docHeight = $(document).height();
+        $(".fullBg").height(docHeight);
+        $(".fullBg2").height(docHeight);
+        tab(".tabBox .hd ul li", ".tabBox .bd .row", "on");
+        centerTop(".w0");
+        centerWindow(".w1");
+        $(".fullBg").click(function () {
+            $(".window").removeClass("animate").hide();
+            $(this).hide();
+            clearTimeout(timer);
+        });
+        timeShow();//倒计时
+    });
+
+    function closedWindow() {
+        timer = setTimeout(function () {
+            $(".fullBg").hide();
+            $(".w1").removeClass("animate").hide();
+            ;
+        }, 5000);
+    }
+
+    function tab(a, b, c) {
+        var len = $(a);
+        len.bind("click", function () {
+            var index = 0;
+            $(this).addClass(c).siblings().removeClass(c);
+            index = len.index(this);
+            $(b).eq(index).show().siblings().hide();
+            return false;
+        }).eq(0).trigger("click");
+    }
+    //2.将盒子方法放入这个方，方便法统一调用
+    function centerWindow(a) {
+        center(a);
+        //自适应窗口
+        $(window).bind('scroll resize',
+                function () {
+                    center(a);
+                });
+    }
+    function centerTop(a) {
+        var wWidth = $(window).width();
+        var boxWidth = $(a).width();
+        var scrollLeft = $(window).scrollLeft();
+        var left = scrollLeft + (wWidth - boxWidth) / 2;
+        $(a).css({
+            "left": left
+        });
+    }
+    //1.居中方法，传入需要剧中的标签
+    function center(a) {
+        var wWidth = $(window).width();
+        var wHeight = $(window).height();
+        var boxWidth = $(a).width();
+        var boxHeight = $(a).height();
+        var scrollTop = $(window).scrollTop();
+        var scrollLeft = $(window).scrollLeft();
+        var top = scrollTop + (wHeight - boxHeight) / 2;
+        var left = scrollLeft + (wWidth - boxWidth) / 2;
+        $(a).css({
+            "top": top,
+            "left": left
+        });
+    }
+
+
+    function timeShow() {
+        var show_time = $(".timeShow");
+        endtime = new Date({{JSON.stringify(participant.activity.endTime)}});//结束时间
+        today = new Date();//当前时间
+        delta_T = endtime.getTime() - today.getTime();//时间间隔
+        window.setTimeout(timeShow, 1000);
+        total_days = delta_T / (24 * 60 * 60 * 1000);//总天数
+        total_show = Math.floor(total_days);//实际显示的天数
+        total_hours = (total_days - total_show) * 24;//剩余小时
+        hours_show = Math.floor(total_hours);//实际显示的小时数
+        total_minutes = (total_hours - hours_show) * 60;//剩余的分钟数
+        minutes_show = Math.floor(total_minutes);//实际显示的分钟数
+        total_seconds = (total_minutes - minutes_show) * 60;//剩余的分钟数
+        seconds_show = Math.floor(total_seconds);//实际显示的秒数
+        if (total_days < 10) {
+            total_days = "0" + total_days;
+        }
+        if (hours_show < 10) {
+            hours_show = "0" + hours_show;
+        }
+        if (minutes_show < 10) {
+            minutes_show = "0" + minutes_show;
+        }
+        if (seconds_show < 10) {
+            seconds_show = "0" + seconds_show;
+        }
+        show_time.find("li").eq(0).text(total_show);//显示在页面上
+        show_time.find("li").eq(2).text(hours_show);
+        show_time.find("li").eq(4).text(minutes_show);
+        show_time.find("li").eq(6).text(seconds_show);
+    }
+
+    function share() {
+        $('.share_bg').show();
+        $('.share_bg').click(function () {
+            if ($(this).css('display') == 'block') {
+                $(this).css('display', 'none');
+            }
+        });
+    }
+    $(function () {
+        countTop();
+        $(window).bind('scroll resize',
+                function () {
+                    countTop();
+                });
+        function countTop() {
+            var ftH = $("footer").height();
+            var wHeight = $(window).height();
+            var top = wHeight - ftH;
+            $("footer").css({"top": top});
+
+        }
+    });
+</script>
+<style>
+    .share_bg {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 99;
+    }
+
+    .tabBox .bd .prize .prizeImg h4 {
+        background-color: #aaa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="../../css/fans.css">
+<script src="../../js/jquery.leanModal.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/leanModal.css">
+<div id="lean_overlay" style="display: none; opacity: 0.45;"></div>
+<script type="text/javascript">
+    $(function () {
+        $('#modaltrigger_notice').leanModal({
+            top: 110,
+            overlay: 0.45,
+            closeButton: ".hidemodal"
+        });
+    });
+</script>
+<header class="scroll">
+    <!-- Swiper -->
+    <div class="swiper-container swiper-container-horizontal">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2552px, 0px, 0px);">
+            {% for item in participant.activity.bgImg %}
+            <div class="swiper-slide swiper-slide-prev" data-swiper-slide-index="0" style="width: 1276px;">
+                <a href="javascript:void(0)"><img src="{{item}}" width="100%"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: 5000//可选选项，自动滑动
+        });
+    </script>
+</header>
+<section class="topUser">
+    <div class="userBox">
+        <div class="fl userAvatar">
+            <img style="border-radius: 100%;" src="{{participant.user.headimgurl}}">
+        </div>
+        <div class="userDesc">
+            <h2>{{participant.user.nickname}}</h2>
+
+            <!--<p>排名：{{participant.user.rank}}</p>-->
+        </div>
+        <div class="tipBox">
+            <div class="tip tip1">
+                <h3>积分</h3>
+
+                <p id="luckyMoney">{{participant.total_money}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="oTime">
+    <div class="timeBox">
+        <h2>
+            时间还剩 </h2>
+        <ul class="timeShow">
+            <li class="bg">755</li>
+            <li class="oText">天</li>
+            <li class="bg">05</li>
+            <li class="oText">时</li>
+            <li class="bg">39</li>
+            <li class="oText">分</li>
+            <li class="bg">17</li>
+            <li class="oText">秒</li>
+        </ul>
+    </div>
+</section>
+<section class="checkBtn animate clearfix">
+</section>
+<section class="oTab">
+    <div class="tabBox">
+        <div class="hd clearfix">
+            <ul>
+                <li class="li0" style="margin:0 2px"><i></i>活动介绍</li>
+                <li class="li1 on" style="margin:0 2px"><i></i>活动规则</li>
+                <li class="li2" style="margin:0 2px"><i></i>排行榜</li>
+            </ul>
+        </div>
+        <div class="bdRound">
+            <div class="bd" style="padding-top: 15px;">
+                <div class="row rule" style="line-height: 20px; display: none;">
+                    {{participant.activity.desc|raw}}
+                </div>
+                <div class="row prize" style="line-height: 20px; display: block;">
+                    {{participant.activity.rule|raw}}
+                </div>
+                <div class="row list" style="display: none;">
+                    <ul>
+                        {% for item in participants %}
+                        <li>
+                            <div class="userBox">
+                                <div class="fl userAvatar">
+                                    <img src="{{item.user.headimgurl}}">
+                                </div>
+                                <div class="userDesc">
+                                    <h2>{{item.user.nickname}}</h2>
+                                </div>
+                                <div class="tipBox">
+                                    <div class="tip tip1">
+                                        <h3>积分</h3>
+                                        <br>
+                                        <p>{{item.total_money}}</p>
+                                    </div>
+                                </div>
+                                <div class="num">
+                                    <span>
+                                        <i>{{loop.index}}</i>
+                                    </span>
+                                    <s></s>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer style="top: 505px;">
+    <div class="oBtn">
+        <a href="{{participant.participateLink}}" style="display: {{ participant.join }}" id="modaltrigger_notice">我要参加</a>
+        <a style="display: {{ participant.help }}" id="helpTa">我要助力</a>
+        <a style="background-color: gray; display: {{ participant.helped }}" id="helped">已助力</a>
+        <a style="background-color: gray; display: {{participant.joined}}">已参加</a>
+        <a style="background-color: gray; display: {{participant.noActivated}}">未开始</a>
+        <a style="background-color: gray; display: {{participant.closed}}">已结束</a>
+        <a style="background-color: gray; display: {{participant.helpLimited}}">助力已达上限</a>
+        <a onclick="share()" style="background: #aa2343;color: #fff; display: {{participant.inviteFriend}}">找朋友助力</a>
+    </div>
+</footer>
+<input type="hidden" id="participantId" value="{{participant._id}}"/>
+<script>
+    $(function(){
+        var helping = false;
+        $('#helpTa').click(function(){
+            if(helping) return;
+            helping = true;
+            $.post('/api/participant/help', {id: $('#participantId').val()}, function(data){
+                if(data){
+                    if(data.helped){
+                        alert('已助力');
+                    }else if(data.invalid == 'nonActivated'){
+                        alert('活动未开始');
+                    }else if(data.invalid == 'closed'){
+                        alert('活动已结束');
+                    }else if(data.limited){
+                        alert('该用户助力已达上限');
+                    }else if(data.error){
+                        alert('助力失败');
+                        helping = false;
+                    }else {
+                        $('#luckyMoney').text('' + data.total_money);
+                        $('#helpTa').hide();
+                        $('#helped').show();
+                        alert('助力成功');
+                    }
+                }else{
+                    alert('助力失败');
+                    helping = false;
+                }
+            })
+        })
+    })
+</script>
+<div class="fullBg" style="height: 1794px;"></div>
+<div class="fullBg2" style="height: 1794px;"></div>
+<div class="share_bg">
+    <img src="../../images/share-guide.png">
+</div>
+<style>
+    .fullBg2 {
+        background-color: #000;
+        left: 0;
+        opacity: 0.8;
+        position: fixed;
+        top: 0;
+        z-index: 3;
+        filter: alpha(opacity=80);
+        -moz-opacity: 0.8;
+        -khtml-opacity: 0.8;
+        display: none;
+        z-index: 888;
+        width: 100%;
+    }
+
+    .w0 .windowThis .bd .row button {
+        width: 100%;
+        height: 30px;
+        background: #f6514b;
+        text-align: center;
+        line-height: 30px;
+        font-size: 1.4rem;
+        color: #fff;
+        border-radius: 5px
+    }
+
+    .tips {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 9999
+    }
+
+    .tips h3 {
+        width: 70%;
+        padding: 10px 0;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 1);
+        text-align: center;
+        font-size: 1.2rem;
+        color: red;
+    }
+</style>
+<div class="tips" style="display: none;"><h3></h3></div>
+
+<script type="text/javascript">
+    function alert(text) {
+        var t = null;
+        clearTimeout(t);
+        var tip = $(".tips");
+        tip.find('h3').html(text);
+        tip.slideDown();
+        t = setTimeout(function () {
+            tip.slideUp()
+        }, 3000);
+    }
+    window.shareData = {
+        "moduleName": "Helping",
+        "moduleID": "0",
+        "imgUrl": "{{participant.activity.shareImg || 'http://s.404.cn/tpl/static/helping/images/default.jpg'}}",
+        "timeLineLink": window.__app.settings.app.url + '/participant?id=' + '{{participant._id}}',
+        "sendFriendLink": window.__app.settings.app.url + '/participant?id=' + '{{participant._id}}',
+        "weiboLink": window.__app.settings.app.url + '/participant?id=' + '{{participant._id}}',
+        "tContent": "{{participant.activity.shareDesc || '我正在参加积分助力活动，小伙伴们快来帮忙呀！'}}",
+        "tTitle": "{{participant.activity.shareTitle || '积分助力，祝我成功！'}}",
+        "fTitle": "{{participant.activity.shareTitle || '我正在参加积分助力活动，小伙伴们快来帮忙呀！'}}"
+    };
+</script>
+<script type="text/javascript">
+    wx.ready(function () {
+        // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+        /*document.querySelector('#checkJsApi').onclick = function () {
+         wx.checkJsApi({
+         jsApiList: [
+         'getNetworkType',
+         'previewImage'
+         ],
+         success: function (res) {
+         //alert(JSON.stringify(res));
+         }
+         });
+         };*/
+        // 2. 分享接口
+        // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareAppMessage({
+            title: window.shareData.tTitle,
+            desc: window.shareData.tContent,
+            link: window.shareData.sendFriendLink,
+            imgUrl: window.shareData.imgUrl,
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+            },
+            cancel: function () {
+                //alert('分享朋友失败');
+            }
+        });
+
+
+        // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+        wx.onMenuShareTimeline({
+            title: window.shareData.fTitle ? window.shareData.fTitle : window.shareData.tTitle,
+            link: window.shareData.sendFriendLink,
+            imgUrl: window.shareData.imgUrl,
+            success: function () {
+                //alert('分享朋友圈成功');
+            },
+            cancel: function () {
+                //alert('分享朋友圈失败');
+            }
+        });
+        wx.error(function (res) {
+            /*if(res.errMsg == 'config:invalid signature'){
+             wx.hideOptionMenu();
+             }else if(res.errMsg == 'config:invalid url domain'){
+             wx.hideOptionMenu();
+             }else{
+             wx.hideOptionMenu();
+             //alert(res.errMsg);
+             }*/
+            if (res.errMsg) {
+                wx.hideOptionMenu();
+            }
+        });
+    });
+
+</script>
+{% endblock %}

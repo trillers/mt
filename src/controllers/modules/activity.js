@@ -51,30 +51,48 @@ module.exports = function(router){
                         activity.closed = '';
                     }
                 }
-                var params = {
-                    conditions: {
-                        activity: activity._id,
-                        lFlg: 'a'
-                    },
-                    sort: {
-                        total_money: -1
-                    },
-                    page: {
-                        no: 1,
-                        size: 10
-                    },
-                    populate: [
-                        {
-                            path: 'user'
-                        }
-                    ]
-                }
-                var participants = yield participantService.filter(params);
-                console.warn('**************************');
-                console.error(activity);
+                var params = null;
+                var participants = null
 
-                console.error(participants);
-                yield this.render('activity', {activity: activity, participants: participants});
+                if(activity.type === 'flmh') {
+                    params = {
+                        conditions: {
+                            activity: activity._id,
+                            lFlg: 'a'
+                        },
+                        sort: {
+                            total_money: -1
+                        },
+                        page: {
+                            no: 1,
+                            size: 10
+                        },
+                        populate: [
+                            {
+                                path: 'user'
+                            }
+                        ]
+                    }
+                    participants = yield participantService.filter(params);
+                    yield this.render('activity', {activity: activity, participants: participants});
+                }else{
+                    params = {
+                        conditions: {
+                            activity: activity._id,
+                            lFlg: 'a'
+                        },
+                        sort: {
+                            total_money: -1
+                        },
+                        populate: [
+                            {
+                                path: 'user'
+                            }
+                        ]
+                    }
+                    participants = yield participantService.filter(params);
+                    yield this.render('points', {activity: activity, participants: participants});
+                }
             }
         }else{
             yield this.render('error', {error: '活动暂未开放'});
@@ -134,26 +152,48 @@ module.exports = function(router){
                     }
                 }
             }
-            var params = {
-                conditions: {
-                    activity: participant.activity._id,
-                    lFlg: 'a'
-                },
-                sort: {
-                    total_money: -1
-                },
-                page: {
-                    no: 1,
-                    size: 10
-                },
-                populate: [
-                    {
-                        path: 'user'
-                    }
-                ]
+            var params = null;
+            var participants = null;
+
+            if(participant.activity.type === 'flmh') {
+                params = {
+                    conditions: {
+                        activity: participant.activity._id,
+                        lFlg: 'a'
+                    },
+                    sort: {
+                        total_money: -1
+                    },
+                    page: {
+                        no: 1,
+                        size: 10
+                    },
+                    populate: [
+                        {
+                            path: 'user'
+                        }
+                    ]
+                }
+                participants = yield participantService.filter(params);
+                yield this.render('participant', {participant: participant, participants: participants});
+            }else{
+                params = {
+                    conditions: {
+                        activity: participant.activity._id,
+                        lFlg: 'a'
+                    },
+                    sort: {
+                        total_money: -1
+                    },
+                    populate: [
+                        {
+                            path: 'user'
+                        }
+                    ]
+                }
+                participants = yield participantService.filter(params);
+                yield this.render('pointsParticipant', {participant: participant, participants: participants});
             }
-            var participants = yield participantService.filter(params);
-            yield this.render('participant', {participant: participant, participants: participants});
         }else{
             yield this.render('error', {error: '活动暂未开放'});
         }
