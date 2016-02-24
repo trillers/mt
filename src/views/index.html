@@ -80,8 +80,7 @@
 
         $('#submit').click(function () {
             var json = {
-                type: $(':radio[name="activity_type"]:checked').val()
-                , name: $('#activityName').val()
+                name: $('#activityName').val()
                 , bgImg: bgImg
                 , shareImg: shareImg
                 , shareTitle: $('#shareTitle').val()
@@ -96,6 +95,7 @@
                 , desc: $('#desc').summernote('code')
             }
             if($('#add-or-update').val() === 'add'){
+                json.type = $(':radio[name="activity_type"]:checked').val();
                 add(json);
             }else{
                 json.id = $('#activity-id').val();
