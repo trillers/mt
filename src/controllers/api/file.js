@@ -13,15 +13,12 @@ module.exports = function(router){
      * */
     router.get('/', function* (){
         var self = this;
-        console.log(self.query);
         var media_id = self.query.media_id;
         try {
             var file = yield FileService.loadAsync(media_id);
-            console.log(file);
             self.type = file.mimeType;
             self.body = yield readFile(file.path);
         }catch(err){
-            console.log(err);
             self.body = '404';
         }
     });

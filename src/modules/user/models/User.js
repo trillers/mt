@@ -148,9 +148,6 @@ helper.mergeUserInfo = function(snsUserInfo, globalUserInfo){
     else{
         userInfo.wx_privilege = '';
     }
-
-    console.log('============= merged userinfo =================');
-    console.log(userInfo);
     return userInfo;
 };
 
