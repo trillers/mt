@@ -59,4 +59,21 @@ describe('Activity Kvs', function(){
             })
         });
     });
+
+    describe('getRankingListWithScore', function(){
+        it('succeed to get ranking list with score', function(done){
+            co(function*(){
+                try{
+                    var list = yield kv.getRankingListWithScoreAsync('J4dkm');
+                    console.info(list)
+                    done();
+                }
+                catch(e){
+                    console.error(e);
+                    done();
+                }
+            })
+        });
+    });
+
 });

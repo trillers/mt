@@ -69,4 +69,46 @@ Kv.prototype.getRankingList = function(activityId, callback){
     });
 };
 
+/**
+ * Get the ranking list of a activity.
+ * the item of the list is like ['{user: {nickname,'sunny' ......}, 'score' 10}', '{user: {nickname,'sunny' ......}, 'score' 10}']
+ * @param activityId
+ * @param callback
+ */
+Kv.prototype.getRankingListWithScore = function(activityId, callback){
+    var lua = " \
+local userIdScoreArr = redis.call('zrevrange', KEYS[1], 0, -1, 'WITHSCORES')\
+local re = {}\
+local index = 0\
+    for i=0, #userIdScoreArr, 2 do\
+        local jsonStr = '{}'\
+        local json = cjson.decode(jsonStr)\
+        local userStr = '{}'\
+        local user = cjson.decode(jsonStr)\
+        local key = table.concat({'usr:id:', userIdScoreArr[i-1]}) \
+        local hm = redis.call('hgetall', key)\
+        for j=0, #hm, 2 do\
+           local field = tostring(hm[j-1])\
+           user[field] = hm[j]\
+        end\
+        json['user'] = user\
+        json['total_money'] = userIdScoreArr[i]\
+        re[index] = cjson.encode(json)\
+        index = index + 1\
+    end    \
+return re\
+";
+    var key = idToRankingListKey(activityId);
+    redis.eval(lua, 1, key, function(err, result){
+        var listJsonString = '[' + result.join(',') + ']';
+        var listJson = JSON.parse(listJsonString);
+        cbUtil.logCallback(
+            err,
+            'Fail to get ranking list with score, activity id ' + activityId + ': ' + err,
+            'Succeed to get ranking list with score, activity id ' + activityId);
+
+        cbUtil.handleSingleValue(callback, err, listJson);
+    });
+};
+
 module.exports = Kv;

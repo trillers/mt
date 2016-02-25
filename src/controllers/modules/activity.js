@@ -4,6 +4,8 @@ var baseAuthFilter = require('../../middlewares/base-auth-filter');
 var userinfoAuthFilter = require('../../middlewares/userinfo-auth-filter');
 var participantService = require('../../modules/activity/services/ParticipantService');
 var activityService = require('../../modules/activity/services/ActivityService');
+var kv = require('../../modules/activity/kvs/index').activity;
+
 var _ = require('underscore');
 
 module.exports = function(router){
@@ -76,21 +78,23 @@ module.exports = function(router){
                     participants = yield participantService.filter(params);
                     yield this.render('activity', {activity: activity, participants: participants});
                 }else{
-                    params = {
-                        conditions: {
-                            activity: activity._id,
-                            lFlg: 'a'
-                        },
-                        sort: {
-                            total_money: -1
-                        },
-                        populate: [
-                            {
-                                path: 'user'
-                            }
-                        ]
-                    }
-                    participants = yield participantService.filter(params);
+                    //params = {
+                    //    conditions: {
+                    //        activity: activity._id,
+                    //        lFlg: 'a'
+                    //    },
+                    //    sort: {
+                    //        total_money: -1
+                    //    },
+                    //    populate: [
+                    //        {
+                    //            path: 'user'
+                    //        }
+                    //    ]
+                    //}
+                    participants = yield kv.getRankingListWithScoreAsync(activity._id);
+                    console.error(participants)
+
                     yield this.render('points', {activity: activity, participants: participants});
                 }
             }
@@ -177,21 +181,22 @@ module.exports = function(router){
                 participants = yield participantService.filter(params);
                 yield this.render('participant', {participant: participant, participants: participants});
             }else{
-                params = {
-                    conditions: {
-                        activity: participant.activity._id,
-                        lFlg: 'a'
-                    },
-                    sort: {
-                        total_money: -1
-                    },
-                    populate: [
-                        {
-                            path: 'user'
-                        }
-                    ]
-                }
-                participants = yield participantService.filter(params);
+                //params = {
+                //    conditions: {
+                //        activity: participant.activity._id,
+                //        lFlg: 'a'
+                //    },
+                //    sort: {
+                //        total_money: -1
+                //    },
+                //    populate: [
+                //        {
+                //            path: 'user'
+                //        }
+                //    ]
+                //}
+                participants = yield kv.getRankingListWithScoreAsync(participant.activity._id);
+                console.error(participants)
                 yield this.render('pointsParticipant', {participant: participant, participants: participants});
             }
         }else{

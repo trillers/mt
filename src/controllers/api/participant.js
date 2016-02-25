@@ -71,7 +71,7 @@ module.exports = function (router) {
                                 var update = {
                                     total_money: total_money
                                 }
-                                var data = yield participantService.updateById(participant._id, update);
+                                var data = yield participantService.updateById(participant._id, update, helpMoney);
                                 this.body = data;
                             } else {
                                 this.body = {helped: true};
