@@ -93,8 +93,6 @@ module.exports = function(router){
                     //    ]
                     //}
                     participants = yield kv.getRankingListWithScoreAsync(activity._id);
-                    console.error(participants)
-
                     yield this.render('points', {activity: activity, participants: participants});
                 }
             }
@@ -196,7 +194,6 @@ module.exports = function(router){
                 //    ]
                 //}
                 participants = yield kv.getRankingListWithScoreAsync(participant.activity._id);
-                console.error(participants)
                 yield this.render('pointsParticipant', {participant: participant, participants: participants});
             }
         }else{

@@ -71,7 +71,7 @@ Kv.prototype.getRankingList = function(activityId, callback){
 
 /**
  * Get the ranking list of a activity.
- * the item of the list is like ['{user: {nickname,'sunny' ......}, 'score' 10}', '{user: {nickname,'sunny' ......}, 'score' 10}']
+ * the item of the list is like ['{user: {nickname,'sunny' ......}, 'total_money' 10}', '{user: {nickname,'sunny' ......}, 'total_money' 10}']
  * @param activityId
  * @param callback
  */

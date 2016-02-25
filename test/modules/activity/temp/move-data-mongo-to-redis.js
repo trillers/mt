@@ -15,7 +15,7 @@ describe('move data', function(){
         it('succeed to move data', function(done){
             co(function*(){
                 try{
-                    var participants = yield Participant.find({activity: 'J4dkm'}).exec();
+                    var participants = yield Participant.find({activity: '1Tktai'}).exec();
                     console.info(participants.length);
                     for(var i=0; i<participants.length; i++){
                         yield kv.addParticipantInRankingListAsync(participants[i].activity, participants[i].user, participants[i].total_money);
