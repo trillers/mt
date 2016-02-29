@@ -39,8 +39,7 @@ module.exports = function(router){
     router.post('/update', function *(){
         var id = this.request.body.id;
         var json = {
-            type:  this.request.body.type
-            ,name: this.request.body.name
+            name: this.request.body.name
             ,shareTitle: this.request.body.shareTitle
             ,shareDesc: this.request.body.shareDesc
             ,shareImg: this.request.body.shareImg

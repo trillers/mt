@@ -6,7 +6,7 @@ module.exports = function(router){
     require('../../app/routes-spa')(router);
 
     router.get('/', function *(){
-        if(!this.session.user){
+        if(!this.session.adminUser){
             this.redirect('/login');
         }else{
             yield this.render('index', {api: settings.api.url});
@@ -23,7 +23,7 @@ module.exports = function(router){
         try{
             var user = yield systemUserService.findOneAsync({username: username, token: token, lFlg: 'a'});
             if(user){
-                this.session.user = user;
+                this.session.adminUser = user;
                 res.success = true;
             }else{
                 res.success = false;
@@ -35,7 +35,7 @@ module.exports = function(router){
         this.body = res;
     });
     router.get('/logout', function *(){
-        this.session.user = null;
+        this.session.adminUser = null;
         this.body = null;
     });
 };

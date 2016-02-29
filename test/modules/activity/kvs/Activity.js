@@ -151,6 +151,21 @@ describe('Activity Kvs', function(){
                     userMapString = yield kv.getParticipantListStringAsync(activityId);
                     console.info('activity\'s list string is load and cached:');
                     console.info(userMapString);
+                }
+                catch(e){
+                    console.error(e);
+                    done();
+                }
+            })
+        });
+    });
+
+    describe('getRankingListWithScore', function(){
+        it('succeed to get ranking list with score', function(done){
+            co(function*(){
+                try{
+                    var list = yield kv.getRankingListWithScoreAsync('J4dkm');
+                    console.info(list)
                     done();
                 }
                 catch(e){
