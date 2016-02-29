@@ -5,6 +5,10 @@ var idToRankingListKey = function(id){
     return 'act:ranking:id:' + id;
 };
 
+var idToParticipantUserListKey = function(id){
+    return 'act:usrs:id:' + id;
+};
+
 var Kv = function(context){
     this.context = context;
 };
@@ -65,6 +69,28 @@ Kv.prototype.getRankingList = function(activityId, callback){
             'Fail to get ranking list, activity id ' + activityId + ': ' + err,
             'Succeed to get ranking list, activity id ' + activityId);
 
+        cbUtil.handleSingleValue(callback, err, result);
+    });
+};
+
+Kv.prototype.setParticipantListString = function(activityId, listString, callback){
+    var key = idToParticipantUserListKey(activityId);
+    redis.set(key, listString, function(err, result){
+        cbUtil.logCallback(
+            err,
+            'Fail to set participant list string for activity: ' + activityId + ': ' + err,
+            'Succeed to set participant list string for activity: ' + activityId);
+        cbUtil.handleOk(callback, err, result);
+    });
+};
+
+Kv.prototype.getParticipantListString = function(activityId, callback){
+    var key = idToParticipantUserListKey(activityId);
+    redis.get(key, function(err, result){
+        cbUtil.logCallback(
+            err,
+            'Fail to get participant list string for activity: ' + activityId + ': ' + err,
+            'Succeed to get participant list string for activity: ' + activityId);
         cbUtil.handleSingleValue(callback, err, result);
     });
 };
